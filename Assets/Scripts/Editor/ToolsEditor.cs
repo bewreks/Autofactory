@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Windows;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
@@ -14,7 +15,13 @@ namespace Editor
 		[MenuItem("Tools/Game Settings/Inventory pack models")]
 		private static void FindAndSelectInventoryPacksModels()
 		{
-			FindAndSelectAsset<InventoryPacksModelsManagerSO>();
+			FindAndSelectAsset<InventoryPacksInstaller>();
+		}
+		
+		[MenuItem("Tools/Game Settings/Windows settings")]
+		private static void FindAndSelectWindowsSettings()
+		{
+			FindAndSelectAsset<WindowsInstaller>();
 		}
 
 		private static void FindAndSelectPrefab<T>() where T : Object

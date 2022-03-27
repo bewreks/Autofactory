@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 using Zenject;
 
 [CreateAssetMenu(fileName = "InventoryPacksModelsManager", menuName = "Models/Inventory/InventoryPacksModelsManager")]
-public class InventoryPacksModelsManagerSO : ScriptableObjectInstaller<InventoryPacksModelsManagerSO>
+public class InventoryPacksInstaller : ScriptableObjectInstaller<InventoryPacksInstaller>
 {
     [SerializeField] private InventoryPacksModelsManager _manager;
     

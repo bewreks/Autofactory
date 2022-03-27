@@ -1,4 +1,5 @@
-﻿using Inventory;
+﻿using Windows;
+using Inventory;
 using UniRx;
 using UnityEngine.Assertions;
 using Zenject;
@@ -28,6 +29,8 @@ namespace Installers
 			Assert.IsTrue(inventory.AddItem(InventoryTypesEnum.GENERATOR));
 			Assert.IsTrue(inventory.RemoveItem(InventoryTypesEnum.GENERATOR));
 			Assert.IsFalse(inventory.RemoveItem(InventoryTypesEnum.GENERATOR));
+			var windowsManager = Container.Resolve<WindowsManager>();
+			windowsManager.OpenWindow<TestWindow>();
 		}
 	}
 }

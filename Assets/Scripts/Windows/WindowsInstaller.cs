@@ -16,7 +16,6 @@ namespace Windows
 		{
 			windowsSettings.Prepare();
 			Container.Bind<WindowsSettings>().FromInstance(windowsSettings).AsSingle();
-			Container.Bind<WindowsManager>().FromNew().AsSingle();
 		}
 	}
 

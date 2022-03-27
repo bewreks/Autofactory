@@ -1,4 +1,5 @@
 ﻿using Windows;
+using Windows.InventoryWindow;
 using Inventory;
 using UniRx;
 using UnityEngine.Assertions;
@@ -18,7 +19,9 @@ namespace Installers
 				_disposables.Dispose();
 			}).AddTo(_disposables);
 
+			
 			Container.BindInterfacesTo<Inventory.Inventory>().AsSingle();
+			Container.Bind<WindowsManager>().FromNew().AsSingle();
 		}
 
 		public override void Start()
@@ -27,10 +30,10 @@ namespace Installers
 			_disposables.Add(inventory);
 
 			Assert.IsTrue(inventory.AddItem(InventoryTypesEnum.GENERATOR));
-			Assert.IsTrue(inventory.RemoveItem(InventoryTypesEnum.GENERATOR));
-			Assert.IsFalse(inventory.RemoveItem(InventoryTypesEnum.GENERATOR));
+			// Assert.IsFalse(inventory.RemoveItem(InventoryTypesEnum.GENERATOR));
 			var windowsManager = Container.Resolve<WindowsManager>();
-			windowsManager.OpenWindow<TestWindow>();
+			windowsManager.OpenWindow<InventoryWindow>();
+			Assert.IsTrue(inventory.RemoveItem(InventoryTypesEnum.GENERATOR));
 		}
 	}
 }

@@ -56,6 +56,11 @@ namespace Inventory
 		{
 			_packs.ForEach(pack => pack.Reset());
 		}
+
+		public List<InventoryPack> GetItems()
+		{
+			return _packs;
+		}
 	}
 
 	public static class InventoryFactory

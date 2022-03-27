@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Inventory
 {
@@ -8,9 +9,11 @@ namespace Inventory
 	{
 		[SerializeField] private InventoryTypesEnum type        = InventoryTypesEnum.NOTHING;
 		[SerializeField] private uint               maxPackSize = 100;
+		[SerializeField] private Sprite             icon;
 
 		public InventoryTypesEnum Type        => type;
 		public uint               MaxPackSize => maxPackSize;
+		public Sprite             Icon        => icon;
 	}
 
 	public class InventoryPack
@@ -23,6 +26,8 @@ namespace Inventory
 		private InventoryPackModel _model;
 
 		public int                Size    => _size;
+		public uint               MaxSize => _model.MaxPackSize;
+		public Sprite             Icon    => _model.Icon;
 		public bool               IsFull  => _size >= _model.MaxPackSize;
 		public bool               IsEmpty => _size <= 0;
 		public InventoryTypesEnum Type    => _model.Type;

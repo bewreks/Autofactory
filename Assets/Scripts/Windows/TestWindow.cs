@@ -8,6 +8,7 @@ namespace Windows
 	{
 		[SerializeField] private Button      closeButton;
 		[SerializeField] private CanvasGroup canvasGroup;
+		private                  Image       _test;
 		
 		protected override void Opening()
 		{

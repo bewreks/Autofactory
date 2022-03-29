@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+#if UNITY_EDITOR
 namespace Editor
 {
 	public class ToolsEditor
@@ -70,3 +71,4 @@ namespace Editor
 		}
 	}
 }
+#endif

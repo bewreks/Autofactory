@@ -41,9 +41,18 @@ namespace Windows
 
 		private Dictionary<Type, Window> _windowsMap;
 
-		public void Prepare()
+		public bool Prepare()
 		{
-			_windowsMap = _windows.ToDictionary(window => window.GetType(), window => window);
+			try
+			{
+				_windowsMap = _windows.ToDictionary(window => window.GetType(), window => window);
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+
+			return true;
 		}
 
 		public Window GetWindow<T>()
@@ -52,6 +61,11 @@ namespace Windows
 			Assert.IsNotNull(window, $"Window of type {typeof(T)} not found");
 			return window;
 		}
+		
+#if UNITY_INCLUDE_TESTS
+		public List<Window>             Windows    => _windows;
+		public Dictionary<Type, Window> WindowsMap => _windowsMap;
+#endif
 	}
 
 	public enum WindowStateEnum

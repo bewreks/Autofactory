@@ -48,15 +48,15 @@ namespace Tests.Inventory
 			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsManager>();
 			var inventoryTypesEnums         = inventoryPacksModelsManager.Models.Select(model => model.Type);
 			var inventoryUniqueTypes        = inventoryTypesEnums.Distinct();
-			var intPtr                      = inventoryUniqueTypes.Count();
-			if (intPtr != inventoryPacksModelsManager.Models.Count)
+			var uniqueCount                 = inventoryUniqueTypes.Count();
+			if (uniqueCount != inventoryPacksModelsManager.Models.Count)
 			{
 				var distinctItems = inventoryPacksModelsManager
 				                    .Models
 				                    .GroupBy(model => model.Type)
 				                    .Where(g => g.Count() > 1)
 				                    .SelectMany(r => r);
-				
+
 				Assert.Fail(string.Join("\r\n", distinctItems));
 			}
 
@@ -78,7 +78,7 @@ namespace Tests.Inventory
 				                    .GroupBy(model => model)
 				                    .Where(g => g.Count() > 1)
 				                    .SelectMany(r => r);
-				
+
 				Assert.Fail(string.Join("\r\n", distinctItems));
 			}
 

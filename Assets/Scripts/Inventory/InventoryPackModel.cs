@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Inventory
 {
@@ -14,6 +13,17 @@ namespace Inventory
 		public InventoryTypesEnum Type        => type;
 		public uint               MaxPackSize => maxPackSize;
 		public Sprite             Icon        => icon;
+		
+#if UNITY_INCLUDE_TESTS
+		public static InventoryPackModel GetTestModel()
+		{
+			var inventoryPackModel = CreateInstance<InventoryPackModel>();
+			inventoryPackModel.type        = InventoryTypesEnum.TEST_OBJECT;
+			inventoryPackModel.maxPackSize = 50;
+			inventoryPackModel.icon        = SpriteHelper.GetBlankSprite(128, 128); 
+			return inventoryPackModel;
+		}
+#endif
 	}
 
 	public class InventoryPack

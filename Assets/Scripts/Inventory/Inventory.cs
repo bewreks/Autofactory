@@ -22,9 +22,16 @@ namespace Inventory
 			var pack = _packs.FirstOrDefault(pack => pack.Type == type && !pack.IsFull);
 			if (pack == null)
 			{
-				pack = InventoryFactory.GetFactoryItem<InventoryPack>();
-				_packs.Add(pack);
-				pack.Initialize(_inventoryPacksModelsManager.GetModel(type));
+				try
+				{
+					pack = InventoryFactory.GetFactoryItem<InventoryPack>();
+					pack.Initialize(_inventoryPacksModelsManager.GetModel(type));
+					_packs.Add(pack);
+				}
+				catch (Exception)
+				{
+					return false;
+				}
 			}
 			else
 			{
@@ -60,6 +67,12 @@ namespace Inventory
 		public List<InventoryPack> GetItems()
 		{
 			return _packs;
+		}
+
+		public int GetItemsCount(InventoryTypesEnum type)
+		{
+			var packs = _packs.Where(pack => pack.Type == type && !pack.IsFull);
+			return packs.Sum(inventoryPack => inventoryPack.Size);
 		}
 	}
 
@@ -102,5 +115,13 @@ namespace Inventory
 			
 			objects.Enqueue(obj);
 		}
+#if UNITY_INCLUDE_TESTS
+		public static void Clear()
+		{
+			_objects.Clear();
+		}
+
+		public static Dictionary<Type, Queue<object>> Objects => _objects;
 	}
+#endif
 }

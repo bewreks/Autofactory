@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Linq;
-using System.Text;
 using Inventory;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 using Zenject;
 
-namespace Tests
+namespace Tests.Inventory
 {
 	public class InventoryIntegrationTest : ZenjectIntegrationTestFixture
 	{

@@ -75,6 +75,7 @@ namespace Inventory
 	public enum InventoryTypesEnum
 	{
 		NOTHING,
+		TEST_OBJECT,
 		GENERATOR
 	}
 }

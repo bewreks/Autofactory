@@ -15,3 +15,4 @@ MonoBehaviour:
   _manager:
     _models:
     - {fileID: 11400000, guid: 03078420a695e2148b395e4956319ed2, type: 2}
+    - {fileID: 11400000, guid: 6457c77fa1229d44eab3bdea4c29ee38, type: 2}

@@ -28,4 +28,8 @@ public class InventoryPacksModelsManager
         Assert.IsNotNull(packModel, $"Model of type {type} not found");
         return packModel;
     }
+
+#if UNITY_INCLUDE_TESTS
+    public List<InventoryPackModel> Models => _models;
+#endif
 }

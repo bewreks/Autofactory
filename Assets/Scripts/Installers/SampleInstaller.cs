@@ -30,10 +30,10 @@ namespace Installers
 			_disposables.Add(inventory);
 
 			Assert.IsTrue(inventory.AddItem(InventoryTypesEnum.GENERATOR));
+			// Assert.IsTrue(inventory.RemoveItem(InventoryTypesEnum.GENERATOR));
 			// Assert.IsFalse(inventory.RemoveItem(InventoryTypesEnum.GENERATOR));
 			var windowsManager = Container.Resolve<WindowsManager>();
 			windowsManager.OpenWindow<InventoryWindow>();
-			Assert.IsTrue(inventory.RemoveItem(InventoryTypesEnum.GENERATOR));
 		}
 	}
 }

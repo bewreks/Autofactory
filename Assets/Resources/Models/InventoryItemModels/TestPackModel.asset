@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85d35c09752241739eea388021661fe1, type: 3}
-  m_Name: GeneratorPackModel
+  m_Name: TestPackModel
   m_EditorClassIdentifier: 
-  type: 2
-  maxPackSize: 100
+  type: 1
+  maxPackSize: 1
   icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}

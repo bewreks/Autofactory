@@ -25,17 +25,17 @@ namespace Editor
 			FindAndSelectAsset<WindowsInstaller>();
 		}
 
-		private static void FindAndSelectPrefab<T>() where T : Object
+		public static T FindAndSelectPrefab<T>() where T : Object
 		{
-			FindAndSelect<T>(LoadAllPrefabs);
+			return FindAndSelect<T>(LoadAllPrefabs);
 		}
 
-		private static void FindAndSelectAsset<T>() where T : Object
+		public static T FindAndSelectAsset<T>() where T : Object
 		{
-			FindAndSelect<T>(LoadAllAssets);
+			return FindAndSelect<T>(LoadAllAssets);
 		}
 
-		private static void FindAndSelect<T>([NotNull]Action load) where T : Object
+		private static T FindAndSelect<T>([NotNull]Action load) where T : Object
 		{
 			
 			var instance = Resources.FindObjectsOfTypeAll<T>().FirstOrDefault();
@@ -48,10 +48,11 @@ namespace Editor
 			if (instance)
 			{
 				Selection.activeObject = instance;
-				return;
+				return instance;
 			}
 
 			Debug.LogError($"Can't find {typeof(T)}.");
+			return default;
 		}
 
 		private static void LoadAllPrefabs()

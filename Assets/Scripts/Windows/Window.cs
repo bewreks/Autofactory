@@ -8,14 +8,15 @@ namespace Windows
 	{
 		public event Action OnClose;
 
-		private ReactiveProperty<WindowStateEnum> _state = new ReactiveProperty<WindowStateEnum>(WindowStateEnum.CLOSED);
+		private readonly ReactiveProperty<WindowStateEnum>
+			_state = new ReactiveProperty<WindowStateEnum>(WindowStateEnum.CLOSED);
 
 		public void Open()
 		{
 			_state.SetValueAndForceNotify(WindowStateEnum.OPENING);
 			Opening();
 		}
-        
+
 		public void Close()
 		{
 			_state.SetValueAndForceNotify(WindowStateEnum.CLOSING);
@@ -36,5 +37,9 @@ namespace Windows
 
 		protected abstract void Opening();
 		protected abstract void Closing();
+
+#if UNITY_INCLUDE_TESTS
+		public ReactiveProperty<WindowStateEnum> State => _state;
+#endif
 	}
 }

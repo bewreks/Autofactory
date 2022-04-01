@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Assertions;
 using Zenject;
 
 namespace Windows
@@ -28,16 +27,23 @@ namespace Windows
 			where T : Window
 		{
 			var windowPrefab = _windowsSettings.GetWindow<T>();
-			var window       = _container.InstantiatePrefab(windowPrefab).GetComponent<T>();
-			window.Open();
-			return window;
+			if (windowPrefab != null)
+			{
+				var window = _container.InstantiatePrefab(windowPrefab).GetComponent<T>();
+				window.Open();
+				return window;
+			}
+			else
+			{
+				return null;
+			}
 		}
 	}
 
 	[Serializable]
 	public class WindowsSettings
 	{
-		[SerializeField] private List<Window> _windows;
+		[SerializeField] private List<Window> _windows = new List<Window>();
 
 		private Dictionary<Type, Window> _windowsMap;
 
@@ -57,8 +63,14 @@ namespace Windows
 
 		public Window GetWindow<T>()
 		{
-			_windowsMap.TryGetValue(typeof(T), out var window);
-			Assert.IsNotNull(window, $"Window of type {typeof(T)} not found");
+			return GetWindow(typeof(T));
+		}
+
+		private Window GetWindow(Type type)
+		{
+			if (_windowsMap == null) return null;
+			
+			_windowsMap.TryGetValue(type, out var window);
 			return window;
 		}
 		

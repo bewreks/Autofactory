@@ -9,18 +9,21 @@ namespace Inventory
 		[SerializeField] private InventoryTypesEnum type        = InventoryTypesEnum.NOTHING;
 		[SerializeField] private uint               maxPackSize = 100;
 		[SerializeField] private Sprite             icon;
+		[SerializeField] private GameObject         instance;
 
 		public InventoryTypesEnum Type        => type;
 		public uint               MaxPackSize => maxPackSize;
 		public Sprite             Icon        => icon;
-		
+		public GameObject         Instance    => instance;
+
 #if UNITY_INCLUDE_TESTS
 		public static InventoryPackModel GetTestModel()
 		{
 			var inventoryPackModel = CreateInstance<InventoryPackModel>();
 			inventoryPackModel.type        = InventoryTypesEnum.TEST_OBJECT;
 			inventoryPackModel.maxPackSize = 50;
-			inventoryPackModel.icon        = SpriteHelper.GetBlankSprite(128, 128); 
+			inventoryPackModel.icon        = SpriteHelper.GetBlankSprite(128, 128);
+			inventoryPackModel.instance    = new GameObject();
 			return inventoryPackModel;
 		}
 #endif
@@ -35,12 +38,13 @@ namespace Inventory
 		private int                _size;
 		private InventoryPackModel _model;
 
-		public int                Size    => _size;
-		public uint               MaxSize => _model.MaxPackSize;
-		public Sprite             Icon    => _model.Icon;
-		public bool               IsFull  => _size >= _model.MaxPackSize;
-		public bool               IsEmpty => _size <= 0;
-		public InventoryTypesEnum Type    => _model.Type;
+		public int                Size           => _size;
+		public uint               MaxSize        => _model.MaxPackSize;
+		public Sprite             Icon           => _model.Icon;
+		public bool               IsFull         => _size >= _model.MaxPackSize;
+		public bool               IsEmpty        => _size <= 0;
+		public InventoryTypesEnum Type           => _model.Type;
+		public GameObject         InstancePrefab => _model.Instance;
 
 		public void Initialize(InventoryPackModel model, int size = 1)
 		{

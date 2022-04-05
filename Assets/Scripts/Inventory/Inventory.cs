@@ -74,6 +74,14 @@ namespace Inventory
 			var packs = _packs.Where(pack => pack.Type == type && !pack.IsFull);
 			return packs.Sum(inventoryPack => inventoryPack.Size);
 		}
+
+		// TODO: Add full pack
+		public InventoryPack GetPack(InventoryTypesEnum type)
+		{
+			var inventoryPacks = _packs.Where(pack => pack.Type == type);
+			var pack           = inventoryPacks.OrderBy(pack => pack.Size).FirstOrDefault();
+			return pack;
+		}
 	}
 
 	public static class InventoryFactory

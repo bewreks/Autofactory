@@ -10,6 +10,6 @@ namespace Inventory
 		bool                RemoveItem(InventoryTypesEnum type);
 		List<InventoryPack> GetItems();
 		int                 GetItemsCount(InventoryTypesEnum type);
-		InventoryPack       GetPack(InventoryTypesEnum       testObject);
+		InventoryPack       GetPack(InventoryTypesEnum       type);
 	}
 }

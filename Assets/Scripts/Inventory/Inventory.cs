@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ModestTree;
+using Factories;
 using Zenject;
 
 namespace Inventory
@@ -24,7 +24,7 @@ namespace Inventory
 			{
 				try
 				{
-					pack = InventoryFactory.GetFactoryItem<InventoryPack>();
+					pack = Factory.GetFactoryItem<InventoryPack>();
 					pack.Initialize(_inventoryPacksModelsManager.GetModel(type));
 					_packs.Add(pack);
 				}
@@ -53,7 +53,7 @@ namespace Inventory
 			{
 				pack.Reset();
 				_packs.Remove(pack);
-				InventoryFactory.ReturnItem(pack);
+				Factory.ReturnItem(pack);
 			}
 			
 			return removeItemResult;
@@ -83,53 +83,4 @@ namespace Inventory
 			return pack;
 		}
 	}
-
-	public static class InventoryFactory
-	{
-		private static Dictionary<Type, Queue<object>> _objects = new Dictionary<Type, Queue<object>>();
-
-		public static T GetFactoryItem<T>() where T : new()
-		{
-			var item = default(T);
-
-			if (_objects.TryGetValue(typeof(T), out var objects))
-			{
-				if (!objects.IsEmpty())
-				{
-					item = (T)objects.Dequeue();
-				}
-			}
-			else
-			{
-				_objects.Add(typeof(T), new Queue<object>());
-			}
-
-			if (EqualityComparer<T>.Default.Equals(item, default))
-			{
-				item = new T();
-			}
-
-			return item;
-		}
-
-		public static void ReturnItem<T>(T obj)
-		{
-			Queue<object> objects;
-			if (!_objects.TryGetValue(typeof(T), out objects))
-			{
-				objects = new Queue<object>();
-				_objects.Add(typeof(T), objects);
-			}
-			
-			objects.Enqueue(obj);
-		}
-#if UNITY_INCLUDE_TESTS
-		public static void Clear()
-		{
-			_objects.Clear();
-		}
-
-		public static Dictionary<Type, Queue<object>> Objects => _objects;
-	}
-#endif
 }

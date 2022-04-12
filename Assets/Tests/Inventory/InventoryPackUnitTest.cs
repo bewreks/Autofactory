@@ -1,5 +1,7 @@
+using System;
 using Inventory;
 using NUnit.Framework;
+using UniRx;
 using Zenject;
 
 namespace Tests.Inventory
@@ -44,12 +46,17 @@ namespace Tests.Inventory
         [Test]
         public void PackSizeChangedEventTest()
         {
+            var testSize      = 10;
             var inventoryPack = new InventoryPack();
-            inventoryPack.Initialize(InventoryPackModel.GetTestModel(), 10);
-            inventoryPack.SizeChanged += i =>
+            inventoryPack.Initialize(InventoryPackModel.GetTestModel(), testSize);
+            IDisposable disposable = null;
+            disposable = inventoryPack.Size.Subscribe(i =>
             {
-                Assert.AreEqual(9, i);
-            };
+                Assert.AreEqual(testSize, i);
+                // ReSharper disable once AccessToModifiedClosure
+                disposable?.Dispose();
+            });
+            testSize = 9;
             inventoryPack.RemoveItem();
         }
         
@@ -59,7 +66,7 @@ namespace Tests.Inventory
             var inventoryPack = new InventoryPack();
             inventoryPack.Initialize(InventoryPackModel.GetTestModel(), 0);
             Assert.True(inventoryPack.AddItem());
-            Assert.AreEqual(1, inventoryPack.Size);
+            Assert.AreEqual(1, inventoryPack.Size.Value);
         }
         
         [Test]
@@ -68,7 +75,7 @@ namespace Tests.Inventory
             var inventoryPack = new InventoryPack();
             inventoryPack.Initialize(InventoryPackModel.GetTestModel(), 2);
             Assert.True(inventoryPack.RemoveItem());
-            Assert.AreEqual(1, inventoryPack.Size);
+            Assert.AreEqual(1, inventoryPack.Size.Value);
         }
         
         [Test]
@@ -76,10 +83,10 @@ namespace Tests.Inventory
         {
             var inventoryPack      = new InventoryPack();
             var inventoryPackModel = InventoryPackModel.GetTestModel();
-            var maxPackSize        = (int)inventoryPackModel.MaxPackSize;
+            var maxPackSize        = inventoryPackModel.MaxPackSize;
             inventoryPack.Initialize(inventoryPackModel, maxPackSize);
             Assert.False(inventoryPack.AddItem());
-            Assert.AreEqual(maxPackSize, inventoryPack.Size);
+            Assert.AreEqual(maxPackSize, inventoryPack.Size.Value);
         }
         
         [Test]
@@ -89,7 +96,7 @@ namespace Tests.Inventory
             var inventoryPackModel = InventoryPackModel.GetTestModel();
             inventoryPack.Initialize(inventoryPackModel, 0);
             Assert.False(inventoryPack.RemoveItem());
-            Assert.AreEqual(0, inventoryPack.Size);
+            Assert.AreEqual(0, inventoryPack.Size.Value);
         }
     }
 }

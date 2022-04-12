@@ -1,4 +1,5 @@
 ﻿using System;
+using UniRx;
 using UnityEngine;
 
 namespace Inventory
@@ -7,12 +8,12 @@ namespace Inventory
 	public class InventoryPackModel : ScriptableObject
 	{
 		[SerializeField] private InventoryTypesEnum type        = InventoryTypesEnum.NOTHING;
-		[SerializeField] private int               maxPackSize = 100;
+		[SerializeField] private int                maxPackSize = 100;
 		[SerializeField] private Sprite             icon;
 		[SerializeField] private GameObject         instance;
 
 		public InventoryTypesEnum Type        => type;
-		public int               MaxPackSize => maxPackSize;
+		public int                MaxPackSize => maxPackSize;
 		public Sprite             Icon        => icon;
 		public GameObject         Instance    => instance;
 
@@ -31,31 +32,29 @@ namespace Inventory
 
 	public class InventoryPack : IDisposable
 	{
-		public event Action<int> SizeChanged;
-		public event Action      PackIsFull;
-		public event Action      PackIsEmpty;
+		public event Action PackIsFull;
+		public event Action PackIsEmpty;
 
-		private int _size;
+		private IntReactiveProperty _size = new IntReactiveProperty();
 
-		public int                Size    => _size;
-		public Sprite             Icon    => Model.Icon;
-		public bool               IsFull  => _size >= Model.MaxPackSize;
-		public bool               IsEmpty => _size <= 0;
-		public InventoryPackModel Model   { get; private set; }
+		public IReadOnlyReactiveProperty<int> Size    => _size;
+		public Sprite                         Icon    => Model.Icon;
+		public bool                           IsFull  => _size.Value >= Model.MaxPackSize;
+		public bool                           IsEmpty => _size.Value <= 0;
+		public InventoryPackModel             Model   { get; private set; }
 
 		public void Initialize(InventoryPackModel model, int size = 1)
 		{
 			Model = model;
-			_size = size;
+			_size.SetValueAndForceNotify(size);
 		}
 
 		private bool UpdateSize(int newSize, Predicate<int> check, Action @event)
 		{
-			if (check.Invoke(_size)) return false;
+			if (check.Invoke(_size.Value)) return false;
 
-			_size = newSize;
-			SizeChanged?.Invoke(_size);
-			if (check.Invoke(_size))
+			_size.SetValueAndForceNotify(newSize);
+			if (check.Invoke(_size.Value))
 			{
 				@event?.Invoke();
 			}
@@ -65,16 +64,15 @@ namespace Inventory
 
 		public void Dispose()
 		{
-			SizeChanged = null;
 			PackIsEmpty = null;
 			PackIsFull  = null;
 			Model       = null;
-			_size       = 0;
+			_size.Value = 0;
 		}
 
 		public bool AddItem(int count = 1)
 		{
-			return UpdateSize(_size + count, size => size >= Model.MaxPackSize, PackIsFull);
+			return UpdateSize(_size.Value + count, size => size >= Model.MaxPackSize, PackIsFull);
 		}
 
 		public bool SetCount(int count)
@@ -84,7 +82,7 @@ namespace Inventory
 
 		public bool RemoveItem(int count = 1)
 		{
-			return UpdateSize(_size - count, size => size <= 0, PackIsEmpty);
+			return UpdateSize(_size.Value - count, size => size <= 0, PackIsEmpty);
 		}
 	}
 

@@ -6,7 +6,7 @@ using Zenject;
 namespace Tests.Inventory
 {
     [TestFixture]
-    public class InventoryPacksModelsManagerUnitTest : ZenjectUnitTestFixture
+    public class InventoryPacksModelsSettingsUnitTest : ZenjectUnitTestFixture
     {
         private InventoryPacksModelsSettings _inventoryPacksModelsSettings;
 

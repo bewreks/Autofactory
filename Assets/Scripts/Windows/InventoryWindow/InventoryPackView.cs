@@ -1,6 +1,7 @@
 ﻿using System;
 using Inventory;
 using TMPro;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,13 +12,13 @@ namespace Windows.InventoryWindow
 		public  Image           icon;
 		public  TextMeshProUGUI count;
 		private InventoryPack   _pack;
+		private IDisposable     _sizeSub;
 
 		public void SetData(InventoryPack pack)
 		{
 			_pack       = pack;
 			icon.sprite = _pack.Icon;
-			OnUpdateSize(_pack.Size);
-			_pack.SizeChanged += OnUpdateSize;
+			_sizeSub = _pack.Size.Subscribe(OnUpdateSize);
 			_pack.PackIsEmpty += OnEmpty;
 		}
 
@@ -34,7 +35,7 @@ namespace Windows.InventoryWindow
 
 		public void Dispose()
 		{
-			_pack.SizeChanged -= OnUpdateSize;
+			_sizeSub?.Dispose();
 		}
 	}
 }

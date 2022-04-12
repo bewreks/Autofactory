@@ -82,7 +82,7 @@ namespace Inventory
 
 		public bool Add(InventoryPack pack)
 		{
-			var totalCount = pack.Size;
+			var totalCount = pack.Size.Value;
 			var packSize   = totalCount;
 			pack.Dispose();
 			Factory.ReturnItem(pack);
@@ -105,7 +105,7 @@ namespace Inventory
 			var fullPacks  = packs._packs.Where(pack => pack.IsFull).ToArray();
 			_packs.AddRange(fullPacks);
 			packs._packs = packs._packs.Where(pack => fullPacks.All(inventoryPack => inventoryPack != pack)).ToList();
-			var count = packs._packs.Sum(pack => pack.Size);
+			var count = packs._packs.Sum(pack => pack.Size.Value);
 			packs.Dispose();
 			_count.SetValueAndForceNotify(_count.Value += totalCount);
 			return Add(count);
@@ -121,12 +121,12 @@ namespace Inventory
 			}
 			else
 			{
-				if (_minPack.Size + count > Model.MaxPackSize)
+				if (_minPack.Size.Value + count > Model.MaxPackSize)
 				{
 					var pack = Factory.GetFactoryItem<InventoryPack>();
 					pack.Initialize(Model, Model.MaxPackSize);
 					_packs.Add(pack);
-					_minPack.SetCount((_minPack.Size + count) % Model.MaxPackSize);
+					_minPack.SetCount((_minPack.Size.Value + count) % Model.MaxPackSize);
 				}
 				else
 				{
@@ -138,17 +138,17 @@ namespace Inventory
 		public bool Remove(int count = 1)
 		{
 			var totalCount = count;
-			if (_minPack?.Size > count)
+			if (_minPack?.Size.Value > count)
 			{
 				return _minPack.RemoveItem(count);
 			}
 
-			if (_minPack?.Size == count)
+			if (_minPack?.Size.Value == count)
 			{
 				return Remove(_minPack);
 			}
 
-			count -= _minPack?.Size ?? 0;
+			count -= _minPack?.Size.Value ?? 0;
 			_count.SetValueAndForceNotify(_count.Value -= totalCount);
 			return Remove(_minPack) && _minPack.RemoveItem(count);
 		}
@@ -157,7 +157,7 @@ namespace Inventory
 		{
 			try
 			{
-				var totalCount = pack.Size;
+				var totalCount = pack.Size.Value;
 				_packs.Remove(pack);
 				var needToFind = pack.Equals(_minPack);
 				pack.Dispose();

@@ -36,7 +36,7 @@ namespace Installers
 			_disposables.Add(gameController);
 			_disposables.Add(instantiateManager);
 
-			Assert.IsTrue(inventory.AddItem(InventoryTypesEnum.TEST_OBJECT));
+			Assert.IsTrue(inventory.AddItems(InventoryTypesEnum.TEST_OBJECT));
 			// var windowsManager = Container.Resolve<WindowsManager>();
 			// windowsManager.OpenWindow<InventoryWindow>();
 		}

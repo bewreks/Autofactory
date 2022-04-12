@@ -16,7 +16,7 @@ namespace Game.States
 			if (Input.GetKeyUp(KeyCode.Alpha1))
 			{
 				var inventory = _container.Resolve<IInventory>();
-				_model.SelectedPack     = inventory.GetPack(InventoryTypesEnum.TEST_OBJECT);
+				_model.SelectedPack     = inventory.GetPacks(InventoryTypesEnum.TEST_OBJECT);
 				_model.InstantiablePack = _instantiateManager.InstantiatePreview();
 				Factory.ReturnItem(this);
 				return Factory.GetFactoryItem<SelectedItemGameState>(_diContainer);

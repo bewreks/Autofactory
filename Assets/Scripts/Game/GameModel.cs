@@ -5,13 +5,13 @@ namespace Game
 {
 	public class GameModel : IGameModel
 	{
-		public InventoryPack SelectedPack     { get; set; }
-		public GameObject    InstantiablePack { get; set; }
+		public FullInventoryPack SelectedPack     { get; set; }
+		public GameObject        InstantiablePack { get; set; }
 	}
 
 	public interface IGameModel
 	{
-		InventoryPack SelectedPack     { get; }
-		GameObject    InstantiablePack { get; }
+		FullInventoryPack SelectedPack     { get; }
+		GameObject        InstantiablePack { get; }
 	}
 }

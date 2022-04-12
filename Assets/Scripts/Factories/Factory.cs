@@ -18,17 +18,17 @@ namespace Factories
 			});
 		}
 		
-		public static T GetFactoryItem<T>(DiContainer _container) where T : new()
+		public static T GetFactoryItem<T>(DiContainer container) where T : new()
 		{
 			return GetFactoryItem(() =>
 			{
 				var item = new T();
-				_container.Inject(item);
+				container.Inject(item);
 				return item;
 			});
 		}
 
-		private static T GetFactoryItem<T>(Func<T> callback) where T : new()
+		private static T GetFactoryItem<T>(Func<T> callback)
 		{
 			var item = default(T);
 

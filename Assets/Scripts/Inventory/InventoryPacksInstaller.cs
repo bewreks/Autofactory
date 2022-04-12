@@ -10,16 +10,16 @@ namespace Inventory
     [CreateAssetMenu(fileName = "InventoryPacksModelsManager", menuName = "Models/Inventory/InventoryPacksModelsManager")]
     public class InventoryPacksInstaller : ScriptableObjectInstaller<InventoryPacksInstaller>
     {
-        [SerializeField] private InventoryPacksModelsManager _manager;
+        [SerializeField] private InventoryPacksModelsSettings settings;
     
         public override void InstallBindings()
         {
-            Container.Bind<InventoryPacksModelsManager>().FromInstance(_manager).AsSingle();
+            Container.Bind<InventoryPacksModelsSettings>().FromInstance(settings).AsSingle();
         }
     }
 
     [Serializable]
-    public class InventoryPacksModelsManager
+    public class InventoryPacksModelsSettings
     {
         [SerializeField] private List<InventoryPackModel> _models = new List<InventoryPackModel>();
 

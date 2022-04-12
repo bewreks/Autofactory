@@ -29,7 +29,7 @@ namespace Windows.InventoryWindow
 
 		public void OnUpdateSize(int size)
 		{
-			count.text = $"{size}/{_pack.MaxSize}";
+			count.text = $"{size}/{_pack.Model.MaxPackSize}";
 		}
 
 		public void Dispose()

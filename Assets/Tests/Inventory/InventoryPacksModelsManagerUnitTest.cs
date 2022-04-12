@@ -8,18 +8,18 @@ namespace Tests.Inventory
     [TestFixture]
     public class InventoryPacksModelsManagerUnitTest : ZenjectUnitTestFixture
     {
-        private InventoryPacksModelsManager _inventoryPacksModelsManager;
+        private InventoryPacksModelsSettings _inventoryPacksModelsSettings;
 
         public override void Setup()
         {
             base.Setup();
-            _inventoryPacksModelsManager = new InventoryPacksModelsManager();
+            _inventoryPacksModelsSettings = new InventoryPacksModelsSettings();
         }
 
         public override void Teardown()
         {
             base.Teardown();
-            _inventoryPacksModelsManager = null;
+            _inventoryPacksModelsSettings = null;
         }
 
         [Test]
@@ -27,7 +27,7 @@ namespace Tests.Inventory
         {
             try
             {
-                _inventoryPacksModelsManager.GetModel(InventoryTypesEnum.TEST_OBJECT);
+                _inventoryPacksModelsSettings.GetModel(InventoryTypesEnum.TEST_OBJECT);
             }
             catch (Exception)
             {
@@ -40,10 +40,10 @@ namespace Tests.Inventory
         [Test]
         public void TryGetConfigObject()
         {
-            _inventoryPacksModelsManager.Models.Add(InventoryPackModel.GetTestModel());
+            _inventoryPacksModelsSettings.Models.Add(InventoryPackModel.GetTestModel());
             try
             {
-                _inventoryPacksModelsManager.GetModel(InventoryTypesEnum.TEST_OBJECT);
+                _inventoryPacksModelsSettings.GetModel(InventoryTypesEnum.TEST_OBJECT);
             }
             catch (Exception)
             {

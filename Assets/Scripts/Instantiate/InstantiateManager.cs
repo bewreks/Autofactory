@@ -25,7 +25,7 @@ namespace Instantiate
 
 		public GameObject InstantiatePreview()
 		{
-			return _container.InstantiatePrefab(_model.SelectedPack.InstancePrefab);
+			return _container.InstantiatePrefab(_model.SelectedPack.Model.Instance);
 		}
 
 		public void UpdatePreviewPosition(Vector3 hit)
@@ -38,7 +38,8 @@ namespace Instantiate
 
 		public void InstantiateFinal()
 		{
-			_container.InstantiatePrefab(_model.SelectedPack.InstancePrefab, 
+			_model.SelectedPack.Remove();
+			_container.InstantiatePrefab(_model.SelectedPack.Model.Instance, 
 			                             _model.InstantiablePack.transform.position,
 			                             _model.InstantiablePack.transform.rotation,
 			                             _model.InstantiablePack.transform.parent);

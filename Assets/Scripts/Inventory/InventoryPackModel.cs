@@ -7,12 +7,12 @@ namespace Inventory
 	public class InventoryPackModel : ScriptableObject
 	{
 		[SerializeField] private InventoryTypesEnum type        = InventoryTypesEnum.NOTHING;
-		[SerializeField] private uint               maxPackSize = 100;
+		[SerializeField] private int               maxPackSize = 100;
 		[SerializeField] private Sprite             icon;
 		[SerializeField] private GameObject         instance;
 
 		public InventoryTypesEnum Type        => type;
-		public uint               MaxPackSize => maxPackSize;
+		public int               MaxPackSize => maxPackSize;
 		public Sprite             Icon        => icon;
 		public GameObject         Instance    => instance;
 
@@ -29,37 +29,24 @@ namespace Inventory
 #endif
 	}
 
-	public class InventoryPack
+	public class InventoryPack : IDisposable
 	{
 		public event Action<int> SizeChanged;
 		public event Action      PackIsFull;
 		public event Action      PackIsEmpty;
 
-		private int                _size;
-		private InventoryPackModel _model;
+		private int _size;
 
-		public int                Size           => _size;
-		public uint               MaxSize        => _model.MaxPackSize;
-		public Sprite             Icon           => _model.Icon;
-		public bool               IsFull         => _size >= _model.MaxPackSize;
-		public bool               IsEmpty        => _size <= 0;
-		public InventoryTypesEnum Type           => _model.Type;
-		public GameObject         InstancePrefab => _model.Instance;
+		public int                Size    => _size;
+		public Sprite             Icon    => Model.Icon;
+		public bool               IsFull  => _size >= Model.MaxPackSize;
+		public bool               IsEmpty => _size <= 0;
+		public InventoryPackModel Model   { get; private set; }
 
 		public void Initialize(InventoryPackModel model, int size = 1)
 		{
-			_model = model;
-			_size  = size;
-		}
-
-		public bool AddItem()
-		{
-			return UpdateSize(_size + 1, size => size >= _model.MaxPackSize, PackIsFull);
-		}
-
-		public bool RemoveItem()
-		{
-			return UpdateSize(_size - 1, size => size <= 0, PackIsEmpty);
+			Model = model;
+			_size = size;
 		}
 
 		private bool UpdateSize(int newSize, Predicate<int> check, Action @event)
@@ -76,13 +63,28 @@ namespace Inventory
 			return true;
 		}
 
-		public void Reset()
+		public void Dispose()
 		{
 			SizeChanged = null;
 			PackIsEmpty = null;
 			PackIsFull  = null;
-			_model      = null;
+			Model       = null;
 			_size       = 0;
+		}
+
+		public bool AddItem(int count = 1)
+		{
+			return UpdateSize(_size + count, size => size >= Model.MaxPackSize, PackIsFull);
+		}
+
+		public bool SetCount(int count)
+		{
+			return UpdateSize(count, size => size >= Model.MaxPackSize, PackIsFull);
+		}
+
+		public bool RemoveItem(int count = 1)
+		{
+			return UpdateSize(_size - count, size => size <= 0, PackIsEmpty);
 		}
 	}
 

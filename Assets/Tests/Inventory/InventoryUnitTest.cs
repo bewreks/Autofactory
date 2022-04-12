@@ -8,13 +8,13 @@ namespace Tests.Inventory
 	public class InventoryUnitTest : ZenjectUnitTestFixture
 	{
 		private IInventory                  _inventory;
-		private InventoryPacksModelsManager _inventoryPacksModelsManager;
+		private InventoryPacksModelsSettings _inventoryPacksModelsSettings;
 
 		public override void Setup()
 		{
 			base.Setup();
-			_inventoryPacksModelsManager = new InventoryPacksModelsManager();
-			Container.Bind<InventoryPacksModelsManager>().FromInstance(_inventoryPacksModelsManager).AsSingle();
+			_inventoryPacksModelsSettings = new InventoryPacksModelsSettings();
+			Container.Bind<InventoryPacksModelsSettings>().FromInstance(_inventoryPacksModelsSettings).AsSingle();
 
 			_inventory = new global::Inventory.Inventory();
 			Container.Inject(_inventory);
@@ -23,16 +23,16 @@ namespace Tests.Inventory
 		public override void Teardown()
 		{
 			base.Teardown();
-			Container.Unbind<InventoryPacksModelsManager>();
+			Container.Unbind<InventoryPacksModelsSettings>();
 			_inventory.Dispose();
 			_inventory                   = null;
-			_inventoryPacksModelsManager = null;
+			_inventoryPacksModelsSettings = null;
 		}
 
 		[Test]
 		public void AddToInventoryNotConfigItemTest()
 		{
-			Assert.False(_inventory.AddItem(InventoryTypesEnum.TEST_OBJECT));
+			Assert.False(_inventory.AddItems(InventoryTypesEnum.TEST_OBJECT));
 		}
 
 		[Test]
@@ -44,26 +44,26 @@ namespace Tests.Inventory
 		[Test]
 		public void GetFromInventoryNotConfigItemsCountTest()
 		{
-			Assert.Zero(_inventory.GetItemsCount(InventoryTypesEnum.TEST_OBJECT));
+			Assert.Zero(_inventory.ItemsCount(InventoryTypesEnum.TEST_OBJECT));
 		}
 
 		private void AddMoqConfig()
 		{
-			_inventoryPacksModelsManager.Models.Add(InventoryPackModel.GetTestModel());
+			_inventoryPacksModelsSettings.Models.Add(InventoryPackModel.GetTestModel());
 		}
 
 		[Test]
 		public void AddToInventoryConfigItemTest()
 		{
 			AddMoqConfig();
-			Assert.True(_inventory.AddItem(InventoryTypesEnum.TEST_OBJECT));
+			Assert.True(_inventory.AddItems(InventoryTypesEnum.TEST_OBJECT));
 		}
 
 		[Test]
 		public void RemoveFromInventoryConfigItemTest()
 		{
 			AddMoqConfig();
-			_inventory.AddItem(InventoryTypesEnum.TEST_OBJECT);
+			_inventory.AddItems(InventoryTypesEnum.TEST_OBJECT);
 			Assert.True(_inventory.RemoveItem(InventoryTypesEnum.TEST_OBJECT));
 		}
 
@@ -71,8 +71,8 @@ namespace Tests.Inventory
 		public void GetFromInventoryConfigItemsCountTest()
 		{
 			AddMoqConfig();
-			_inventory.AddItem(InventoryTypesEnum.TEST_OBJECT);
-			Assert.NotZero(_inventory.GetItemsCount(InventoryTypesEnum.TEST_OBJECT));
+			_inventory.AddItems(InventoryTypesEnum.TEST_OBJECT);
+			Assert.NotZero(_inventory.ItemsCount(InventoryTypesEnum.TEST_OBJECT));
 		}
 	}
 }

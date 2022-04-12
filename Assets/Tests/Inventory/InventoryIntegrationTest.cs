@@ -15,7 +15,7 @@ namespace Tests.Inventory
 			PreInstall();
 			PostInstall();
 
-			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsManager>();
+			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsSettings>();
 			Assert.NotZero(inventoryPacksModelsManager.Models.Count);
 
 			yield break;
@@ -27,7 +27,7 @@ namespace Tests.Inventory
 			PreInstall();
 			PostInstall();
 
-			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsManager>();
+			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsSettings>();
 			foreach (var packModel in inventoryPacksModelsManager.Models)
 			{
 				Assert.NotNull(packModel.Icon, $"packModel.Icon != null at {packModel.name}");
@@ -45,7 +45,7 @@ namespace Tests.Inventory
 			PreInstall();
 			PostInstall();
 
-			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsManager>();
+			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsSettings>();
 			var inventoryTypesEnums         = inventoryPacksModelsManager.Models.Select(model => model.Type);
 			var inventoryUniqueTypes        = inventoryTypesEnums.Distinct();
 			var uniqueCount                 = inventoryUniqueTypes.Count();
@@ -69,7 +69,7 @@ namespace Tests.Inventory
 			PreInstall();
 			PostInstall();
 
-			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsManager>();
+			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsSettings>();
 			var inventoryUniqueTypes        = inventoryPacksModelsManager.Models.Select(model => model.Type).Distinct();
 			if (inventoryUniqueTypes.Count() != inventoryPacksModelsManager.Models.Count)
 			{

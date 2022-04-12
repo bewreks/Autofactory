@@ -8,79 +8,89 @@ namespace Inventory
 {
 	public class Inventory : IInventory
 	{
-		[Inject] private InventoryPacksModelsManager _inventoryPacksModelsManager;
-		
-		private List<InventoryPack> _packs;
+		[Inject] private InventoryPacksModelsSettings _settings;
 
-		public Inventory()
+		private Dictionary<InventoryTypesEnum, FullInventoryPack> _packs =
+			new Dictionary<InventoryTypesEnum, FullInventoryPack>();
+
+		public void Dispose()
 		{
-			_packs = new List<InventoryPack>();
+			foreach (var fullInventoryPack in _packs.Values)
+			{
+				fullInventoryPack.Dispose();
+			}
 		}
 
-		public bool AddItem(InventoryTypesEnum type)
+		public IReadOnlyList<InventoryPack> GetPacks()
 		{
-			var pack = _packs.FirstOrDefault(pack => pack.Type == type && !pack.IsFull);
-			if (pack == null)
+			var inventoryPacks = _packs.Values.SelectMany(pack => pack.Packs);
+			return inventoryPacks.ToList();
+		}
+
+		public FullInventoryPack GetPacks(InventoryTypesEnum type)
+		{
+			return _packs.TryGetValue(type, out var value) ? value : null;
+		}
+
+		public bool AddItems(InventoryTypesEnum type, int count = 1)
+		{
+			return SearchPack(type, out var value) && value.Add(count);
+		}
+
+		public bool AddItems(InventoryPack pack)
+		{
+			return SearchPack(pack.Model.Type, out var value) && value.Add(pack);
+		}
+
+		public bool AddItems(FullInventoryPack packs)
+		{
+			return SearchPack(packs.Model.Type, out var value) && value.Add(packs);
+		}
+
+		public bool RemoveItem(InventoryTypesEnum type, int count = 1)
+		{
+			return SearchPack(type, out var value) && value.Remove(count);
+		}
+
+		public bool RemoveItem(InventoryPack pack)
+		{
+			return SearchPack(pack.Model.Type, out var value) && value.Remove(pack);
+		}
+
+		public bool RemoveItem(FullInventoryPack packs)
+		{
+			SearchPack(packs.Model.Type, out var value);
+			if (packs.Equals(value))
+			{
+				packs.Clear();
+				return true;
+			}
+
+			return false;
+		}
+
+		public int ItemsCount(InventoryTypesEnum type)
+		{
+			return SearchPack(type, out var value) ? value.Count.Value : 0;
+		}
+
+		private bool SearchPack(InventoryTypesEnum type, out FullInventoryPack value)
+		{
+			if (!_packs.TryGetValue(type, out value))
 			{
 				try
 				{
-					pack = Factory.GetFactoryItem<InventoryPack>();
-					pack.Initialize(_inventoryPacksModelsManager.GetModel(type));
-					_packs.Add(pack);
+					value = Factory.GetFactoryItem<FullInventoryPack>();
+					value.Initialize(null, _settings.GetModel(type));
+					_packs.Add(type, value);
 				}
 				catch (Exception)
 				{
 					return false;
 				}
 			}
-			else
-			{
-				return pack.AddItem();
-			}
 
 			return true;
-		}
-
-		public bool RemoveItem(InventoryTypesEnum type)
-		{
-			var pack = _packs.FirstOrDefault(pack => pack.Type == type && !pack.IsEmpty);
-
-			if (pack == null) return false;
-
-			var removeItemResult = pack.RemoveItem();
-
-			if (pack.IsEmpty)
-			{
-				pack.Reset();
-				_packs.Remove(pack);
-				Factory.ReturnItem(pack);
-			}
-			
-			return removeItemResult;
-		}
-
-		public void Dispose()
-		{
-			_packs.ForEach(pack => pack.Reset());
-		}
-
-		public List<InventoryPack> GetItems()
-		{
-			return _packs;
-		}
-
-		public int GetItemsCount(InventoryTypesEnum type)
-		{
-			var packs = _packs.Where(pack => pack.Type == type && !pack.IsFull);
-			return packs.Sum(inventoryPack => inventoryPack.Size);
-		}
-
-		// TODO: Add full pack
-		public InventoryPack GetPack(InventoryTypesEnum type)
-		{
-			var inventoryPacks = _packs.Where(pack => pack.Type == type);
-			var pack           = inventoryPacks.OrderBy(pack => pack.Size).FirstOrDefault();
-			return pack;
 		}
 	}
 }

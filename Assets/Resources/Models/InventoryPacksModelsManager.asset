@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b0f060e721cba4ea7e6156e06c1218, type: 3}
   m_Name: InventoryPacksModelsManager
   m_EditorClassIdentifier: 
-  _manager:
+  settings:
     _models:
     - {fileID: 11400000, guid: 03078420a695e2148b395e4956319ed2, type: 2}
     - {fileID: 11400000, guid: 6457c77fa1229d44eab3bdea4c29ee38, type: 2}

@@ -19,7 +19,7 @@ namespace Windows.InventoryWindow
 
 		protected override void Opening()
 		{
-			var inventoryPacks = _inventory.GetItems();
+			var inventoryPacks = _inventory.GetPacks();
 			inventoryPackPrefab.gameObject.SetActive(true);
 
 			foreach (var pack in inventoryPacks)

@@ -32,7 +32,7 @@ namespace Tests
         public void ReturnToFromFactory()
         {
             Factory.ReturnItem(new TestFactoryClass());
-            Assert.NotZero(Factory.Objects[typeof(TestFactoryClass)].Count);
+            Assert.NotZero(Factory.GetCountOf<TestFactoryClass>());
         }
         
         [Test]
@@ -40,7 +40,7 @@ namespace Tests
         {
             var inventoryPack = new TestFactoryClass();
             Factory.ReturnItem(inventoryPack);
-            Assert.NotZero(Factory.Objects[typeof(TestFactoryClass)].Count);
+            Assert.NotZero(Factory.GetCountOf<TestFactoryClass>());
             Assert.AreEqual(Factory.GetFactoryItem<TestFactoryClass>(), inventoryPack);
         }
     }

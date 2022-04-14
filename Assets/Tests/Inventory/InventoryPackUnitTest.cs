@@ -1,4 +1,5 @@
 using System;
+using Factories;
 using Inventory;
 using NUnit.Framework;
 using UniRx;
@@ -330,6 +331,34 @@ namespace Tests.Inventory
 			});
 			testSize = 9;
 			inventoryPack.RemoveItem();
+		}
+
+		[Test]
+		public void InitNullModelTest()
+		{
+			var inventoryPack = new InventoryPack();
+			try
+			{
+				inventoryPack.Initialize(null, 0);
+			}
+			catch (Exception)
+			{
+				Assert.Pass();
+			}
+			Assert.Fail();
+		}
+
+		[Test]
+		public void DisposeTest()
+		{
+			var inventoryPack = new InventoryPack();
+			inventoryPack.Initialize(InventoryPackModel.GetTestModel(), 5);
+			Factory.Clear();
+			Assert.Zero(Factory.GetCountOf<InventoryPack>());
+			inventoryPack.Dispose();
+			Assert.Null(inventoryPack.Model);
+			Assert.Zero(inventoryPack.Size.Value);
+			Assert.NotZero(Factory.GetCountOf<InventoryPack>());
 		}
 	}
 }

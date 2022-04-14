@@ -1,4 +1,5 @@
 ﻿using System;
+using Factories;
 using UniRx;
 using UnityEngine;
 
@@ -59,6 +60,7 @@ namespace Inventory
 			PackIsFull  = null;
 			Model       = null;
 			_size.Value = 0;
+			Factory.ReturnItem(this);
 		}
 
 		public int AddItem(int count = 1)

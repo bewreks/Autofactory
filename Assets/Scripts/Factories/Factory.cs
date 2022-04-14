@@ -54,8 +54,7 @@ namespace Factories
 
 		public static void ReturnItem<T>(T obj)
 		{
-			Queue<object> objects;
-			if (!_objects.TryGetValue(typeof(T), out objects))
+			if (!_objects.TryGetValue(typeof(T), out var objects))
 			{
 				objects = new Queue<object>();
 				_objects.Add(typeof(T), objects);
@@ -63,13 +62,20 @@ namespace Factories
 			
 			objects.Enqueue(obj);
 		}
-#if UNITY_INCLUDE_TESTS
+
+		public static int GetCountOf<T>()
+		{
+			if (!_objects.TryGetValue(typeof(T), out var objects))
+			{
+				return 0;
+			}
+
+			return objects.Count;
+		}
+		
 		public static void Clear()
 		{
 			_objects.Clear();
 		}
-
-		public static Dictionary<Type, Queue<object>> Objects => _objects;
 	}
-#endif
 }

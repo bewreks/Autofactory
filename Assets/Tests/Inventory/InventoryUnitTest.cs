@@ -1,3 +1,4 @@
+using Factories;
 using Inventory;
 using NUnit.Framework;
 using Zenject;
@@ -7,7 +8,7 @@ namespace Tests.Inventory
 	[TestFixture]
 	public class InventoryUnitTest : ZenjectUnitTestFixture
 	{
-		private IInventory                  _inventory;
+		private IInventory                   _inventory;
 		private InventoryPacksModelsSettings _inventoryPacksModelsSettings;
 
 		public override void Setup()
@@ -25,7 +26,7 @@ namespace Tests.Inventory
 			base.Teardown();
 			Container.Unbind<InventoryPacksModelsSettings>();
 			_inventory.Dispose();
-			_inventory                   = null;
+			_inventory                    = null;
 			_inventoryPacksModelsSettings = null;
 		}
 
@@ -36,9 +37,43 @@ namespace Tests.Inventory
 		}
 
 		[Test]
+		public void AddToInventoryNotConfigItemPackTest()
+		{
+			var inventoryPack = Factory.GetFactoryItem<InventoryPack>();
+			inventoryPack.Initialize(InventoryPackModel.GetTestModel(), 500);
+			Assert.False(_inventory.AddItems(inventoryPack));
+		}
+
+		[Test]
+		public void AddToInventoryNotConfigItemFullPackTest()
+		{
+			var fullInventoryPack = Factory.GetFactoryItem<FullInventoryPack>();
+			fullInventoryPack.Initialize(null, InventoryPackModel.GetTestModel());
+			fullInventoryPack.Add(500);
+			Assert.False(_inventory.AddItems(fullInventoryPack));
+		}
+
+		[Test]
 		public void RemoveFromInventoryNotConfigItemTest()
 		{
 			Assert.False(_inventory.RemoveItem(InventoryTypesEnum.TEST_OBJECT));
+		}
+
+		[Test]
+		public void RemoveFromInventoryNotConfigItemPackTest()
+		{
+			var inventoryPack = Factory.GetFactoryItem<InventoryPack>();
+			inventoryPack.Initialize(InventoryPackModel.GetTestModel(), 500);
+			Assert.False(_inventory.RemoveItem(inventoryPack));
+		}
+
+		[Test]
+		public void RemoveFromInventoryNotConfigItemFullPackTest()
+		{
+			var fullInventoryPack = Factory.GetFactoryItem<FullInventoryPack>();
+			fullInventoryPack.Initialize(null, InventoryPackModel.GetTestModel());
+			fullInventoryPack.Add(500);
+			Assert.False(_inventory.RemoveItem(fullInventoryPack));
 		}
 
 		[Test]

@@ -45,10 +45,7 @@ namespace Inventory
 
 		public void Dispose()
 		{
-			foreach (var inventoryPack in _packs)
-			{
-				inventoryPack.Dispose();
-			}
+			Clear();
 
 			Factory.ReturnItem(this);
 		}
@@ -140,7 +137,7 @@ namespace Inventory
 			var totalCount = count;
 			if (_minPack?.Size.Value > count)
 			{
-				return _minPack.RemoveItem(count);
+				return _minPack.RemoveItem(count) == 0;
 			}
 
 			if (_minPack?.Size.Value == count)
@@ -150,7 +147,7 @@ namespace Inventory
 
 			count -= _minPack?.Size.Value ?? 0;
 			_count.SetValueAndForceNotify(_count.Value -= totalCount);
-			return Remove(_minPack) && _minPack.RemoveItem(count);
+			return Remove(_minPack) && _minPack.RemoveItem(count) == 0;
 		}
 
 		public bool Remove(InventoryPack pack)

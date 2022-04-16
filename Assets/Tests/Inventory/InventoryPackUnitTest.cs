@@ -315,6 +315,9 @@ namespace Tests.Inventory
 			}
 		}
 
+		/// <summary>
+		/// TODO: переделать на разные варианты
+		/// </summary>
 		[Test]
 		public void PackSizeChangedEventTest()
 		{

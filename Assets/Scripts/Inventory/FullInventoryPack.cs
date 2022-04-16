@@ -20,27 +20,43 @@ namespace Inventory
 
 		public void Initialize(IEnumerable<InventoryPack> packs, InventoryPackModel inventoryPackModel)
 		{
+			Model = inventoryPackModel;
+			if (Model == null)
+			{
+				throw new NullReferenceException("Model is null");
+			}
+
 			if (packs == null)
 			{
 				packs = new List<InventoryPack>();
 			}
 
-			_packs = packs.ToList();
+			_packs = new List<InventoryPack>();
+			foreach (var pack in packs)
+			{
+				if (_minPack == null)
+				{
+					_minPack = pack;
+					_packs.Add(_minPack);
+					continue;
+				}
+
+				var edge = _minPack.AddItem(pack.Size.Value);
+				if (edge != 0)
+				{
+					_minPack = Factory.GetFactoryItem<InventoryPack>();
+					_minPack.Initialize(Model, edge);
+					_packs.Add(_minPack);
+				}
+			}
+
+			_count.SetValueAndForceNotify(_packs.Sum(pack => pack.Size.Value));
 			FindNextPack();
-			Model = inventoryPackModel;
 		}
 
 		private void FindNextPack()
 		{
-			if (_packs.IsEmpty())
-			{
-				_minPack = null;
-				_count.SetValueAndForceNotify(0);
-			}
-			else
-			{
-				_minPack = _packs.OrderBy(pack => pack.Size).First();
-			}
+			_minPack = _packs.IsEmpty() ? null : _packs.OrderBy(pack => pack.Size.Value).First();
 		}
 
 		public void Dispose()
@@ -50,34 +66,47 @@ namespace Inventory
 			Factory.ReturnItem(this);
 		}
 
-		public bool Add(int count = 1)
+		public int Add(int count = 1)
 		{
+			if (count < 0)
+			{
+				count = 0;
+			}
+
+			if (count == 0) return 0;
+
 			var totalCount = count;
 			try
 			{
-				var ceil = Mathf.Ceil(count / (float)Model.MaxPackSize);
-				if (ceil > 1)
-				{
-					for (var i = 0; i < ceil - 1; i++)
-					{
-						var pack = Factory.GetFactoryItem<InventoryPack>();
-						pack.Initialize(Model, Model.MaxPackSize);
-						_packs.Add(pack);
-					}
-				}
-
-				count %= Model.MaxPackSize;
+				count = AddFulls(count);
 				AddSingle(count);
 				_count.SetValueAndForceNotify(_count.Value += totalCount);
-				return true;
+				return 0;
 			}
 			catch (Exception)
 			{
-				return false;
+				return 0;
 			}
 		}
 
-		public bool Add(InventoryPack pack)
+		private int AddFulls(int count)
+		{
+			var ceil = Mathf.Floor(count / (float)Model.MaxPackSize);
+			if (ceil > 0)
+			{
+				for (var i = 0; i < ceil; i++)
+				{
+					var pack = Factory.GetFactoryItem<InventoryPack>();
+					pack.Initialize(Model, Model.MaxPackSize);
+					_packs.Add(pack);
+				}
+			}
+
+			count %= Model.MaxPackSize;
+			return count;
+		}
+
+		public int Add(InventoryPack pack)
 		{
 			var totalCount = pack.Size.Value;
 			var packSize   = totalCount;
@@ -89,27 +118,31 @@ namespace Inventory
 			}
 			catch (Exception)
 			{
-				return false;
+				return 0;
 			}
 
 			_count.SetValueAndForceNotify(_count.Value += totalCount);
-			return true;
+			return 0;
 		}
 
-		public bool Add(FullInventoryPack packs)
+		public int Add(FullInventoryPack packs)
 		{
+			if (packs.Equals(this)) return 0;
+
 			var totalCount = packs.Count.Value;
 			var fullPacks  = packs._packs.Where(pack => pack.IsFull).ToArray();
 			_packs.AddRange(fullPacks);
 			packs._packs = packs._packs.Where(pack => fullPacks.All(inventoryPack => inventoryPack != pack)).ToList();
 			var count = packs._packs.Sum(pack => pack.Size.Value);
 			packs.Dispose();
+			AddSingle(AddFulls(count));
 			_count.SetValueAndForceNotify(_count.Value += totalCount);
-			return Add(count);
+			return 0;
 		}
 
 		private void AddSingle(int count)
 		{
+			if (count == 0) return;
 			if (_minPack == null)
 			{
 				_minPack = Factory.GetFactoryItem<InventoryPack>();
@@ -132,30 +165,79 @@ namespace Inventory
 			}
 		}
 
-		public bool Remove(int count = 1)
+		public int Remove(int count = 1)
 		{
-			var totalCount = count;
-			if (_minPack?.Size.Value > count)
+			if (count < 0)
 			{
-				return _minPack.RemoveItem(count) == 0;
+				count = 0;
 			}
 
-			if (_minPack?.Size.Value == count)
+			if (count == 0) return 0;
+
+			var edge = count;
+
+			if (edge > Model.MaxPackSize)
 			{
-				return Remove(_minPack);
+				var maxPacks       = edge % Model.MaxPackSize;
+				var inventoryPacks = _packs.Where(pack => pack.IsFull).Take(maxPacks).ToList();
+				inventoryPacks.ForEach(pack =>
+				{
+					if (_minPack == pack)
+					{
+						_minPack = null;
+					}
+
+					_packs.Remove(pack);
+				});
+				if (_minPack == null)
+				{
+					FindNextPack();
+				}
+
+				edge -= Model.MaxPackSize * (inventoryPacks.Count % Model.MaxPackSize);
 			}
 
-			count -= _minPack?.Size.Value ?? 0;
-			_count.SetValueAndForceNotify(_count.Value -= totalCount);
-			return Remove(_minPack) && _minPack.RemoveItem(count) == 0;
+			if (_minPack != null)
+			{
+				while (edge > 0)
+				{
+					edge = _minPack.RemoveItem(edge);
+					RemoveSpecificPack(_minPack);
+					if (_minPack == null)
+					{
+						break;
+					}
+				}
+			}
+
+			_count.SetValueAndForceNotify(_count.Value - (count - edge));
+			return edge;
 		}
 
-		public bool Remove(InventoryPack pack)
+		public int Remove(InventoryPack pack)
 		{
 			try
 			{
-				var totalCount = pack.Size.Value;
-				_packs.Remove(pack);
+				if (_packs.Contains(pack))
+				{
+					var totalCount = RemoveSpecificPack(pack);
+
+					_count.SetValueAndForceNotify(_count.Value -= totalCount);
+				}
+
+				return 0;
+			}
+			catch (Exception)
+			{
+				return 0;
+			}
+		}
+
+		private int RemoveSpecificPack(InventoryPack pack)
+		{
+			if (_packs.Remove(pack))
+			{
+				var size       = pack.Size.Value;
 				var needToFind = pack.Equals(_minPack);
 				pack.Dispose();
 				if (needToFind)
@@ -163,12 +245,11 @@ namespace Inventory
 					FindNextPack();
 				}
 
-				_count.SetValueAndForceNotify(_count.Value -= totalCount);
-				return true;
+				return size;
 			}
-			catch (Exception)
+			else
 			{
-				return false;
+				return 0;
 			}
 		}
 
@@ -176,7 +257,8 @@ namespace Inventory
 		{
 			_packs.ForEach(pack => pack.Dispose());
 			_packs.Clear();
-			_minPack = null;
+			_count.Value = 0;
+			_minPack     = null;
 		}
 	}
 }

@@ -34,27 +34,27 @@ namespace Inventory
 
 		public bool AddItems(InventoryTypesEnum type, int count = 1)
 		{
-			return SearchPack(type, out var value) && value.Add(count);
+			return SearchPack(type, out var value) && value.Add(count) == 0;
 		}
 
 		public bool AddItems(InventoryPack pack)
 		{
-			return SearchPack(pack.Model.Type, out var value) && value.Add(pack);
+			return SearchPack(pack.Model.Type, out var value) && value.Add(pack) == 0;
 		}
 
 		public bool AddItems(FullInventoryPack packs)
 		{
-			return SearchPack(packs.Model.Type, out var value) && value.Add(packs);
+			return SearchPack(packs.Model.Type, out var value) && value.Add(packs) == 0;
 		}
 
 		public bool RemoveItem(InventoryTypesEnum type, int count = 1)
 		{
-			return SearchPack(type, out var value) && value.Remove(count);
+			return SearchPack(type, out var value) && value.Remove(count) == 0;
 		}
 
 		public bool RemoveItem(InventoryPack pack)
 		{
-			return SearchPack(pack.Model.Type, out var value) && value.Remove(pack);
+			return SearchPack(pack.Model.Type, out var value) && value.Remove(pack) == 0;
 		}
 
 		public bool RemoveItem(FullInventoryPack packs)

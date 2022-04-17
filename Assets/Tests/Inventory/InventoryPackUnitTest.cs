@@ -301,39 +301,114 @@ namespace Tests.Inventory
 		[Test]
 		public void PackEmptyEventTest()
 		{
-			var increment     = true;
-			var inventoryPack = new InventoryPack();
-			inventoryPack.Initialize(InventoryPackModel.GetTestModel(), 10);
-			inventoryPack.PackIsEmpty += () =>
+			CheckIsEmptyEventTest(pack =>
 			{
-				increment = false;
-				Assert.Pass();
-			};
-			while (increment)
-			{
-				inventoryPack.RemoveItem();
-			}
+				while (pack.Size.Value != 0)
+				{
+					pack.RemoveItem();
+				}
+			}, 1);
 		}
 
-		/// <summary>
-		/// TODO: переделать на разные варианты
-		/// </summary>
 		[Test]
-		public void PackSizeChangedEventTest()
+		public void PackSetEmptyEventTest()
 		{
-			var testSize      = 10;
-			var inventoryPack = new InventoryPack();
-			inventoryPack.Initialize(InventoryPackModel.GetTestModel(), testSize);
+			CheckIsEmptyEventTest(pack => { pack.SetCount(0); }, 1);
+		}
+
+		[Test]
+		public void PackSizeAddOneChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.AddItem(); }, 2, 1);
+		}
+
+		[Test]
+		public void PackSizeAddNegativeChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.AddItem(-1); }, 1, 0);
+		}
+
+		[Test]
+		public void PackSizeAddZeroChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.AddItem(0); }, 1, 0);
+		}
+
+		[Test]
+		public void PackSizeSetOneChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.SetCount(1); }, 2, -9, 10);
+		}
+
+		[Test]
+		public void PackSizeReSetOneChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.SetCount(1); }, 1, 0, 1);
+		}
+
+		[Test]
+		public void PackSizeSetNegativeChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.SetCount(-1); }, 2, -1);
+		}
+
+		[Test]
+		public void PackSizeSetZeroChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.SetCount(0); }, 2, -1);
+		}
+
+		[Test]
+		public void PackSizeRemoveOneChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.RemoveItem(); }, 2, -1);
+		}
+
+		[Test]
+		public void PackSizeRemoveNegativeChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.RemoveItem(-1); }, 1, 0);
+		}
+
+		[Test]
+		public void PackSizeRemoveZeroChangedEventTest()
+		{
+			CheckChangeEventTest(pack => { pack.RemoveItem(0); }, 1, 0);
+		}
+
+		private static void CheckIsEmptyEventTest(Action<InventoryPack> func,
+		                                          int                   expectedEventCount)
+		{
+			var eventCount = 0;
+			var pack       = new InventoryPack();
+			pack.Initialize(InventoryPackModel.GetTestModel(), 10);
+			pack.PackIsEmpty += () => { eventCount++; };
+			func(pack);
+			Assert.AreEqual(expectedEventCount, eventCount);
+		}
+
+		private static void CheckChangeEventTest(Action<InventoryPack> func,
+		                                         int                   expectedEventCount,
+		                                         int                   expectedSizeChange,
+		                                         int                   initSize = 1)
+		{
+			var eventCount = 0;
+			var initialize = new InventoryPack();
+			var checkSize  = initSize;
+			initialize.Initialize(InventoryPackModel.GetTestModel(), initSize);
 			IDisposable disposable = null;
-			disposable = inventoryPack.Size.Subscribe(i =>
+			disposable = initialize.Size.Subscribe(i =>
 			{
 				// ReSharper disable once AccessToModifiedClosure
-				Assert.AreEqual(testSize, i);
+				Assert.AreEqual(checkSize, i);
 				// ReSharper disable once AccessToModifiedClosure
 				disposable?.Dispose();
+				eventCount++;
 			});
-			testSize = 9;
-			inventoryPack.RemoveItem();
+
+			checkSize += expectedSizeChange;
+			func(initialize);
+			Assert.AreEqual(expectedEventCount, eventCount);
 		}
 
 		[Test]
@@ -348,6 +423,7 @@ namespace Tests.Inventory
 			{
 				Assert.Pass();
 			}
+
 			Assert.Fail();
 		}
 

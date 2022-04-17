@@ -23,11 +23,11 @@ namespace Inventory
 			Model = model;
 			if (size > model.MaxPackSize)
 			{
-				_size.SetValueAndForceNotify(model.MaxPackSize);
+				SetSize(model.MaxPackSize);
 				return size - model.MaxPackSize;
 			}
 
-			_size.SetValueAndForceNotify(size <= 0 ? 0 : size);
+			SetSize(size <= 0 ? 0 : size);
 
 			return 0;
 		}
@@ -39,11 +39,11 @@ namespace Inventory
 			if (newSize > Model.MaxPackSize)
 			{
 				edge = newSize - Model.MaxPackSize;
-				_size.SetValueAndForceNotify(Model.MaxPackSize);
+				SetSize(Model.MaxPackSize);
 			}
 			else
 			{
-				_size.SetValueAndForceNotify(newSize);
+				SetSize(newSize);
 			}
 
 			if (check.Invoke(_size.Value))
@@ -52,6 +52,14 @@ namespace Inventory
 			}
 
 			return edge;
+		}
+
+		private void SetSize(int newSize)
+		{
+			if (_size.Value != newSize)
+			{
+				_size.SetValueAndForceNotify(newSize);
+			}
 		}
 
 		public void Dispose()
@@ -69,17 +77,19 @@ namespace Inventory
 			{
 				count = 0;
 			}
+
+			if (count == 0) return 0;
 			
 			var edge    = 0;
 			var newSize = _size.Value + count;
 			if (newSize > Model.MaxPackSize)
 			{
 				edge = newSize - Model.MaxPackSize;
-				_size.SetValueAndForceNotify(Model.MaxPackSize);
+				SetSize(Model.MaxPackSize);
 			}
 			else
 			{
-				_size.SetValueAndForceNotify(newSize);
+				SetSize(newSize);
 			}
 
 			if (_size.Value >= Model.MaxPackSize)
@@ -102,11 +112,11 @@ namespace Inventory
 			if (newSize > Model.MaxPackSize)
 			{
 				edge = newSize - Model.MaxPackSize;
-				_size.SetValueAndForceNotify(Model.MaxPackSize);
+				SetSize(Model.MaxPackSize);
 			}
 			else
 			{
-				_size.SetValueAndForceNotify(newSize);
+				SetSize(newSize);
 			}
 
 			if (_size.Value >= Model.MaxPackSize)
@@ -134,11 +144,11 @@ namespace Inventory
 			if (newSize < 0)
 			{
 				edge = Mathf.Abs(newSize);
-				_size.SetValueAndForceNotify(0);
+				SetSize(0);
 			}
 			else
 			{
-				_size.SetValueAndForceNotify(newSize);
+				SetSize(newSize);
 			}
 
 			if (_size.Value <= 0)

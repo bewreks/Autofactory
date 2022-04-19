@@ -39,17 +39,28 @@ namespace Inventory
 
 		public bool AddItems(InventoryPack pack)
 		{
-			return SearchPack(pack.Model.Type, out var value) && value.Add(pack) == 0;
+			if (SearchPack(pack.Model.Type, out var value))
+			{
+				return value.Add(pack) == 0;
+			}
+
+			return false;
 		}
 
 		public bool AddItems(FullInventoryPack packs)
 		{
-			return SearchPack(packs.Model.Type, out var value) && value.Add(packs) == 0;
+			if (SearchPack(packs.Model.Type, out var value))
+			{
+				return value.Add(packs) == 0;
+			}
+
+			return false;
 		}
 
 		public bool RemoveItem(InventoryTypesEnum type, int count = 1)
 		{
-			return SearchPack(type, out var value) && value.Remove(count) == 0;
+			if (!SearchPack(type,   out var value)) return false;
+			return value.Remove(count) == 0;
 		}
 
 		public bool RemoveItem(InventoryPack pack)
@@ -71,7 +82,12 @@ namespace Inventory
 
 		public int ItemsCount(InventoryTypesEnum type)
 		{
-			return SearchPack(type, out var value) ? value.Count.Value : 0;
+			if (SearchPack(type, out var value))
+			{
+				return value.Count.Value;
+			}
+
+			return 0;
 		}
 
 		private bool SearchPack(InventoryTypesEnum type, out FullInventoryPack value)

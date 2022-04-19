@@ -101,6 +101,8 @@ namespace Inventory
 					_packs.Add(pack);
 				}
 			}
+			
+			FindNextPack();
 
 			count %= Model.MaxPackSize;
 			return count;
@@ -202,7 +204,11 @@ namespace Inventory
 				while (edge > 0)
 				{
 					edge = _minPack.RemoveItem(edge);
-					RemoveSpecificPack(_minPack);
+					if (_minPack.IsEmpty)
+					{
+						RemoveSpecificPack(_minPack);
+					}
+
 					if (_minPack == null)
 					{
 						break;

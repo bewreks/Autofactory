@@ -5,7 +5,6 @@ using Factories;
 using Inventory;
 using NUnit.Framework;
 using UniRx;
-using UnityEngine;
 using Zenject;
 
 namespace Tests.Inventory
@@ -221,6 +220,15 @@ namespace Tests.Inventory
 				SizeOfPacks      = 50,
 				ToChange         = 0,
 				ResultCount      = 50,
+				ResultPacksCount = 1,
+			},
+			new InventoryPackInitTestData
+			{
+				Model            = InventoryPackModel.GetTestModel(),
+				GetPacksCount    = 1,
+				SizeOfPacks      = 50,
+				ToChange         = 1,
+				ResultCount      = 49,
 				ResultPacksCount = 1,
 			},
 			new InventoryPackInitTestData

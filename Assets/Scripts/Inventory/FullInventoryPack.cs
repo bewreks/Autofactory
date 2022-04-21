@@ -111,12 +111,11 @@ namespace Inventory
 		public int Add(InventoryPack pack)
 		{
 			var totalCount = pack.Size.Value;
-			var packSize   = totalCount;
 			pack.Dispose();
 			Factory.ReturnItem(pack);
 			try
 			{
-				AddSingle(packSize);
+				AddSingle(totalCount);
 			}
 			catch (Exception)
 			{

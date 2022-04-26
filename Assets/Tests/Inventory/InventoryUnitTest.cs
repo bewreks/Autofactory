@@ -446,7 +446,7 @@ namespace Tests.Inventory
 			newPack.Add(resultCount);
 			var removeResult = _inventory.RemoveItem(newPack);
 
-			CheckResults(inventoryTypesEnum, removeResult, true, 10, 1);
+			CheckResults(inventoryTypesEnum, removeResult, false, 10, 1);
 		}
 
 		[Test]
@@ -504,13 +504,36 @@ namespace Tests.Inventory
 		[Test]
 		public void RemoveFromInventoryNotInventoryNotConfiguredFullPackTest()
 		{
-			Assert.Fail();
+			AddMoqConfig();
+			const int                resultCount        = 10;
+			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
+			const InventoryTypesEnum nothingTypesEnum   = InventoryTypesEnum.NOTHING;
+			var                      addPack            = Factory.GetFactoryItem<InventoryPack>();
+			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
+			_inventory.AddItems(addPack);
+
+			Assert.AreEqual(resultCount, _inventory.ItemsCount(inventoryTypesEnum));
+
+			var newPack = Factory.GetFactoryItem<FullInventoryPack>();
+			newPack.Initialize(null, InventoryPackModel.GetNothingTestModel());
+			newPack.Add(resultCount);
+			var removeResult = _inventory.RemoveItem(newPack);
+
+			CheckResults(inventoryTypesEnum, true, true, 10, 1);
+			CheckNullResults(nothingTypesEnum, removeResult);
 		}
 
 		[Test]
 		public void RemoveFromInventoryNotConfiguredFullPackTest()
 		{
-			Assert.Fail();
+			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
+
+			var newPack = Factory.GetFactoryItem<FullInventoryPack>();
+			newPack.Initialize(null, InventoryPackModel.GetTestModel());
+			newPack.Add(10);
+			var removeResult = _inventory.RemoveItem(newPack);
+
+			CheckNullResults(inventoryTypesEnum, removeResult);
 		}
 
 		/*[Test]

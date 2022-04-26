@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using Factories;
 using Inventory;
 using NUnit.Framework;
+using UnityEngine;
 using Zenject;
 
 namespace Tests.Inventory
@@ -224,6 +226,7 @@ namespace Tests.Inventory
 		public override void Teardown()
 		{
 			base.Teardown();
+			Factory.Clear();
 			Container.Unbind<InventoryPacksModelsSettings>();
 			_inventory.Dispose();
 			_inventory                    = null;
@@ -235,6 +238,48 @@ namespace Tests.Inventory
 			_inventoryPacksModelsSettings.Models.Add(InventoryPackModel.GetTestModel());
 		}
 
+		private void CheckResults(InventoryTypesEnum type,
+		                          bool               methodResult,
+		                          bool               methodResultExpected,
+		                          int                resultCount,
+		                          int                resultPacksCount)
+		{
+			Assert.AreEqual(methodResultExpected, methodResult);
+			Assert.AreEqual(resultCount,          _inventory.ItemsCount(type));
+			Assert.AreEqual(resultCount,
+			                _inventory.GetPacks().Where(pack => pack.Model.Type == type)
+			                          .Sum(pack => pack.Size.Value));
+			Assert.AreEqual(resultCount,      _inventory.GetPacks(type).Count.Value);
+			Assert.AreEqual(resultPacksCount, _inventory.GetPacks().Count(pack => pack.Model.Type == type));
+			Assert.AreEqual(resultPacksCount, _inventory.GetPacks(type).Packs.Count());
+		}
+
+		private void CheckNullResults(InventoryTypesEnum type,
+		                              bool               methodResult)
+		{
+			Assert.AreEqual(false, methodResult);
+			Assert.AreEqual(0,     _inventory.ItemsCount(type));
+			Assert.AreEqual(0,
+			                _inventory.GetPacks().Where(pack => pack.Model.Type == type)
+			                          .Sum(pack => pack.Size.Value));
+			Assert.AreEqual(0, _inventory.GetPacks().Count(pack => pack.Model.Type == type));
+			Assert.IsNull(_inventory.GetPacks(type));
+		}
+
+		private void CheckResults(InventoryTypesEnum type,
+		                          bool               methodResult,
+		                          InventoryTestData  data)
+		{
+			CheckResults(type, methodResult, data.ResultChange, data.ResultCount, data.ResultPacksCount);
+		}
+
+		private void CheckNullResults(InventoryTypesEnum type,
+		                              bool               methodResult,
+		                              InventoryTestData  data)
+		{
+			CheckNullResults(type, methodResult);
+		}
+
 		[Test]
 		public void AddToInventoryConfiguredItemTest([ValueSource("_addItemTestDatas")] InventoryTestData data)
 		{
@@ -242,14 +287,7 @@ namespace Tests.Inventory
 			var resultType = data.Type;
 			var addResult  = _inventory.AddItems(data.Type, data.ToChange);
 
-			Assert.AreEqual(data.ResultChange, addResult);
-			Assert.AreEqual(data.ResultCount,  _inventory.ItemsCount(resultType));
-			Assert.AreEqual(data.ResultCount,
-			                _inventory.GetPacks().Where(pack => pack.Model.Type == resultType)
-			                          .Sum(pack => pack.Size.Value));
-			Assert.AreEqual(data.ResultCount,      _inventory.GetPacks(resultType).Count.Value);
-			Assert.AreEqual(data.ResultPacksCount, _inventory.GetPacks().Count(pack => pack.Model.Type == resultType));
-			Assert.AreEqual(data.ResultPacksCount, _inventory.GetPacks(resultType).Packs.Count());
+			CheckResults(resultType, addResult, data);
 		}
 
 		[Test]
@@ -260,14 +298,7 @@ namespace Tests.Inventory
 			_inventory.AddItems(resultType, data.InitCount);
 			var removeResult = _inventory.RemoveItem(resultType, data.ToChange);
 
-			Assert.AreEqual(data.ResultChange, removeResult);
-			Assert.AreEqual(data.ResultCount,  _inventory.ItemsCount(resultType));
-			Assert.AreEqual(data.ResultCount,
-			                _inventory.GetPacks().Where(pack => pack.Model.Type == resultType)
-			                          .Sum(pack => pack.Size.Value));
-			Assert.AreEqual(data.ResultCount,      _inventory.GetPacks(resultType).Count.Value);
-			Assert.AreEqual(data.ResultPacksCount, _inventory.GetPacks().Count(pack => pack.Model.Type == resultType));
-			Assert.AreEqual(data.ResultPacksCount, _inventory.GetPacks(resultType).Packs.Count());
+			CheckResults(resultType, removeResult, data);
 		}
 
 		[Test]
@@ -277,13 +308,7 @@ namespace Tests.Inventory
 			var resultType = data.Type;
 			var addResult  = _inventory.AddItems(data.Type, data.ToChange);
 
-			Assert.AreEqual(data.ResultChange, addResult);
-			Assert.AreEqual(data.ResultCount,  _inventory.ItemsCount(resultType));
-			Assert.AreEqual(data.ResultCount,
-			                _inventory.GetPacks().Where(pack => pack.Model.Type == resultType)
-			                          .Sum(pack => pack.Size.Value));
-			Assert.AreEqual(data.ResultPacksCount, _inventory.GetPacks().Count(pack => pack.Model.Type == resultType));
-			Assert.IsNull(_inventory.GetPacks(resultType));
+			CheckNullResults(resultType, addResult, data);
 		}
 
 		[Test]
@@ -294,13 +319,7 @@ namespace Tests.Inventory
 			_inventory.AddItems(resultType, data.InitCount);
 			var removeResult = _inventory.RemoveItem(resultType, data.ToChange);
 
-			Assert.AreEqual(data.ResultChange, removeResult);
-			Assert.AreEqual(data.ResultCount,  _inventory.ItemsCount(resultType));
-			Assert.AreEqual(data.ResultCount,
-			                _inventory.GetPacks().Where(pack => pack.Model.Type == resultType)
-			                          .Sum(pack => pack.Size.Value));
-			Assert.AreEqual(data.ResultPacksCount, _inventory.GetPacks().Count(pack => pack.Model.Type == resultType));
-			Assert.IsNull(_inventory.GetPacks(resultType));
+			CheckNullResults(resultType, removeResult, data);
 		}
 
 		[Test]
@@ -314,15 +333,7 @@ namespace Tests.Inventory
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
 			var addResult = _inventory.AddItems(addPack);
 
-			Assert.AreEqual(true,        addResult);
-			Assert.AreEqual(resultCount, _inventory.ItemsCount(inventoryTypesEnum));
-			Assert.AreEqual(resultCount,
-			                _inventory.GetPacks().Where(pack => pack.Model.Type == inventoryTypesEnum)
-			                          .Sum(pack => pack.Size.Value));
-			Assert.AreEqual(resultCount, _inventory.GetPacks(inventoryTypesEnum).Count.Value);
-			Assert.AreEqual(resultPacksCount,
-			                _inventory.GetPacks().Count(pack => pack.Model.Type == inventoryTypesEnum));
-			Assert.AreEqual(resultPacksCount, _inventory.GetPacks(inventoryTypesEnum).Packs.Count());
+			CheckResults(inventoryTypesEnum, addResult, true, resultCount, resultPacksCount);
 		}
 
 		[Test]
@@ -334,14 +345,7 @@ namespace Tests.Inventory
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
 			var addResult = _inventory.AddItems(addPack);
 
-			Assert.AreEqual(false, addResult);
-			Assert.AreEqual(0,     _inventory.ItemsCount(inventoryTypesEnum));
-			Assert.AreEqual(0,
-			                _inventory.GetPacks().Where(pack => pack.Model.Type == inventoryTypesEnum)
-			                          .Sum(pack => pack.Size.Value));
-			Assert.AreEqual(0,
-			                _inventory.GetPacks().Count(pack => pack.Model.Type == inventoryTypesEnum));
-			Assert.IsNull(_inventory.GetPacks(inventoryTypesEnum));
+			CheckNullResults(inventoryTypesEnum, addResult);
 		}
 
 		[Test]
@@ -357,15 +361,7 @@ namespace Tests.Inventory
 			addPack.Add(resultCount);
 			var addResult = _inventory.AddItems(addPack);
 
-			Assert.AreEqual(true,        addResult);
-			Assert.AreEqual(resultCount, _inventory.ItemsCount(inventoryTypesEnum));
-			Assert.AreEqual(resultCount,
-			                _inventory.GetPacks().Where(pack => pack.Model.Type == inventoryTypesEnum)
-			                          .Sum(pack => pack.Size.Value));
-			Assert.AreEqual(resultCount, _inventory.GetPacks(inventoryTypesEnum).Count.Value);
-			Assert.AreEqual(resultPacksCount,
-			                _inventory.GetPacks().Count(pack => pack.Model.Type == inventoryTypesEnum));
-			Assert.AreEqual(resultPacksCount, _inventory.GetPacks(inventoryTypesEnum).Packs.Count());
+			CheckResults(inventoryTypesEnum, addResult, true, resultCount, resultPacksCount);
 		}
 
 		[Test]
@@ -373,51 +369,149 @@ namespace Tests.Inventory
 		{
 			const int                resultCount        = 10;
 			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
-			
+
 			var addPack = Factory.GetFactoryItem<FullInventoryPack>();
 			addPack.Initialize(null, InventoryPackModel.GetTestModel());
 			addPack.Add(resultCount);
 			var addResult = _inventory.AddItems(addPack);
 
-			Assert.AreEqual(false, addResult);
-			Assert.AreEqual(0,     _inventory.ItemsCount(inventoryTypesEnum));
-			Assert.AreEqual(0,
-			                _inventory.GetPacks().Where(pack => pack.Model.Type == inventoryTypesEnum)
-			                          .Sum(pack => pack.Size.Value));
-			Assert.AreEqual(0,
-			                _inventory.GetPacks().Count(pack => pack.Model.Type == inventoryTypesEnum));
-			Assert.IsNull(_inventory.GetPacks(inventoryTypesEnum));
+			CheckNullResults(inventoryTypesEnum, addResult);
 		}
 
 		[Test]
-		public void RemoveFromInventoryConfiguredPackTest() { }
+		public void RemoveFromInventoryConfiguredPackTest()
+		{
+			AddMoqConfig();
+			const int                resultCount        = 10;
+			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
+			var                      addPack            = Factory.GetFactoryItem<InventoryPack>();
+			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
+			_inventory.AddItems(addPack);
+
+			Assert.AreEqual(resultCount, _inventory.ItemsCount(inventoryTypesEnum));
+
+			var removeResult =
+				_inventory.RemoveItem(_inventory.GetPacks().First(pack => pack.Model.Type == inventoryTypesEnum));
+
+			CheckResults(inventoryTypesEnum, removeResult, true, 0, 0);
+		}
 
 		[Test]
-		public void RemoveFromEmptyInventoryConfiguredPackTest() { }
+		public void RemoveFromEmptyInventoryConfiguredPackTest()
+		{
+			AddMoqConfig();
+			const int                resultCount        = 10;
+			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
+			var                      addPack            = Factory.GetFactoryItem<InventoryPack>();
+			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
+
+			var removeResult = _inventory.RemoveItem(addPack);
+
+			CheckResults(inventoryTypesEnum, removeResult, true, 0, 0);
+		}
 
 		[Test]
-		public void RemoveFromInventoryNotInventoryConfiguredPackTest() { }
-		
-		[Test]
-		public void RemoveFromInventoryNotInventoryConfiguredFullPackTest() { }
-		
-		[Test]
-		public void RemoveFromInventoryConfiguredFullPackTest() { }
+		public void RemoveFromInventoryNotInventoryConfiguredPackTest()
+		{
+			AddMoqConfig();
+			const int                resultCount        = 10;
+			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
+			var                      addPack            = Factory.GetFactoryItem<InventoryPack>();
+			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
+			_inventory.AddItems(addPack);
+
+			Assert.AreEqual(resultCount, _inventory.ItemsCount(inventoryTypesEnum));
+
+			addPack = Factory.GetFactoryItem<InventoryPack>();
+			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
+			var removeResult = _inventory.RemoveItem(addPack);
+
+			CheckResults(inventoryTypesEnum, removeResult, true, 10, 1);
+		}
 
 		[Test]
-		public void RemoveFromInventoryNotConfiguredPackTest() { }
+		public void RemoveFromInventoryNotInventoryConfiguredFullPackTest()
+		{
+			AddMoqConfig();
+			const int                resultCount        = 10;
+			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
+			var                      addPack            = Factory.GetFactoryItem<InventoryPack>();
+			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
+			_inventory.AddItems(addPack);
+
+			Assert.AreEqual(resultCount, _inventory.ItemsCount(inventoryTypesEnum));
+
+			var newPack = Factory.GetFactoryItem<FullInventoryPack>();
+			newPack.Initialize(null, InventoryPackModel.GetTestModel());
+			newPack.Add(resultCount);
+			var removeResult = _inventory.RemoveItem(newPack);
+
+			CheckResults(inventoryTypesEnum, removeResult, true, 10, 1);
+		}
 
 		[Test]
-		public void RemoveFromEmptyInventoryNotConfiguredPackTest() { }
+		public void RemoveFromInventoryConfiguredFullPackTest()
+		{
+			AddMoqConfig();
+			const int                resultCount        = 10;
+			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
+			var                      addPack            = Factory.GetFactoryItem<InventoryPack>();
+			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
+			_inventory.AddItems(addPack);
+
+			Assert.AreEqual(resultCount, _inventory.ItemsCount(inventoryTypesEnum));
+
+			var removeResult = _inventory.RemoveItem(_inventory.GetPacks(inventoryTypesEnum));
+
+			CheckResults(inventoryTypesEnum, removeResult, true, 0, 0);
+		}
 
 		[Test]
-		public void RemoveFromInventoryNotInventoryNotConfiguredPackTest() { }
-		
+		public void RemoveFromEmptyInventoryNotConfiguredPackTest()
+		{
+			const int                resultCount        = 10;
+			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
+
+			var removePack = Factory.GetFactoryItem<InventoryPack>();
+			removePack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
+
+			var removeResult = _inventory.RemoveItem(removePack);
+
+			CheckNullResults(inventoryTypesEnum, removeResult);
+		}
+
 		[Test]
-		public void RemoveFromInventoryNotInventoryNotConfiguredFullPackTest() { }
-		
+		public void RemoveFromInventoryNotInventoryNotConfiguredPackTest()
+		{
+			AddMoqConfig();
+			const int                resultCount        = 10;
+			const InventoryTypesEnum inventoryTypesEnum = InventoryTypesEnum.TEST_OBJECT;
+			const InventoryTypesEnum nothingTypesEnum   = InventoryTypesEnum.NOTHING;
+			var                      addPack            = Factory.GetFactoryItem<InventoryPack>();
+			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
+			_inventory.AddItems(addPack);
+
+			Assert.AreEqual(resultCount, _inventory.ItemsCount(inventoryTypesEnum));
+
+			addPack = Factory.GetFactoryItem<InventoryPack>();
+			addPack.Initialize(InventoryPackModel.GetNothingTestModel(), resultCount);
+			var removeResult = _inventory.RemoveItem(addPack);
+
+			CheckResults(inventoryTypesEnum, true, true, 10, 1);
+			CheckNullResults(nothingTypesEnum, removeResult);
+		}
+
 		[Test]
-		public void RemoveFromInventoryNotConfiguredFullPackTest() { }
+		public void RemoveFromInventoryNotInventoryNotConfiguredFullPackTest()
+		{
+			Assert.Fail();
+		}
+
+		[Test]
+		public void RemoveFromInventoryNotConfiguredFullPackTest()
+		{
+			Assert.Fail();
+		}
 
 		/*[Test]
 		public void AddToInventoryNotConfigItemTest()

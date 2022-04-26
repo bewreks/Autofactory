@@ -25,6 +25,16 @@ namespace Inventory
 			inventoryPackModel.instance    = new GameObject();
 			return inventoryPackModel;
 		}
+		
+		public static InventoryPackModel GetNothingTestModel()
+		{
+			var inventoryPackModel = CreateInstance<InventoryPackModel>();
+			inventoryPackModel.type        = InventoryTypesEnum.NOTHING;
+			inventoryPackModel.maxPackSize = 50;
+			inventoryPackModel.icon        = SpriteHelper.GetBlankSprite(128, 128);
+			inventoryPackModel.instance    = new GameObject();
+			return inventoryPackModel;
+		}
 #endif
 	}
 

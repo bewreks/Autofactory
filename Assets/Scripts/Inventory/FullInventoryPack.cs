@@ -111,8 +111,6 @@ namespace Inventory
 		public int Add(InventoryPack pack)
 		{
 			var totalCount = pack.Size.Value;
-			pack.Dispose();
-			Factory.ReturnItem(pack);
 			try
 			{
 				AddSingle(totalCount);
@@ -120,6 +118,11 @@ namespace Inventory
 			catch (Exception)
 			{
 				return 0;
+			}
+			finally
+			{
+				pack.Dispose();
+				Factory.ReturnItem(pack);
 			}
 
 			_count.SetValueAndForceNotify(_count.Value += totalCount);

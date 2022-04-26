@@ -59,13 +59,16 @@ namespace Inventory
 
 		public bool RemoveItem(InventoryTypesEnum type, int count = 1)
 		{
-			if (!SearchPack(type,   out var value)) return false;
+			if (!SearchPack(type, out var value)) return false;
 			return value.Remove(count) == 0;
 		}
 
 		public bool RemoveItem(InventoryPack pack)
 		{
-			return SearchPack(pack.Model.Type, out var value) && value.Remove(pack) == 0;
+			var type = pack.Model.Type;
+			if (!SearchPack(type, out var value)) return false;
+			var removeResult = value.Remove(pack) == 0;
+			return removeResult;
 		}
 
 		public bool RemoveItem(FullInventoryPack packs)

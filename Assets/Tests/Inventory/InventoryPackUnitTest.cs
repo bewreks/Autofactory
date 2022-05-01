@@ -1,6 +1,6 @@
 using System;
 using Factories;
-using Inventory;
+using Inventories;
 using NUnit.Framework;
 using UniRx;
 using Zenject;

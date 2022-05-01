@@ -3,7 +3,7 @@ using Factories;
 using UniRx;
 using UnityEngine;
 
-namespace Inventory
+namespace Inventories
 {
 	public class InventoryPack : IDisposable
 	{
@@ -12,11 +12,12 @@ namespace Inventory
 
 		private IntReactiveProperty _size = new IntReactiveProperty();
 
-		public IReadOnlyReactiveProperty<int> Size    => _size;
-		public Sprite                         Icon    => Model.Icon;
-		public bool                           IsFull  => _size.Value >= Model.MaxPackSize;
-		public bool                           IsEmpty => _size.Value <= 0;
-		public InventoryPackModel             Model   { get; private set; }
+		public IReadOnlyReactiveProperty<int> Size     => _size;
+		public Sprite                         Icon     => Model.Icon;
+		public bool                           IsFull   => _size.Value >= Model.MaxPackSize;
+		public bool                           IsEmpty  => _size.Value <= 0;
+		public InventoryPackModel             Model    { get; private set; }
+		public bool                           Disposed => Model == null;
 
 		public int Initialize(InventoryPackModel model, int size = 1)
 		{
@@ -35,7 +36,7 @@ namespace Inventory
 		private int UpdateSize(int newSize, Predicate<int> check, Action @event)
 		{
 			var edge = 0;
-			
+
 			if (newSize > Model.MaxPackSize)
 			{
 				edge = newSize - Model.MaxPackSize;
@@ -79,7 +80,7 @@ namespace Inventory
 			}
 
 			if (count == 0) return 0;
-			
+
 			var edge    = 0;
 			var newSize = _size.Value + count;
 			if (newSize > Model.MaxPackSize)
@@ -106,7 +107,7 @@ namespace Inventory
 			{
 				count = 0;
 			}
-			
+
 			var edge    = 0;
 			var newSize = count;
 			if (newSize > Model.MaxPackSize)
@@ -123,7 +124,7 @@ namespace Inventory
 			{
 				PackIsFull?.Invoke();
 			}
-			
+
 			if (_size.Value <= 0)
 			{
 				PackIsEmpty?.Invoke();
@@ -138,7 +139,7 @@ namespace Inventory
 			{
 				count = 0;
 			}
-			
+
 			var edge    = 0;
 			var newSize = _size.Value - count;
 			if (newSize < 0)

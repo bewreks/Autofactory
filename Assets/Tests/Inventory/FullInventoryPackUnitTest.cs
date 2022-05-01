@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Factories;
-using Inventory;
+using Inventories;
 using NUnit.Framework;
 using UniRx;
 using Zenject;

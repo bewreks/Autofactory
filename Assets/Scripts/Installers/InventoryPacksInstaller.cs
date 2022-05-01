@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Zenject;
 
-namespace Inventory
+namespace Inventories
 {
     [CreateAssetMenu(fileName = "InventoryPacksModelsManager", menuName = "Models/Inventory/InventoryPacksModelsManager")]
     public class InventoryPacksInstaller : ScriptableObjectInstaller<InventoryPacksInstaller>

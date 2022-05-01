@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Factories;
-using Inventory;
+using Inventories;
 using NUnit.Framework;
 using UnityEngine;
 using Zenject;
@@ -219,7 +219,7 @@ namespace Tests.Inventory
 			_inventoryPacksModelsSettings = new InventoryPacksModelsSettings();
 			Container.Bind<InventoryPacksModelsSettings>().FromInstance(_inventoryPacksModelsSettings).AsSingle();
 
-			_inventory = new global::Inventory.Inventory();
+			_inventory = new global::Inventories.Inventory();
 			Container.Inject(_inventory);
 		}
 

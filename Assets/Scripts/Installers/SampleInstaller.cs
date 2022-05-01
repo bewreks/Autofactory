@@ -1,7 +1,8 @@
 ﻿using Windows;
+using Windows.InventoryWindow;
 using Game;
 using Instantiate;
-using Inventory;
+using Inventories;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -17,9 +18,7 @@ namespace Installers
 		{
 			Observable.OnceApplicationQuit().Subscribe(unit => { _disposables.Dispose(); }).AddTo(_disposables);
 
-			Container.BindInterfacesTo<GameModel>().AsSingle();
 			Container.Bind<GameController>().FromNew().AsSingle();
-			Container.BindInterfacesTo<Inventory.Inventory>().AsSingle();
 			Container.Bind<WindowsManager>().FromNew().AsSingle();
 			Container.Bind<InstantiateManager>().FromNew().AsSingle();
 			Container.Bind<LayerMask>().FromInstance(_groundMask).AsSingle();
@@ -29,16 +28,15 @@ namespace Installers
 
 		public override void Start()
 		{
-			var inventory          = Container.Resolve<IInventory>();
-			var instantiateManager = Container.Resolve<InstantiateManager>();
 			var gameController     = Container.Resolve<GameController>();
-			_disposables.Add(inventory);
+			var gameModel          = Container.Resolve<IGameModel>();
+			var instantiateManager = Container.Resolve<InstantiateManager>();
 			_disposables.Add(gameController);
 			_disposables.Add(instantiateManager);
 
-			Assert.IsTrue(inventory.AddItems(InventoryTypesEnum.TEST_OBJECT));
-			// var windowsManager = Container.Resolve<WindowsManager>();
-			// windowsManager.OpenWindow<InventoryWindow>();
+			gameModel.PlayerModel.Inventory.AddItems(InventoryTypesEnum.TEST_OBJECT);
+			var windowsManager = Container.Resolve<WindowsManager>();
+			windowsManager.OpenWindow<InventoryWindow>();
 		}
 	}
 }

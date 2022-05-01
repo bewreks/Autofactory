@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Factories;
+using UnityEngine;
 using Zenject;
 
-namespace Inventory
+namespace Inventories
 {
 	public class Inventory : IInventory
 	{
@@ -103,8 +104,9 @@ namespace Inventory
 					value.Initialize(null, _settings.GetModel(type));
 					_packs.Add(type, value);
 				}
-				catch (Exception)
+				catch (Exception e)
 				{
+					Debug.LogError(e.Message);
 					return false;
 				}
 			}

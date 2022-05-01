@@ -1,4 +1,6 @@
-﻿using Inventory;
+﻿using System;
+using Inventories;
+using Players;
 using UnityEngine;
 
 namespace Game
@@ -7,11 +9,20 @@ namespace Game
 	{
 		public FullInventoryPack SelectedPack     { get; set; }
 		public GameObject        InstantiablePack { get; set; }
+		public PlayerModel       PlayerModel      { get; set; }
+
+		public void Dispose()
+		{
+			SelectedPack?.Dispose();
+			if (PlayerModel)
+				PlayerModel.Dispose();
+		}
 	}
 
-	public interface IGameModel
+	public interface IGameModel : IDisposable
 	{
 		FullInventoryPack SelectedPack     { get; }
 		GameObject        InstantiablePack { get; }
+		PlayerModel       PlayerModel      { get; }
 	}
 }

@@ -1,6 +1,9 @@
 ﻿using System;
 using Factories;
 using Game.States;
+using Inventories;
+using NUnit.Framework;
+using Players;
 using UniRx;
 using Zenject;
 
@@ -15,16 +18,18 @@ namespace Game
 		private CompositeDisposable _disposables = new CompositeDisposable();
 
 		[Inject]
-		public void Construct()
+		public void Construct(PlayersSetting playersSetting)
 		{
+			_model             = new GameModel();
+			_model.PlayerModel = _diContainer.InstantiatePrefabForComponent<PlayerModel>(playersSetting.PlayerPrefab);
+			_disposables.Add(_model);
+			_diContainer.Inject(_model.PlayerModel.Inventory);
+			_diContainer.BindInterfacesTo<GameModel>().FromInstance(_model).AsSingle();
+
 			_state = Factory.GetFactoryItem<NormalGameState>(_diContainer);
 
-			_model = _diContainer.Resolve<IGameModel>() as GameModel;
-			
-			Observable.EveryUpdate().Subscribe(l =>
-			{
-				_state = _state.OnUpdate(_model, _diContainer);
-			}).AddTo(_disposables);
+			Observable.EveryUpdate().Subscribe(l => { _state = _state.OnUpdate(_model, _diContainer); })
+			          .AddTo(_disposables);
 		}
 
 		public void Dispose()

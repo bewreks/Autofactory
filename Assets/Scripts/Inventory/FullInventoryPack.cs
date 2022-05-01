@@ -6,7 +6,7 @@ using ModestTree;
 using UniRx;
 using UnityEngine;
 
-namespace Inventory
+namespace Inventories
 {
 	public class FullInventoryPack : IDisposable
 	{

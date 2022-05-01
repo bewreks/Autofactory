@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Inventory
+namespace Inventories
 {
 	[CreateAssetMenu(fileName = "NewPackModel", menuName = "Models/Inventory/InventoryPack", order = 0)]
 	public class InventoryPackModel : ScriptableObject

@@ -1,5 +1,5 @@
 using System;
-using Inventory;
+using Inventories;
 using NUnit.Framework;
 using Zenject;
 

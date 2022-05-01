@@ -1,6 +1,6 @@
 ﻿using Factories;
 using Instantiate;
-using Inventory;
+using Inventories;
 using UnityEngine;
 using Zenject;
 
@@ -10,12 +10,12 @@ namespace Game.States
 	{
 		[Inject] private InstantiateManager _instantiateManager;
 		[Inject] private DiContainer        _diContainer;
-		
+
 		public IGameState OnUpdate(GameModel _model, DiContainer _container)
 		{
 			if (Input.GetKeyUp(KeyCode.Alpha1))
 			{
-				var inventory = _container.Resolve<IInventory>();
+				var inventory = _model.PlayerModel.Inventory;
 				_model.SelectedPack     = inventory.GetPacks(InventoryTypesEnum.TEST_OBJECT);
 				_model.InstantiablePack = _instantiateManager.InstantiatePreview();
 				Factory.ReturnItem(this);

@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Linq;
-using Inventory;
+using Inventories;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 using Zenject;

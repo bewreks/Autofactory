@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using Windows;
-using Inventory;
+using Inventories;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
@@ -13,13 +13,12 @@ namespace Editor
 {
 	public class ToolsEditor
 	{
-		
 		[MenuItem("Tools/Game Settings/Inventory pack models")]
 		private static void FindAndSelectInventoryPacksModels()
 		{
 			FindAndSelectAsset<InventoryPacksInstaller>();
 		}
-		
+
 		[MenuItem("Tools/Game Settings/Windows settings")]
 		private static void FindAndSelectWindowsSettings()
 		{
@@ -36,9 +35,8 @@ namespace Editor
 			return FindAndSelect<T>(LoadAllAssets);
 		}
 
-		private static T FindAndSelect<T>([NotNull]Action load) where T : Object
+		private static T FindAndSelect<T>([NotNull] Action load) where T : Object
 		{
-			
 			var instance = Resources.FindObjectsOfTypeAll<T>().FirstOrDefault();
 			if (!instance)
 			{
@@ -67,7 +65,7 @@ namespace Editor
 		private static void LoadAllAssets()
 		{
 			Directory.GetDirectories(Application.dataPath, @"Resources", SearchOption.AllDirectories)
-			         .Select(s => Directory.GetFiles(s, @"*.assets", SearchOption.TopDirectoryOnly))
+			         .Select(s => Directory.GetFiles(s, @"*.asset", SearchOption.AllDirectories))
 			         .SelectMany(strings => strings.Select(Path.GetFileNameWithoutExtension))
 			         .Distinct().ToList().ForEach(s => Resources.LoadAll(s));
 		}

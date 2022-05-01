@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Inventory;
+using Game;
+using Inventories;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -13,20 +14,20 @@ namespace Windows.InventoryWindow
 		[SerializeField] private Transform  content;
 
 		[Inject] private DiContainer _container;
-		[Inject] private IInventory  _inventory;
+		[Inject] private IGameModel  _gameModel;
 
 		private List<InventoryPackView> _packViews = new List<InventoryPackView>();
 
 		protected override void Opening()
 		{
-			var inventoryPacks = _inventory.GetPacks();
+			var inventoryPacks = _gameModel.PlayerModel.Inventory.GetPacks();
 			inventoryPackPrefab.gameObject.SetActive(true);
 
 			foreach (var pack in inventoryPacks)
 			{
 				var packView = _container.InstantiatePrefab(inventoryPackPrefab,
-				                                            Vector3.zero, 
-				                                            Quaternion.identity, 
+				                                            Vector3.zero,
+				                                            Quaternion.identity,
 				                                            content).GetComponent<InventoryPackView>();
 				packView.SetData(pack);
 				_packViews.Add(packView);
@@ -40,6 +41,7 @@ namespace Windows.InventoryWindow
 
 		protected override void Closing()
 		{
+			_packViews.ForEach(view => view.Dispose());
 			closeButton.onClick.RemoveAllListeners();
 			Closed();
 		}

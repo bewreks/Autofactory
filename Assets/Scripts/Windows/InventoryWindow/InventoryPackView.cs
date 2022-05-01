@@ -1,5 +1,5 @@
 ﻿using System;
-using Inventory;
+using Inventories;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -30,12 +30,14 @@ namespace Windows.InventoryWindow
 
 		public void OnUpdateSize(int size)
 		{
-			count.text = $"{size}/{_pack.Model.MaxPackSize}";
+			if (!_pack.Disposed)
+				count.text = $"{size}/{_pack.Model.MaxPackSize}";
 		}
 
 		public void Dispose()
 		{
 			_sizeSub?.Dispose();
+			_sizeSub = null;
 		}
 	}
 }

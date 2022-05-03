@@ -12,8 +12,6 @@ namespace Installers
 {
 	public class SampleInstaller : MonoInstaller<SampleInstaller>
 	{
-		[SerializeField] private LayerMask _groundMask;
-
 		public override void InstallBindings()
 		{
 			Observable.OnceApplicationQuit().Subscribe(unit => { _disposables.Dispose(); }).AddTo(_disposables);
@@ -21,7 +19,6 @@ namespace Installers
 			Container.Bind<GameController>().FromNew().AsSingle();
 			Container.Bind<WindowsManager>().FromNew().AsSingle();
 			Container.Bind<InstantiateManager>().FromNew().AsSingle();
-			Container.Bind<LayerMask>().FromInstance(_groundMask).AsSingle();
 		}
 
 		private CompositeDisposable _disposables = new CompositeDisposable();
@@ -35,8 +32,8 @@ namespace Installers
 			_disposables.Add(instantiateManager);
 
 			gameModel.PlayerModel.Inventory.AddItems(InventoryTypesEnum.TEST_OBJECT);
-			var windowsManager = Container.Resolve<WindowsManager>();
-			windowsManager.OpenWindow<InventoryWindow>();
+			// var windowsManager = Container.Resolve<WindowsManager>();
+			// windowsManager.OpenWindow<InventoryWindow>();
 		}
 	}
 }

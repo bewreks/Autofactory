@@ -6,7 +6,10 @@ namespace Players
 {
 	public class PlayerModel : MonoBehaviour, IDisposable
 	{
-		public IInventory Inventory { get; private set; }
+		[SerializeField] private GameObject playerViewModel;
+		
+		public IInventory Inventory       { get; private set; }
+		public GameObject PlayerViewModel => playerViewModel;
 
 		private void Awake()
 		{

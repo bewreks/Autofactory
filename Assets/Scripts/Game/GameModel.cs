@@ -10,6 +10,7 @@ namespace Game
 		public FullInventoryPack SelectedPack     { get; set; }
 		public GameObject        InstantiablePack { get; set; }
 		public PlayerModel       PlayerModel      { get; set; }
+		public Vector3           MousePosition    { get; set; }
 
 		public void Dispose()
 		{
@@ -24,5 +25,6 @@ namespace Game
 		FullInventoryPack SelectedPack     { get; }
 		GameObject        InstantiablePack { get; }
 		PlayerModel       PlayerModel      { get; }
+		Vector3           MousePosition    { get; }
 	}
 }

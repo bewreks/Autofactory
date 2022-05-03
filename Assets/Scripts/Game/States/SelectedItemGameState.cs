@@ -1,5 +1,6 @@
 ﻿using Factories;
 using Instantiate;
+using Players;
 using UnityEngine;
 using Zenject;
 
@@ -34,21 +35,12 @@ namespace Game.States
 				Factory.ReturnItem(this);
 				return Factory.GetFactoryItem<NormalGameState>(_diContainer);
 			}
-			
+
 			if (!(Camera.main is null))
 			{
-				var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-				var groundMask = _gameSettings.GroundMask;
-
-				if (Physics.Raycast(ray, out var hit, float.MaxValue, groundMask))
+				if (PlayerInputHelper.GetWorldMousePosition(_gameSettings.GroundMask, Camera.main, out var mousePosition))
 				{
-					if (hit.collider.CompareTag("Ground"))
-					{
-						model.MousePosition = hit.point;
-					}
-
-					Debug.DrawLine(ray.origin, hit.point, Color.red);
+					model.MousePosition = mousePosition;
 				}
 			}
 

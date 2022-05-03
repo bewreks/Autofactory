@@ -1,8 +1,7 @@
 ﻿using System;
+using DG.Tweening;
 using Factories;
 using Game.States;
-using Inventories;
-using NUnit.Framework;
 using Players;
 using UniRx;
 using UnityEngine;
@@ -12,7 +11,8 @@ namespace Game
 {
 	public class GameController : IDisposable
 	{
-		[Inject] private DiContainer _diContainer;
+		[Inject] private DiContainer  _diContainer;
+		[Inject] private GameSettings _gameSettings;
 
 		private GameModel           _model;
 		private IGameState          _state;
@@ -46,7 +46,12 @@ namespace Game
 		public void RotatePlayerTo(Vector3 rotateTo)
 		{
 			rotateTo.y = _model.PlayerModel.PlayerViewModel.transform.position.y;
-			_model.PlayerModel.PlayerViewModel.transform.LookAt(rotateTo);
+			_model.PlayerModel.PlayerViewModel.transform.DOLookAt(rotateTo, _gameSettings.RotationSpeed);
+		}
+
+		public void MovePlayer(Vector3 modelMoveDelta)
+		{
+			_model.PlayerModel.transform.position += modelMoveDelta * _gameSettings.MoveSpeed;
 		}
 	}
 }

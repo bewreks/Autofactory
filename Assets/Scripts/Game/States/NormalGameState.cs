@@ -1,6 +1,7 @@
 ﻿using Factories;
 using Instantiate;
 using Inventories;
+using Players;
 using UnityEngine;
 using Zenject;
 
@@ -17,20 +18,15 @@ namespace Game.States
 		{
 			if (!(Camera.main is null))
 			{
-				var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-				var groundMask = _gameSettings.GroundMask;
-
-				if (Physics.Raycast(ray, out var hit, float.MaxValue, groundMask))
+				if (PlayerInputHelper.GetWorldMousePosition(_gameSettings.GroundMask, Camera.main, out var mousePosition))
 				{
-					if (hit.collider.CompareTag("Ground"))
-					{
-						model.MousePosition = hit.point;
-					}
-
-					Debug.DrawLine(ray.origin, hit.point, Color.red);
+					model.MousePosition = mousePosition;
 				}
 			}
+
+			var deltaTime    = Time.deltaTime;
+			var currentInput = PlayerInputHelper.GetPlayerInput(deltaTime);
+			model.MoveDelta += currentInput;
 			
 			if (Input.GetKeyUp(KeyCode.Alpha1))
 			{
@@ -47,6 +43,8 @@ namespace Game.States
 		public void OnFixedUpdate(GameModel model)
 		{
 			_gameController.RotatePlayerTo(model.MousePosition);
+			_gameController.MovePlayer(model.MoveDelta);
+			model.MoveDelta = Vector3.zero;
 		}
 	}
 }

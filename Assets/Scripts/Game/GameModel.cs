@@ -11,6 +11,7 @@ namespace Game
 		public GameObject        InstantiablePack { get; set; }
 		public PlayerModel       PlayerModel      { get; set; }
 		public Vector3           MousePosition    { get; set; }
+		public Vector3           MoveDelta        { get; set; }
 
 		public void Dispose()
 		{
@@ -26,5 +27,6 @@ namespace Game
 		GameObject        InstantiablePack { get; }
 		PlayerModel       PlayerModel      { get; }
 		Vector3           MousePosition    { get; }
+		Vector3           MoveDelta        { get; }
 	}
 }

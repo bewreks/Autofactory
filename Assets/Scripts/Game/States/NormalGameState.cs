@@ -22,11 +22,10 @@ namespace Game.States
 				{
 					model.MousePosition = mousePosition;
 				}
+				var deltaTime    = Time.deltaTime;
+				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime);
+				model.MoveDelta += currentInput;
 			}
-
-			var deltaTime    = Time.deltaTime;
-			var currentInput = PlayerInputHelper.GetPlayerInput(deltaTime);
-			model.MoveDelta += currentInput;
 			
 			if (Input.GetKeyUp(KeyCode.Alpha1))
 			{

@@ -22,11 +22,25 @@ namespace Players
 			return false;
 		}
 
-		public static Vector3 GetPlayerInput(float delta)
+		public static Vector3 GetPlayerInput(Camera camera, float delta)
 		{
-			return new Vector3(Input.GetAxis("Horizontal") * delta,
-			                   0,
-			                   Input.GetAxis("Vertical") * delta);
+			var transform = camera.transform;
+			var forward   = transform.forward;
+			var right     = transform.right;
+
+			forward.y = 0;
+			right.y   = 0;
+			forward.Normalize();
+			right.Normalize();
+
+			right   *= Input.GetAxis("Horizontal");
+			forward *= Input.GetAxis("Vertical");
+
+			forward += right;
+			
+			forward.Normalize();
+
+			return forward * delta;
 		}
 	}
 }

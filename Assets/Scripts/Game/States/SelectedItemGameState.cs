@@ -42,6 +42,9 @@ namespace Game.States
 				{
 					model.MousePosition = mousePosition;
 				}
+				var deltaTime    = Time.deltaTime;
+				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime);
+				model.MoveDelta += currentInput;
 			}
 
 			return this;
@@ -51,6 +54,8 @@ namespace Game.States
 		{
 			_instantiateManager.UpdatePreviewPosition(model.MousePosition);
 			_gameController.RotatePlayerTo(model.MousePosition);
+			_gameController.MovePlayer(model.MoveDelta);
+			model.MoveDelta = Vector3.zero;
 		}
 	}
 }

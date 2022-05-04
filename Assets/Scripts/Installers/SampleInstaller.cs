@@ -4,8 +4,6 @@ using Game;
 using Instantiate;
 using Inventories;
 using UniRx;
-using UnityEngine;
-using UnityEngine.Assertions;
 using Zenject;
 
 namespace Installers
@@ -32,8 +30,8 @@ namespace Installers
 			_disposables.Add(instantiateManager);
 
 			gameModel.PlayerModel.Inventory.AddItems(InventoryTypesEnum.TEST_OBJECT);
-			var windowsManager = Container.Resolve<WindowsManager>();
-			windowsManager.OpenWindow<InventoryWindow>();
+			// var windowsManager = Container.Resolve<WindowsManager>();
+			// windowsManager.OpenWindow<InventoryWindow>();
 		}
 	}
 }

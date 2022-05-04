@@ -8,7 +8,7 @@ namespace Game
 	public class GameModel : IGameModel
 	{
 		public FullInventoryPack SelectedPack     { get; set; }
-		public GameObject        InstantiablePack { get; set; }
+		public BuildingView      InstantiablePack { get; set; }
 		public PlayerModel       PlayerModel      { get; set; }
 		public Vector3           MousePosition    { get; set; }
 		public Vector3           MoveDelta        { get; set; }
@@ -24,7 +24,7 @@ namespace Game
 	public interface IGameModel : IDisposable
 	{
 		FullInventoryPack SelectedPack     { get; }
-		GameObject        InstantiablePack { get; }
+		BuildingView      InstantiablePack { get; }
 		PlayerModel       PlayerModel      { get; }
 		Vector3           MousePosition    { get; }
 		Vector3           MoveDelta        { get; }

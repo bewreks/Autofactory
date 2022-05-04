@@ -25,10 +25,10 @@ namespace Game.States
 				return Factory.GetFactoryItem<NormalGameState>(_diContainer);
 			}
 
-			if (Input.GetMouseButtonUp(0))
+			if (Input.GetMouseButtonUp(0) && !model.InstantiablePack.Triggered)
 			{
 				_instantiateManager.InstantiateFinal();
-				Object.Destroy(model.InstantiablePack);
+				Object.Destroy(model.InstantiablePack.gameObject);
 				
 				model.SelectedPack     = null;
 				model.InstantiablePack = null;

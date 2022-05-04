@@ -1,5 +1,6 @@
 ﻿using System;
 using Game;
+using Inventories;
 using UnityEngine;
 using Zenject;
 
@@ -16,16 +17,20 @@ namespace Instantiate
 			{
 				coordX -= 0.5f;
 			}
+
 			return (int)(coordX / 0.5) * 0.5f;
 		}
 
-		public void Dispose()
-		{
-		}
+		public void Dispose() { }
 
-		public GameObject InstantiatePreview()
+		public BuildingView InstantiatePreview()
 		{
-			return _container.InstantiatePrefab(_model.SelectedPack.Model.Instance);
+			var hit = _model.MousePosition;
+			hit.x = SetStep(hit.x);
+			hit.z = SetStep(hit.z);
+
+			return _container.InstantiatePrefabForComponent<BuildingView>(_model.SelectedPack.Model.Instance, hit,
+			                                                              Quaternion.identity, null);
 		}
 
 		public void UpdatePreviewPosition(Vector3 hit)
@@ -39,10 +44,12 @@ namespace Instantiate
 		public void InstantiateFinal()
 		{
 			_model.SelectedPack.Remove();
-			_container.InstantiatePrefab(_model.SelectedPack.Model.Instance, 
-			                             _model.InstantiablePack.transform.position,
-			                             _model.InstantiablePack.transform.rotation,
-			                             _model.InstantiablePack.transform.parent);
+			var transform = _model.InstantiablePack.transform;
+			var view = _container.InstantiatePrefabForComponent<BuildingView>(_model.SelectedPack.Model.Instance,
+			                                                                  transform.position,
+			                                                                  transform.rotation,
+			                                                                  transform.parent);
+			view.Collider.isTrigger = false;
 		}
 	}
 }

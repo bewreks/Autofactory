@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: GameSettingsInstaller
   m_EditorClassIdentifier: 
   settingses:
-    _playerPrefab: {fileID: 2697359441457239117, guid: 3f727b160e226c74da4abb17a2428c63, type: 3}
     _groundMask:
       serializedVersion: 2
       m_Bits: 64
+    _playerPrefab: {fileID: 2697359441457239117, guid: 3f727b160e226c74da4abb17a2428c63, type: 3}
+    _rotationSpeed: 0.05
+    _moveSpeed: 3

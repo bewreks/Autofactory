@@ -16,9 +16,9 @@ namespace Windows.InventoryWindow
 
 		public void SetData(InventoryPack pack)
 		{
-			_pack       = pack;
-			icon.sprite = _pack.Icon;
-			_sizeSub = _pack.Size.Subscribe(OnUpdateSize);
+			_pack             =  pack;
+			icon.sprite       =  _pack.Icon;
+			_sizeSub          =  _pack.Size.Subscribe(OnUpdateSize);
 			_pack.PackIsEmpty += OnEmpty;
 		}
 

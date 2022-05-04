@@ -104,9 +104,8 @@ namespace Inventories
 					value.Initialize(null, _settings.GetModel(type));
 					_packs.Add(type, value);
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
-					Debug.LogError(e.Message);
 					return false;
 				}
 			}

@@ -5,12 +5,12 @@ namespace Inventories
 	[CreateAssetMenu(fileName = "NewPackModel", menuName = "Models/Inventory/InventoryPack", order = 0)]
 	public class InventoryPackModel : ScriptableObject
 	{
-		[SerializeField] private InventoryTypesEnum type        = InventoryTypesEnum.NOTHING;
+		[SerializeField] private InventoryObjectsTypesEnum type        = InventoryObjectsTypesEnum.NOTHING;
 		[SerializeField] private int                maxPackSize = 100;
 		[SerializeField] private Sprite             icon;
 		[SerializeField] private BuildingView       instance;
 
-		public InventoryTypesEnum Type        => type;
+		public InventoryObjectsTypesEnum Type        => type;
 		public int                MaxPackSize => maxPackSize;
 		public Sprite             Icon        => icon;
 		public BuildingView       Instance    => instance;
@@ -19,26 +19,26 @@ namespace Inventories
 		public static InventoryPackModel GetTestModel()
 		{
 			var inventoryPackModel = CreateInstance<InventoryPackModel>();
-			inventoryPackModel.type        = InventoryTypesEnum.TEST_OBJECT;
+			inventoryPackModel.type        = InventoryObjectsTypesEnum.TEST_OBJECT;
 			inventoryPackModel.maxPackSize = 50;
 			inventoryPackModel.icon        = SpriteHelper.GetBlankSprite(128, 128);
-			inventoryPackModel.instance    = new GameObject().AddComponent<BuildingView>();
+			inventoryPackModel.instance    = Resources.Load<BuildingView>("InstanceModels/TestObjectModel");
 			return inventoryPackModel;
 		}
 
 		public static InventoryPackModel GetNothingTestModel()
 		{
 			var inventoryPackModel = CreateInstance<InventoryPackModel>();
-			inventoryPackModel.type        = InventoryTypesEnum.NOTHING;
+			inventoryPackModel.type        = InventoryObjectsTypesEnum.NOTHING;
 			inventoryPackModel.maxPackSize = 50;
 			inventoryPackModel.icon        = SpriteHelper.GetBlankSprite(128, 128);
-			inventoryPackModel.instance    = new GameObject().AddComponent<BuildingView>();
+			inventoryPackModel.instance    = Resources.Load<BuildingView>("InstanceModels/TestObjectModel");
 			return inventoryPackModel;
 		}
 #endif
 	}
 
-	public enum InventoryTypesEnum
+	public enum InventoryObjectsTypesEnum
 	{
 		NOTHING,
 		TEST_OBJECT,

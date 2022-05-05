@@ -2,6 +2,7 @@
 using DG.Tweening;
 using Factories;
 using Game.States;
+using Installers;
 using Players;
 using UniRx;
 using UnityEngine;

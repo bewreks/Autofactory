@@ -1,6 +1,7 @@
 using System.Collections;
 using Windows;
 using Windows.TestWindows;
+using Installers;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;

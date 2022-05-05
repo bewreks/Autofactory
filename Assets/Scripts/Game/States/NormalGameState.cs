@@ -1,4 +1,5 @@
 ﻿using Factories;
+using Installers;
 using Instantiate;
 using Inventories;
 using Players;
@@ -30,7 +31,7 @@ namespace Game.States
 			if (Input.GetKeyUp(KeyCode.Alpha1))
 			{
 				var inventory = model.PlayerModel.Inventory;
-				model.SelectedPack     = inventory.GetPacks(InventoryTypesEnum.TEST_OBJECT);
+				model.SelectedPack     = inventory.GetPacks(InventoryObjectsTypesEnum.TEST_OBJECT);
 				model.InstantiablePack = _instantiateManager.InstantiatePreview();
 				Factory.ReturnItem(this);
 				return Factory.GetFactoryItem<SelectedItemGameState>(_diContainer);

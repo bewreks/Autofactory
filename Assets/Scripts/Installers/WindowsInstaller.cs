@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Windows;
 using UnityEngine;
 using Zenject;
 
-namespace Windows
+namespace Installers
 {
 	[CreateAssetMenu(fileName = "WindowsInstaller", menuName = "Installers/WindowsInstaller")]
 	public class WindowsInstaller : ScriptableObjectInstaller<WindowsInstaller>

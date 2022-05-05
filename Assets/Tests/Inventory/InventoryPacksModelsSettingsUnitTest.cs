@@ -1,4 +1,5 @@
 using System;
+using Installers;
 using Inventories;
 using NUnit.Framework;
 using Zenject;
@@ -27,7 +28,7 @@ namespace Tests.Inventory
         {
             try
             {
-                _inventoryPacksModelsSettings.GetModel(InventoryTypesEnum.TEST_OBJECT);
+                _inventoryPacksModelsSettings.GetModel(InventoryObjectsTypesEnum.TEST_OBJECT);
             }
             catch (Exception)
             {
@@ -43,7 +44,7 @@ namespace Tests.Inventory
             _inventoryPacksModelsSettings.Models.Add(InventoryPackModel.GetTestModel());
             try
             {
-                _inventoryPacksModelsSettings.GetModel(InventoryTypesEnum.TEST_OBJECT);
+                _inventoryPacksModelsSettings.GetModel(InventoryObjectsTypesEnum.TEST_OBJECT);
             }
             catch (Exception)
             {

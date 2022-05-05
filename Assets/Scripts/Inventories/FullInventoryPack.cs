@@ -89,6 +89,33 @@ namespace Inventories
 			}
 		}
 
+		public int Add(int count, int limitOfPacks)
+		{
+			int AddWithLimit(int needToAdd1)
+			{
+				var addedCount = needToAdd1 * Model.MaxPackSize;
+				AddFulls(addedCount);
+				var edge     = count - addedCount;
+				var canToAdd = Model.MaxPackSize - (_minPack?.Size.Value ?? 0);
+				if (needToAdd1 >= limitOfPacks)
+				{
+					canToAdd = Mathf.Min(edge, canToAdd);
+				}
+				else
+				{
+					canToAdd = edge;
+				}
+
+				edge     -= canToAdd;
+				AddSingle(canToAdd);
+				_count.SetValueAndForceNotify(_count.Value += count - edge);
+				return edge;
+			}
+
+			var needToAdd = count / Model.MaxPackSize;
+			return AddWithLimit(needToAdd <= limitOfPacks ? needToAdd : limitOfPacks);
+		}
+
 		private int AddFulls(int count)
 		{
 			var ceil = Mathf.Floor(count / (float)Model.MaxPackSize);
@@ -101,7 +128,7 @@ namespace Inventories
 					_packs.Add(pack);
 				}
 			}
-			
+
 			FindNextPack();
 
 			count %= Model.MaxPackSize;

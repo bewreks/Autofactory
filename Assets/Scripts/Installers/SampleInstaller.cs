@@ -29,7 +29,7 @@ namespace Installers
 			_disposables.Add(gameController);
 			_disposables.Add(instantiateManager);
 
-			gameModel.PlayerModel.Inventory.AddItems(InventoryTypesEnum.TEST_OBJECT);
+			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.TEST_OBJECT, 1, out var edge);
 			// var windowsManager = Container.Resolve<WindowsManager>();
 			// windowsManager.OpenWindow<InventoryWindow>();
 		}

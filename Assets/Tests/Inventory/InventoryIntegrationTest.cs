@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+using Installers;
 using Inventories;
 using NUnit.Framework;
 using UnityEngine.TestTools;
@@ -32,7 +33,7 @@ namespace Tests.Inventory
 			{
 				Assert.NotNull(packModel.Icon, $"packModel.Icon != null at {packModel.name}");
 				Assert.NotZero(packModel.MaxPackSize, $"packModel.MaxPackSize != 0 at {packModel.name}");
-				Assert.AreNotEqual(InventoryTypesEnum.NOTHING, packModel.Type,
+				Assert.AreNotEqual(InventoryObjectsTypesEnum.NOTHING, packModel.Type,
 				                   $"packModel.Type != NOTHING at {packModel.name}");
 			}
 

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using Windows;
+using Installers;
 using Inventories;
 using JetBrains.Annotations;
 using UnityEditor;

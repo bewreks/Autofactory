@@ -2,6 +2,7 @@ using System.Linq;
 using Windows;
 using Windows.TestWindows;
 using Editor;
+using Installers;
 using NUnit.Framework;
 using UnityEngine;
 using Zenject;

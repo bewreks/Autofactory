@@ -1,37 +1,71 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Inventories;
+using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.Assertions;
 using Zenject;
 
-namespace Inventories
+namespace Installers
 {
-    [CreateAssetMenu(fileName = "InventoryPacksModelsManager", menuName = "Models/Inventory/InventoryPacksModelsManager")]
-    public class InventoryPacksInstaller : ScriptableObjectInstaller<InventoryPacksInstaller>
-    {
-        [SerializeField] private InventoryPacksModelsSettings settings;
-    
-        public override void InstallBindings()
-        {
-            Container.Bind<InventoryPacksModelsSettings>().FromInstance(settings).AsSingle();
-        }
-    }
+	[CreateAssetMenu(fileName = "InventoryPacksModelsManager",
+		                menuName = "Models/Inventory/InventoryPacksModelsManager")]
+	public class InventoryPacksInstaller : ScriptableObjectInstaller<InventoryPacksInstaller>
+	{
+		[SerializeField] private InventoryPacksModelsSettings settings;
 
-    [Serializable]
-    public class InventoryPacksModelsSettings
-    {
-        [SerializeField] private List<InventoryPackModel> _models = new List<InventoryPackModel>();
+		public override void InstallBindings()
+		{
+			settings.Prepare();
+			Container.Bind<InventoryPacksModelsSettings>().FromInstance(settings).AsSingle();
+		}
+	}
 
-        public InventoryPackModel GetModel(InventoryTypesEnum type)
-        {
-            var packModel = _models.FirstOrDefault(model => model.Type == type);
-            Assert.IsNotNull(packModel, $"Model of type {type} not found");
-            return packModel;
-        }
+	[Serializable]
+	public class InventoryPacksModelsSettings
+	{
+		[SerializeField] private List<InventoryPackModel> _models = new List<InventoryPackModel>();
+
+		[SerializeField]
+		private List<InventoryTypesModel> _inventories = new List<InventoryTypesModel>();
+
+		private Dictionary<InventoryTypesEnum, InventoryTypesModel> _inventoriesMap =
+			new Dictionary<InventoryTypesEnum, InventoryTypesModel>();
+
+		public InventoryPackModel GetModel(InventoryObjectsTypesEnum type)
+		{
+			var packModel = _models.FirstOrDefault(model => model.Type == type);
+			Assert.IsNotNull(packModel, $"Model of type {type} not found");
+			return packModel;
+		}
+
+		public InventoryTypesModel GetInventoryModel(InventoryTypesEnum type)
+		{
+			if (_inventoriesMap.TryGetValue(type, out var model))
+			{
+				return model;
+			}
+			Assert.Fail($"Model of type {type} not found");
+			return null;
+		}
 
 #if UNITY_INCLUDE_TESTS
-        public List<InventoryPackModel> Models => _models;
+		public List<InventoryPackModel>  Models      => _models;
+		public List<InventoryTypesModel> Inventories => _inventories;
 #endif
-    }
+		public bool Prepare()
+		{
+			try
+			{
+				_inventoriesMap =
+					_inventories.ToDictionary(inventory => inventory.InventoryType, inventory => inventory);
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+
+			return true;
+		}
+	}
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Factories;
-using UnityEngine;
+using Installers;
 using Zenject;
 
 namespace Inventories
@@ -11,8 +11,21 @@ namespace Inventories
 	{
 		[Inject] private InventoryPacksModelsSettings _settings;
 
-		private Dictionary<InventoryTypesEnum, FullInventoryPack> _packs =
-			new Dictionary<InventoryTypesEnum, FullInventoryPack>();
+		private InventoryTypesModel _model;
+
+		private Dictionary<InventoryObjectsTypesEnum, FullInventoryPack> _packs =
+			new Dictionary<InventoryObjectsTypesEnum, FullInventoryPack>();
+
+		public void Initialize(InventoryTypesEnum type)
+		{
+			_model = _settings.GetInventoryModel(type);
+		}
+
+		[Inject]
+		public void Construct()
+		{
+			Initialize(InventoryTypesEnum.UNLIMITED);
+		}
 
 		public void Dispose()
 		{
@@ -28,14 +41,31 @@ namespace Inventories
 			return inventoryPacks.ToList();
 		}
 
-		public FullInventoryPack GetPacks(InventoryTypesEnum type)
+		public int FreePacksCount()
+		{
+			var packsCount = _packs.Values.SelectMany(pack => pack.Packs).Count();
+			return _model.Limit - packsCount;
+		}
+
+		public FullInventoryPack GetPacks(InventoryObjectsTypesEnum type)
 		{
 			return _packs.TryGetValue(type, out var value) ? value : null;
 		}
 
-		public bool AddItems(InventoryTypesEnum type, int count = 1)
+		public bool AddItems(InventoryObjectsTypesEnum type, int count, out int edge)
 		{
-			return SearchPack(type, out var value) && value.Add(count) == 0;
+			edge = 0;
+			if (count < 0)
+			{
+				return false;
+			}
+			
+			if (!SearchPack(type,   out var value)) return false;
+			
+			var freePacksCount = FreePacksCount();
+
+			edge = value.Add(count, freePacksCount);
+			return true;
 		}
 
 		public bool AddItems(InventoryPack pack)
@@ -58,7 +88,7 @@ namespace Inventories
 			return false;
 		}
 
-		public bool RemoveItem(InventoryTypesEnum type, int count = 1)
+		public bool RemoveItem(InventoryObjectsTypesEnum type, int count = 1)
 		{
 			if (!SearchPack(type, out var value)) return false;
 			return value.Remove(count) == 0;
@@ -84,7 +114,7 @@ namespace Inventories
 			return false;
 		}
 
-		public int ItemsCount(InventoryTypesEnum type)
+		public int ItemsCount(InventoryObjectsTypesEnum type)
 		{
 			if (SearchPack(type, out var value))
 			{
@@ -94,7 +124,7 @@ namespace Inventories
 			return 0;
 		}
 
-		private bool SearchPack(InventoryTypesEnum type, out FullInventoryPack value)
+		private bool SearchPack(InventoryObjectsTypesEnum type, out FullInventoryPack value)
 		{
 			if (!_packs.TryGetValue(type, out value))
 			{

@@ -68,21 +68,29 @@ namespace Inventories
 			return true;
 		}
 
-		public bool AddItems(InventoryPack pack)
+		public bool AddItems(InventoryPack pack, out int edge)
 		{
+			edge = 0;
 			if (SearchPack(pack.Model.Type, out var value))
 			{
-				return value.Add(pack) == 0;
+				var freePacksCount = FreePacksCount();
+
+				edge = value.Add(pack, freePacksCount);
+				return true;
 			}
 
 			return false;
 		}
 
-		public bool AddItems(FullInventoryPack packs)
+		public bool AddItems(FullInventoryPack packs, out int edge)
 		{
+			edge = 0;
 			if (SearchPack(packs.Model.Type, out var value))
 			{
-				return value.Add(packs) == 0;
+				var freePacksCount = FreePacksCount();
+				
+				edge = value.Add(packs, freePacksCount);
+				return true;
 			}
 
 			return false;

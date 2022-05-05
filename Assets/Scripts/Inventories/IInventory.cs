@@ -13,9 +13,9 @@ namespace Inventories
 
 		bool AddItems(InventoryObjectsTypesEnum type, int count, out int edge);
 
-		bool AddItems(InventoryPack pack);
+		bool AddItems(InventoryPack pack, out int edge);
 
-		bool AddItems(FullInventoryPack packs);
+		bool AddItems(FullInventoryPack packs, out int edge);
 
 		bool RemoveItem(InventoryObjectsTypesEnum type, int count = 1);
 

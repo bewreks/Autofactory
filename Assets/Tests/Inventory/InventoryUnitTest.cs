@@ -27,6 +27,7 @@ namespace Tests.Inventory
 		public class InventoryLimitTestData
 		{
 			public InventoryObjectsTypesEnum Type;
+			public int                       InitCount;
 			public int                       ToChange;
 			public bool                      ResultChange;
 			public int                       ResultEdge;
@@ -256,6 +257,62 @@ namespace Tests.Inventory
 			},
 		};
 
+		private static InventoryLimitTestData[] _limitPackTestData =
+		{
+			new InventoryLimitTestData
+			{
+				Type         = InventoryObjectsTypesEnum.TEST_OBJECT,
+				InitCount    = 0,
+				ToChange     = 1,
+				ResultChange = true,
+				ResultEdge   = 0
+			},
+			new InventoryLimitTestData
+			{
+				Type         = InventoryObjectsTypesEnum.TEST_OBJECT,
+				InitCount    = 0,
+				ToChange     = 50,
+				ResultChange = true,
+				ResultEdge   = 0
+			},
+			new InventoryLimitTestData
+			{
+				Type         = InventoryObjectsTypesEnum.TEST_OBJECT,
+				InitCount    = 50,
+				ToChange     = 1,
+				ResultChange = true,
+				ResultEdge   = 1
+			},
+			new InventoryLimitTestData
+			{
+				Type         = InventoryObjectsTypesEnum.TEST_OBJECT,
+				InitCount    = 50,
+				ToChange     = 50,
+				ResultChange = true,
+				ResultEdge   = 50
+			},
+		};
+
+		private static InventoryLimitTestData[] _limitFullPackTestData =
+		{
+			new InventoryLimitTestData
+			{
+				Type         = InventoryObjectsTypesEnum.TEST_OBJECT,
+				InitCount    = 0,
+				ToChange     = 51,
+				ResultChange = true,
+				ResultEdge   = 1
+			},
+			new InventoryLimitTestData
+			{
+				Type         = InventoryObjectsTypesEnum.TEST_OBJECT,
+				InitCount    = 50,
+				ToChange     = 51,
+				ResultChange = true,
+				ResultEdge   = 51
+			},
+		};
+
 		#endregion
 
 		private IInventory                   _inventory;
@@ -382,7 +439,7 @@ namespace Tests.Inventory
 			const InventoryObjectsTypesEnum InventoryObjectsTypesEnum = InventoryObjectsTypesEnum.TEST_OBJECT;
 			var                             addPack                   = Factory.GetFactoryItem<InventoryPack>();
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
-			var addResult = _inventory.AddItems(addPack);
+			var addResult = _inventory.AddItems(addPack, out var edge);
 
 			CheckResults(InventoryObjectsTypesEnum, addResult, true, resultCount, resultPacksCount);
 		}
@@ -394,7 +451,7 @@ namespace Tests.Inventory
 			const InventoryObjectsTypesEnum InventoryObjectsTypesEnum = InventoryObjectsTypesEnum.TEST_OBJECT;
 			var                             addPack                   = Factory.GetFactoryItem<InventoryPack>();
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
-			var addResult = _inventory.AddItems(addPack);
+			var addResult = _inventory.AddItems(addPack, out var edge);
 
 			CheckNullResults(InventoryObjectsTypesEnum, addResult);
 		}
@@ -410,7 +467,7 @@ namespace Tests.Inventory
 			var addPack = Factory.GetFactoryItem<FullInventoryPack>();
 			addPack.Initialize(null, InventoryPackModel.GetTestModel());
 			addPack.Add(resultCount);
-			var addResult = _inventory.AddItems(addPack);
+			var addResult = _inventory.AddItems(addPack, out int edge);
 
 			CheckResults(InventoryObjectsTypesEnum, addResult, true, resultCount, resultPacksCount);
 		}
@@ -424,7 +481,7 @@ namespace Tests.Inventory
 			var addPack = Factory.GetFactoryItem<FullInventoryPack>();
 			addPack.Initialize(null, InventoryPackModel.GetTestModel());
 			addPack.Add(resultCount);
-			var addResult = _inventory.AddItems(addPack);
+			var addResult = _inventory.AddItems(addPack, out int edge);
 
 			CheckNullResults(InventoryObjectsTypesEnum, addResult);
 		}
@@ -437,7 +494,7 @@ namespace Tests.Inventory
 			const InventoryObjectsTypesEnum InventoryObjectsTypesEnum = InventoryObjectsTypesEnum.TEST_OBJECT;
 			var                             addPack                   = Factory.GetFactoryItem<InventoryPack>();
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
-			_inventory.AddItems(addPack);
+			_inventory.AddItems(addPack, out var edge);
 
 			Assert.AreEqual(resultCount, _inventory.ItemsCount(InventoryObjectsTypesEnum));
 
@@ -470,7 +527,7 @@ namespace Tests.Inventory
 			const InventoryObjectsTypesEnum InventoryObjectsTypesEnum = InventoryObjectsTypesEnum.TEST_OBJECT;
 			var                             addPack                   = Factory.GetFactoryItem<InventoryPack>();
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
-			_inventory.AddItems(addPack);
+			_inventory.AddItems(addPack, out var edge);
 
 			Assert.AreEqual(resultCount, _inventory.ItemsCount(InventoryObjectsTypesEnum));
 
@@ -489,7 +546,7 @@ namespace Tests.Inventory
 			const InventoryObjectsTypesEnum InventoryObjectsTypesEnum = InventoryObjectsTypesEnum.TEST_OBJECT;
 			var                             addPack                   = Factory.GetFactoryItem<InventoryPack>();
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
-			_inventory.AddItems(addPack);
+			_inventory.AddItems(addPack, out var edge);
 
 			Assert.AreEqual(resultCount, _inventory.ItemsCount(InventoryObjectsTypesEnum));
 
@@ -509,7 +566,7 @@ namespace Tests.Inventory
 			const InventoryObjectsTypesEnum InventoryObjectsTypesEnum = InventoryObjectsTypesEnum.TEST_OBJECT;
 			var                             addPack                   = Factory.GetFactoryItem<InventoryPack>();
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
-			_inventory.AddItems(addPack);
+			_inventory.AddItems(addPack, out var edge);
 
 			Assert.AreEqual(resultCount, _inventory.ItemsCount(InventoryObjectsTypesEnum));
 
@@ -541,7 +598,7 @@ namespace Tests.Inventory
 			const InventoryObjectsTypesEnum nothingTypesEnum          = InventoryObjectsTypesEnum.NOTHING;
 			var                             addPack                   = Factory.GetFactoryItem<InventoryPack>();
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
-			_inventory.AddItems(addPack);
+			_inventory.AddItems(addPack, out var edge);
 
 			Assert.AreEqual(resultCount, _inventory.ItemsCount(InventoryObjectsTypesEnum));
 
@@ -562,7 +619,7 @@ namespace Tests.Inventory
 			const InventoryObjectsTypesEnum nothingTypesEnum          = InventoryObjectsTypesEnum.NOTHING;
 			var                             addPack                   = Factory.GetFactoryItem<InventoryPack>();
 			addPack.Initialize(InventoryPackModel.GetTestModel(), resultCount);
-			_inventory.AddItems(addPack);
+			_inventory.AddItems(addPack, out var edge);
 
 			Assert.AreEqual(resultCount, _inventory.ItemsCount(InventoryObjectsTypesEnum));
 
@@ -595,6 +652,40 @@ namespace Tests.Inventory
 			_inventory.Initialize(InventoryTypesEnum.TEST);
 
 			var result = _inventory.AddItems(data.Type, data.ToChange, out var edge);
+			Assert.AreEqual(data.ResultChange, result);
+			Assert.AreEqual(data.ResultEdge,   edge);
+		}
+
+		[Test]
+		public void LimitPackInventoryTests([ValueSource("_limitPackTestData")] InventoryLimitTestData data)
+		{
+			AddMoqConfig();
+			_inventory.Initialize(InventoryTypesEnum.TEST);
+			var inventoryPack = Factory.GetFactoryItem<InventoryPack>();
+			inventoryPack.Initialize(InventoryPackModel.GetTestModel(), data.InitCount);
+			_inventory.AddItems(inventoryPack, out var edge);
+
+			inventoryPack = Factory.GetFactoryItem<InventoryPack>();
+			inventoryPack.Initialize(InventoryPackModel.GetTestModel(), data.ToChange);
+			var result = _inventory.AddItems(inventoryPack, out edge);
+			Assert.AreEqual(data.ResultChange, result);
+			Assert.AreEqual(data.ResultEdge,   edge);
+		}
+
+		[Test]
+		public void LimitFullPackInventoryTests([ValueSource("_limitFullPackTestData")] InventoryLimitTestData data)
+		{
+			AddMoqConfig();
+			_inventory.Initialize(InventoryTypesEnum.TEST);
+			var inventoryPack = Factory.GetFactoryItem<FullInventoryPack>();
+			inventoryPack.Initialize(null, InventoryPackModel.GetTestModel());
+			inventoryPack.Add(data.InitCount);
+			_inventory.AddItems(inventoryPack, out var edge);
+
+			inventoryPack = Factory.GetFactoryItem<FullInventoryPack>();
+			inventoryPack.Initialize(null, InventoryPackModel.GetTestModel());
+			inventoryPack.Add(data.ToChange);
+			var result = _inventory.AddItems(inventoryPack, out edge);
 			Assert.AreEqual(data.ResultChange, result);
 			Assert.AreEqual(data.ResultEdge,   edge);
 		}

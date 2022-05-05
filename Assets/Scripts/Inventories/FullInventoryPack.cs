@@ -96,24 +96,30 @@ namespace Inventories
 				var addedCount = needToAdd1 * Model.MaxPackSize;
 				AddFulls(addedCount);
 				var edge     = count - addedCount;
-				var canToAdd = Model.MaxPackSize - (_minPack?.Size.Value ?? 0);
-				if (needToAdd1 >= limitOfPacks)
-				{
-					canToAdd = Mathf.Min(edge, canToAdd);
-				}
-				else
-				{
-					canToAdd = edge;
-				}
-
-				edge     -= canToAdd;
-				AddSingle(canToAdd);
+				edge = AddSingleWithLimit(limitOfPacks, needToAdd1, edge);
 				_count.SetValueAndForceNotify(_count.Value += count - edge);
 				return edge;
 			}
 
 			var needToAdd = count / Model.MaxPackSize;
 			return AddWithLimit(needToAdd <= limitOfPacks ? needToAdd : limitOfPacks);
+		}
+
+		private int AddSingleWithLimit(int limitOfPacks, int needToAdd, int edge)
+		{
+			var canToAdd = Model.MaxPackSize - (_minPack?.Size.Value ?? 0);
+			if (needToAdd >= limitOfPacks)
+			{
+				canToAdd = Mathf.Min(edge, canToAdd);
+			}
+			else
+			{
+				canToAdd = edge;
+			}
+
+			edge -= canToAdd;
+			AddSingle(canToAdd);
+			return edge;
 		}
 
 		private int AddFulls(int count)
@@ -149,11 +155,22 @@ namespace Inventories
 			finally
 			{
 				pack.Dispose();
-				Factory.ReturnItem(pack);
 			}
 
 			_count.SetValueAndForceNotify(_count.Value += totalCount);
 			return 0;
+		}
+
+		public int Add(InventoryPack pack, int limitOfPacks)
+		{
+			if (limitOfPacks >= 1)
+			{
+				return Add(pack);
+			}
+
+			var edge = AddSingleWithLimit(limitOfPacks, 0, pack.Size.Value);
+			_count.SetValueAndForceNotify(_count.Value += pack.Size.Value - edge);
+			return edge;
 		}
 
 		public int Add(FullInventoryPack packs)
@@ -169,6 +186,31 @@ namespace Inventories
 			AddSingle(AddFulls(count));
 			_count.SetValueAndForceNotify(_count.Value += totalCount);
 			return 0;
+		}
+
+		public int Add(FullInventoryPack packs, int limitOfPacks)
+		{
+			if (packs.Equals(this)) return 0;
+
+			if (packs._packs.Count <= limitOfPacks)
+			{
+				return Add(packs);
+			}
+			else
+			{
+				var fullPacks = packs._packs.Where(pack => pack.IsFull).Take(limitOfPacks).ToArray();
+				_packs.AddRange(fullPacks);
+				packs._packs = packs._packs.Where(pack => fullPacks.All(inventoryPack => inventoryPack != pack)).ToList();
+				packs._count.Value -= fullPacks.Sum(pack => pack.Size.Value); 
+				var count = packs._packs.Sum(pack => pack.Size.Value);
+				var add   = Add(count, limitOfPacks - fullPacks.Length);
+				packs.Remove(count - add);
+				if (packs.Count.Value <= 0)
+				{
+					packs.Dispose();
+				}
+				return add;
+			}
 		}
 
 		private void AddSingle(int count)

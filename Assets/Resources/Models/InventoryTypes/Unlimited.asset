@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb6e3825d974deba2b0216515a46965, type: 3}
   m_Name: Unlimited
   m_EditorClassIdentifier: 
-  inventoryType: 0
+  inventoryType: 1
   limit: 65535

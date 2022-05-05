@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3eb6e3825d974deba2b0216515a46965, type: 3}
   m_Name: WoodBox
   m_EditorClassIdentifier: 
-  inventoryType: 1
+  inventoryType: 2
   limit: 10

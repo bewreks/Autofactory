@@ -21,6 +21,18 @@ namespace Tests.Inventory
 
 			yield break;
 		}
+		
+		[UnityTest]
+		public IEnumerator InventoryTypesCountTest()
+		{
+			PreInstall();
+			PostInstall();
+
+			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsSettings>();
+			Assert.NotZero(inventoryPacksModelsManager.Inventories.Count);
+
+			yield break;
+		}
 
 		[UnityTest]
 		public IEnumerator InventoryManagerContentTest()
@@ -35,6 +47,23 @@ namespace Tests.Inventory
 				Assert.NotZero(packModel.MaxPackSize, $"packModel.MaxPackSize != 0 at {packModel.name}");
 				Assert.AreNotEqual(InventoryObjectsTypesEnum.NOTHING, packModel.Type,
 				                   $"packModel.Type != NOTHING at {packModel.name}");
+			}
+
+			yield break;
+		}
+
+		[UnityTest]
+		public IEnumerator InventoryTypesContentTest()
+		{
+			PreInstall();
+			PostInstall();
+
+			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsSettings>();
+			foreach (var inventoryModel in inventoryPacksModelsManager.Inventories)
+			{
+				Assert.NotZero(inventoryModel.Limit, $"inventoryModel.Limit != 0 at {inventoryModel.name}");
+				Assert.AreNotEqual(InventoryTypesEnum.TEST, inventoryModel.InventoryType,
+				                   $"inventoryModel.Type != TEST at {inventoryModel.name}");
 			}
 
 			yield break;
@@ -65,6 +94,30 @@ namespace Tests.Inventory
 		}
 
 		[UnityTest]
+		public IEnumerator InventoryTypesContentUniqueTypesTest()
+		{
+			PreInstall();
+			PostInstall();
+
+			var inventoryTypesModelsManager = Container.Resolve<InventoryPacksModelsSettings>();
+			var inventoryTypesEnums         = inventoryTypesModelsManager.Inventories.Select(model => model.InventoryType);
+			var inventoryUniqueTypes        = inventoryTypesEnums.Distinct();
+			var uniqueCount                 = inventoryUniqueTypes.Count();
+			if (uniqueCount != inventoryTypesModelsManager.Inventories.Count)
+			{
+				var distinctItems = inventoryTypesModelsManager
+				                    .Inventories
+				                    .GroupBy(model => model.InventoryType)
+				                    .Where(g => g.Count() > 1)
+				                    .SelectMany(r => r);
+
+				Assert.Fail(string.Join("\r\n", distinctItems));
+			}
+
+			yield break;
+		}
+
+		[UnityTest]
 		public IEnumerator InventoryManagerContentDuplicatesTest()
 		{
 			PreInstall();
@@ -76,6 +129,28 @@ namespace Tests.Inventory
 			{
 				var distinctItems = inventoryPacksModelsManager
 				                    .Models
+				                    .GroupBy(model => model)
+				                    .Where(g => g.Count() > 1)
+				                    .SelectMany(r => r);
+
+				Assert.Fail(string.Join("\r\n", distinctItems));
+			}
+
+			yield break;
+		}
+
+		[UnityTest]
+		public IEnumerator InventoryTypesContentDuplicatesTest()
+		{
+			PreInstall();
+			PostInstall();
+
+			var inventoryPacksModelsManager = Container.Resolve<InventoryPacksModelsSettings>();
+			var inventoryUniqueTypes        = inventoryPacksModelsManager.Inventories.Select(model => model.InventoryType).Distinct();
+			if (inventoryUniqueTypes.Count() != inventoryPacksModelsManager.Inventories.Count)
+			{
+				var distinctItems = inventoryPacksModelsManager
+				                    .Inventories
 				                    .GroupBy(model => model)
 				                    .Where(g => g.Count() > 1)
 				                    .SelectMany(r => r);

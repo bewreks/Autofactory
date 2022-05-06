@@ -1,5 +1,4 @@
-﻿using Windows;
-using Windows.InventoryWindow;
+﻿using Crafting;
 using Game;
 using Instantiate;
 using Inventories;
@@ -15,6 +14,7 @@ namespace Installers
 			Observable.OnceApplicationQuit().Subscribe(unit => { _disposables.Dispose(); }).AddTo(_disposables);
 
 			Container.Bind<GameController>().FromNew().AsSingle();
+			Container.Bind<CraftingController>().FromNew().AsSingle();
 			Container.Bind<WindowsManager>().FromNew().AsSingle();
 			Container.Bind<InstantiateManager>().FromNew().AsSingle();
 		}
@@ -26,10 +26,13 @@ namespace Installers
 			var gameController     = Container.Resolve<GameController>();
 			var gameModel          = Container.Resolve<IGameModel>();
 			var instantiateManager = Container.Resolve<InstantiateManager>();
+			var craftingController = Container.Resolve<CraftingController>();
 			_disposables.Add(gameController);
 			_disposables.Add(instantiateManager);
+			_disposables.Add(craftingController);
 
 			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.TEST_OBJECT, 1, out var edge);
+			craftingController.StartCraft(gameModel.PlayerModel.Inventory, gameModel.PlayerModel.Inventory, InventoryObjectsTypesEnum.GENERATOR);
 			// var windowsManager = Container.Resolve<WindowsManager>();
 			// windowsManager.OpenWindow<InventoryWindow>();
 		}

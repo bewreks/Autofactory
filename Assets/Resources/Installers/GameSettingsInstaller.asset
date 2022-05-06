@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da58308b858a474b920aa3b7e5d85634, type: 3}
   m_Name: GameSettingsInstaller
   m_EditorClassIdentifier: 
-  settingses:
+  settings:
     _groundMask:
       serializedVersion: 2
       m_Bits: 64
     _playerPrefab: {fileID: 2697359441457239117, guid: 3f727b160e226c74da4abb17a2428c63, type: 3}
     _rotationSpeed: 0.05
-    _moveSpeed: 3
+    _moveSpeed: 1.5

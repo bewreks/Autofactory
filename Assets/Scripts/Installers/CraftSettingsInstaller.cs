@@ -19,7 +19,7 @@ namespace Installers
 			Container.Bind<CraftSettings>().FromInstance(settings).AsSingle();
 		}
 	}
-	
+
 	[Serializable]
 	public class CraftSettings
 	{
@@ -28,17 +28,29 @@ namespace Installers
 		private Dictionary<InventoryObjectsTypesEnum, CraftingModel> _craftingMap =
 			new Dictionary<InventoryObjectsTypesEnum, CraftingModel>();
 
-		public void Prepare()
+		public bool Prepare()
 		{
-			_craftingMap = _craftingModels.ToDictionary(model => model.CraftingResult.model.Type, model => model);
+			try
+			{
+				_craftingMap = _craftingModels.ToDictionary(model => model.CraftingResult.model.Type, model => model);
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+
+			return true;
 		}
-		
+
 		public CraftingModel GetModel(InventoryObjectsTypesEnum type)
 		{
 			if (_craftingMap == null) return null;
-			
+
 			_craftingMap.TryGetValue(type, out var craftingModel);
 			return craftingModel;
 		}
+#if UNITY_INCLUDE_TESTS
+		public List<CraftingModel> Models => _craftingModels;
+#endif
 	}
 }

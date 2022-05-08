@@ -20,33 +20,64 @@ namespace Tests.Crafting
 			public int   StartTestObject;
 			public int   ResultNothing;
 			public int   ResultTestObject;
+			public bool  ResultTaskComplete;
 		}
 
 		public static CraftTestData[] _craftTests =
 		{
 			new CraftTestData
 			{
-				TimeOfTick       = 0.1f,
-				ResultNothing    = 0,
-				StartNothing     = 1,
-				ResultTestObject = 1,
-				StartTestObject  = 0
+				TimeOfTick         = 0.1f,
+				ResultNothing      = 0,
+				StartNothing       = 1,
+				ResultTestObject   = 1,
+				StartTestObject    = 0,
+				ResultTaskComplete = true
 			},
 			new CraftTestData
 			{
-				TimeOfTick       = 1f,
-				ResultNothing    = 0,
-				StartNothing     = 1,
-				ResultTestObject = 1,
-				StartTestObject  = 0
+				TimeOfTick         = 1f,
+				ResultNothing      = 0,
+				StartNothing       = 1,
+				ResultTestObject   = 1,
+				StartTestObject    = 0,
+				ResultTaskComplete = true
 			},
 			new CraftTestData
 			{
-				TimeOfTick       = 1.1f,
-				ResultNothing    = 0,
-				StartNothing     = 1,
-				ResultTestObject = 1,
-				StartTestObject  = 0
+				TimeOfTick         = 1.1f,
+				ResultNothing      = 0,
+				StartNothing       = 1,
+				ResultTestObject   = 1,
+				StartTestObject    = 0,
+				ResultTaskComplete = true
+			},
+			new CraftTestData
+			{
+				TimeOfTick         = 0.1f,
+				ResultNothing      = 0,
+				StartNothing       = 0,
+				ResultTestObject   = 0,
+				StartTestObject    = 0,
+				ResultTaskComplete = false
+			},
+			new CraftTestData
+			{
+				TimeOfTick         = 1f,
+				ResultNothing      = 0,
+				StartNothing       = 0,
+				ResultTestObject   = 0,
+				StartTestObject    = 0,
+				ResultTaskComplete = false
+			},
+			new CraftTestData
+			{
+				TimeOfTick         = 1.1f,
+				ResultNothing      = 0,
+				StartNothing       = 0,
+				ResultTestObject   = 0,
+				StartTestObject    = 0,
+				ResultTaskComplete = false
 			},
 		};
 
@@ -101,9 +132,10 @@ namespace Tests.Crafting
 			{
 				_craftingTask.Tick(data.TimeOfTick);
 			}
+
 			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     data.ResultNothing);
 			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), data.ResultTestObject);
-			Assert.IsTrue(taskCompleted);
+			Assert.AreEqual(taskCompleted,                                                data.ResultTaskComplete);
 		}
 	}
 }

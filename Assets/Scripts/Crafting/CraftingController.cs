@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Factories;
 using Installers;
 using Inventories;
@@ -14,7 +15,8 @@ namespace Crafting
 
 		private CompositeDisposable _disposables = new CompositeDisposable();
 
-		private List<CraftingTask> _tasks = new List<CraftingTask>();
+		private List<CraftingTask> _tasks      = new List<CraftingTask>();
+		private List<CraftingTask> _endedTasks = new List<CraftingTask>();
 
 		[Inject]
 		public void Construct()
@@ -22,7 +24,20 @@ namespace Crafting
 			const float timerTimeConst = 0.1f;
 			Observable.Timer(TimeSpan.FromSeconds(timerTimeConst)).Repeat().Subscribe(l =>
 			{
-				_tasks.ForEach(task => task.Tick(timerTimeConst));
+				var parallelOptions = new ParallelOptions
+				{
+					                      MaxDegreeOfParallelism = 5
+				};
+				var parallelLoopResult = Parallel.ForEach(_tasks, parallelOptions, task => { task.Tick(timerTimeConst); });
+				// _tasks.ForEach(task => task.Tick(timerTimeConst));
+				if (parallelLoopResult.IsCompleted)
+				{
+					_endedTasks.ForEach(task =>
+					{
+						_tasks.Remove(task);
+					});
+					_endedTasks.Clear();
+				}
 			}).AddTo(_disposables);
 		}
 
@@ -32,7 +47,7 @@ namespace Crafting
 			craftingTask.Initialize(from, to, _craftSettings.GetModel(types));
 			craftingTask.TaskComplete += task =>
 			{
-				_tasks.Remove(task);
+				_tasks.Add(task);
 				task.Dispose();
 				Factory.ReturnItem(task);
 			};

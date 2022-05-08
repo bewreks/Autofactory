@@ -14,6 +14,29 @@ namespace Crafting
 		public CraftingNeed[] CraftingNeeds  => craftingNeeds;
 		public CraftingNeed   CraftingResult => craftingResult;
 		public float          CraftingTime   => craftingTime;
+
+#if UNITY_INCLUDE_TESTS
+		public static CraftingModel GetTestModel()
+		{
+			var craftingModel = CreateInstance<CraftingModel>();
+			craftingModel.craftingTime = 1;
+			craftingModel.craftingResult = new CraftingNeed
+			                               {
+				                               count = 1,
+				                               model = InventoryPackModel.GetTestModel()
+			                               };
+			craftingModel.craftingNeeds = new[]
+			                              {
+				                              new CraftingNeed
+				                              {
+					                              count = 1,
+					                              model = InventoryPackModel.GetNothingTestModel()
+				                              }
+			                              };
+			return craftingModel;
+		}
+
+#endif
 	}
 
 	[Serializable]

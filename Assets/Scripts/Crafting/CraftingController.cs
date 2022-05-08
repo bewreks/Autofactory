@@ -32,6 +32,7 @@ namespace Crafting
 			craftingTask.Initialize(from, to, _craftSettings.GetModel(types));
 			craftingTask.TaskComplete += task =>
 			{
+				_tasks.Remove(task);
 				task.Dispose();
 				Factory.ReturnItem(task);
 			};

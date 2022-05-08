@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Unlimited
   m_EditorClassIdentifier: 
   inventoryType: 1
-  limit: 65535
+  limit: 2147483647

@@ -44,7 +44,7 @@ namespace Inventories
 		public int FreePacksCount()
 		{
 			var packsCount = _packs.Values.SelectMany(pack => pack.Packs).Count();
-			return _model.Limit - packsCount;
+			return (int)(_model.Limit - packsCount);
 		}
 
 		public FullInventoryPack GetPacks(InventoryObjectsTypesEnum type)

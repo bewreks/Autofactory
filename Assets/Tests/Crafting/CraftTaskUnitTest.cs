@@ -137,5 +137,25 @@ namespace Tests.Crafting
 			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), data.ResultTestObject);
 			Assert.AreEqual(taskCompleted,                                                data.ResultTaskComplete);
 		}
+
+		[Test]
+		public void CancelCraftTaskTest()
+		{
+			var taskCompleted = false;
+			_inventory.AddItems(InventoryObjectsTypesEnum.NOTHING, 1, out var edge);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     1);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
+			var craftingModel = CraftingModel.GetTestModel();
+			_craftingTask.Initialize(_inventory, _inventory, craftingModel);
+			_craftingTask.TaskComplete += task => { taskCompleted = true; };
+			_craftingTask.Tick(0.1f);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     0);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
+			_craftingTask.Cancel();
+			_craftingTask.Tick(0.1f);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     1);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
+			Assert.IsTrue(taskCompleted);
+		}
 	}
 }

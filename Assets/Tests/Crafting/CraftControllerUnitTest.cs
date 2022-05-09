@@ -76,5 +76,35 @@ namespace Tests.Crafting
             Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     0);
             Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
         }
+    
+        [UnityTest]
+        public IEnumerator CancelOneOfCraftTest()
+        {
+            _inventory.AddItems(InventoryObjectsTypesEnum.NOTHING, 1, out var edge);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     1);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
+            _craftingController.StartCraft(_inventory, _inventory, InventoryObjectsTypesEnum.TEST_OBJECT);
+            yield return new WaitForSeconds(.1f);
+            _craftingController.CancelCraft(_inventory, _inventory);
+            yield return new WaitForSeconds(.1f);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     1);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
+        }
+    
+        [UnityTest]
+        public IEnumerator CancelTwoOfCraftTest()
+        {
+            _inventory.AddItems(InventoryObjectsTypesEnum.NOTHING, 2, out var edge);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     2);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
+            _craftingController.StartCraft(_inventory, _inventory, InventoryObjectsTypesEnum.TEST_OBJECT);
+            yield return new WaitForSeconds(.1f);
+            _craftingController.StartCraft(_inventory, _inventory, InventoryObjectsTypesEnum.TEST_OBJECT);
+            yield return new WaitForSeconds(.4f);
+            _craftingController.CancelCraft(_inventory, _inventory);
+            yield return new WaitForSeconds(.1f);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     2);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
+        }
     }
 }

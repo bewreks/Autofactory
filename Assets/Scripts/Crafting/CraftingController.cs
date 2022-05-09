@@ -16,8 +16,10 @@ namespace Crafting
 
 		private CompositeDisposable _disposables = new CompositeDisposable();
 
-		private List<CraftingTask> _tasks      = new List<CraftingTask>();
-		private List<CraftingTask> _endedTasks = new List<CraftingTask>();
+		private Dictionary<(IInventory, IInventory), Queue<CraftingTask>> _craftingMap =
+			new Dictionary<(IInventory, IInventory), Queue<CraftingTask>>();
+
+		private List<(IInventory, IInventory)> _endedTasks = new List<(IInventory, IInventory)>();
 
 		[Inject]
 		public void Construct()
@@ -29,13 +31,17 @@ namespace Crafting
 				{
 					                      MaxDegreeOfParallelism = 5
 				};
-				var parallelLoopResult = Parallel.ForEach(_tasks, parallelOptions, task => { task.Tick(timerTimeConst); });
+				var selectMany = _craftingMap.Select(pair => pair.Value.Peek());
+				var parallelLoopResult = Parallel.ForEach(selectMany, parallelOptions, task => { task.Tick(timerTimeConst); });
 				// _tasks.ForEach(task => task.Tick(timerTimeConst));
 				if (parallelLoopResult.IsCompleted)
 				{
 					_endedTasks.ForEach(task =>
 					{
-						_tasks.Remove(task);
+						if (_craftingMap.TryGetValue(task, out var queue))
+						{
+							queue.Dequeue();
+						}
 					});
 					_endedTasks.Clear();
 				}
@@ -48,19 +54,30 @@ namespace Crafting
 			craftingTask.Initialize(from, to, _craftSettings.GetModel(types));
 			craftingTask.TaskComplete += task =>
 			{
-				_endedTasks.Add(task);
+				_endedTasks.Add((from, to));
 				task.Dispose();
 				Factory.ReturnItem(task);
 			};
-			_tasks.Add(craftingTask);
+			if (!_craftingMap.TryGetValue((from, to), out var queue))
+			{
+				queue = new Queue<CraftingTask>();
+				_craftingMap.Add((from, to), queue);
+			}
+			queue.Enqueue(craftingTask);
 		}
 
 		public void CancelCraft(IInventory from, IInventory to)
 		{
-			var task = _tasks.FirstOrDefault(task => task.IsSame(from, to));
-			if (!task?.IsComplete??false)
+			if (_craftingMap.TryGetValue((from, to), out var queue))
 			{
-				task.Cancel();
+				var craftingTasks = queue.ToArray();
+				foreach (var task in craftingTasks)
+				{
+					if (!task?.IsComplete??false)
+					{
+						task.Cancel();
+					}
+				}
 			}
 		}
 

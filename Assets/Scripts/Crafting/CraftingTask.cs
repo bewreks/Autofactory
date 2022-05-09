@@ -55,7 +55,14 @@ namespace Crafting
 		public void Cancel()
 		{
 			Factory.ReturnItem(_state);
-			_state = Factory.GetFactoryItem<CancelCraftingTaskState>();
+			if (_state is InitializeCraftingTaskState)
+			{
+				_state = Factory.GetFactoryItem<EndCraftingTaskState>();
+			}
+			else
+			{
+				_state = Factory.GetFactoryItem<CancelCraftingTaskState>();
+			}
 		}
 	}
 }

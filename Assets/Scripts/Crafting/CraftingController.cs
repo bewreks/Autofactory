@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Factories;
 using Installers;
@@ -52,6 +53,15 @@ namespace Crafting
 				Factory.ReturnItem(task);
 			};
 			_tasks.Add(craftingTask);
+		}
+
+		public void CancelCraft(IInventory from, IInventory to)
+		{
+			var task = _tasks.FirstOrDefault(task => task.IsSame(from, to));
+			if (!task?.IsComplete??false)
+			{
+				task.Cancel();
+			}
 		}
 
 		public void Dispose()

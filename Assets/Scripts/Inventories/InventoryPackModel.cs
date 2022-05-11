@@ -5,10 +5,10 @@ namespace Inventories
 	[CreateAssetMenu(fileName = "NewPackModel", menuName = "Models/Inventory/InventoryPack", order = 0)]
 	public class InventoryPackModel : ScriptableObject
 	{
-		[SerializeField] private InventoryObjectsTypesEnum type        = InventoryObjectsTypesEnum.NOTHING;
-		[SerializeField] private int                maxPackSize = 100;
-		[SerializeField] private Sprite             icon;
-		[SerializeField] private BuildingView       instance;
+		[SerializeField] private InventoryObjectsTypesEnum type        = InventoryObjectsTypesEnum.NOT_CONFIGURED;
+		[SerializeField] private int                       maxPackSize = 100;
+		[SerializeField] private Sprite                    icon;
+		[SerializeField] private BuildingView              instance;
 
 		public InventoryObjectsTypesEnum Type        => type;
 		public int                MaxPackSize => maxPackSize;
@@ -42,6 +42,7 @@ namespace Inventories
 	{
 		NOTHING,
 		TEST_OBJECT,
-		GENERATOR
+		NOT_CONFIGURED,
+		GENERATOR,
 	}
 }

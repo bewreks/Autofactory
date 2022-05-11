@@ -139,6 +139,22 @@ namespace Tests.Crafting
 		}
 
 		[Test]
+		public void CraftZeroTimeTaskTest()
+		{
+			var taskCompleted = false;
+			_inventory.AddItems(InventoryObjectsTypesEnum.NOTHING, 1, out var edge);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     1);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
+			var craftingModel = CraftingModel.GetZeroTestModel();
+			_craftingTask.Initialize(_inventory, _inventory, craftingModel);
+			_craftingTask.TaskComplete += task => { taskCompleted = true; };
+			_craftingTask.Tick(0);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     0);
+			Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 1);
+			Assert.IsTrue(taskCompleted);
+		}
+
+		[Test]
 		public void CancelCraftTaskTest()
 		{
 			var taskCompleted = false;

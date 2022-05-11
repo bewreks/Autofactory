@@ -1,4 +1,6 @@
-﻿using Factories;
+﻿using Windows.CraftingWindow;
+using Windows.InventoryWindow;
+using Factories;
 using Installers;
 using Instantiate;
 using Inventories;
@@ -14,6 +16,7 @@ namespace Game.States
 		[Inject] private DiContainer        _diContainer;
 		[Inject] private GameSettings       _gameSettings;
 		[Inject] private GameController     _gameController;
+		[Inject] private WindowsManager     _windowsManager;
 
 		public IGameState OnUpdate(GameModel model, DiContainer container)
 		{
@@ -35,6 +38,16 @@ namespace Game.States
 				model.InstantiablePack = _instantiateManager.InstantiatePreview();
 				Factory.ReturnItem(this);
 				return Factory.GetFactoryItem<SelectedItemGameState>(_diContainer);
+			}
+
+			if (Input.GetKeyUp(KeyCode.Tab))
+			{
+				_windowsManager.OpenWindow<InventoryWindow>();
+			}
+
+			if (Input.GetKeyUp(KeyCode.E))
+			{
+				_windowsManager.OpenWindow<CraftingWindow>();
 			}
 
 			return this;

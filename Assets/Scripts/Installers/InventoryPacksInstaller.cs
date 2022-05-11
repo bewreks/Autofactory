@@ -35,7 +35,8 @@ namespace Installers
 		public InventoryPackModel GetModel(InventoryObjectsTypesEnum type)
 		{
 			var packModel = _models.FirstOrDefault(model => model.Type == type);
-			Assert.IsNotNull(packModel, $"Model of type {type} not found");
+			if (packModel == null)
+				throw new Exception($"Model of type {type} not found");
 			return packModel;
 		}
 

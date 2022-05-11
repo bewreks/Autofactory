@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Game;
-using Inventories;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -9,12 +8,12 @@ namespace Windows.InventoryWindow
 {
 	public class InventoryWindow : Window
 	{
-		[SerializeField] private GameObject inventoryPackPrefab;
-		[SerializeField] private Button     closeButton;
-		[SerializeField] private Transform  content;
+		[SerializeField] private InventoryPackView inventoryPackPrefab;
+		[SerializeField] private Button            closeButton;
+		[SerializeField] private Transform         inventoryContent;
 
-		[Inject] private DiContainer _container;
-		[Inject] private IGameModel  _gameModel;
+		[Inject] private DiContainer        _container;
+		[Inject] private IGameModel         _gameModel;
 
 		private List<InventoryPackView> _packViews = new List<InventoryPackView>();
 
@@ -28,7 +27,7 @@ namespace Windows.InventoryWindow
 				var packView = _container.InstantiatePrefab(inventoryPackPrefab,
 				                                            Vector3.zero,
 				                                            Quaternion.identity,
-				                                            content).GetComponent<InventoryPackView>();
+				                                            inventoryContent).GetComponent<InventoryPackView>();
 				packView.SetData(pack);
 				_packViews.Add(packView);
 			}

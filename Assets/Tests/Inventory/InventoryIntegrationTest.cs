@@ -45,7 +45,7 @@ namespace Tests.Inventory
 			{
 				Assert.NotNull(packModel.Icon, $"packModel.Icon != null at {packModel.name}");
 				Assert.NotZero(packModel.MaxPackSize, $"packModel.MaxPackSize != 0 at {packModel.name}");
-				Assert.AreNotEqual(InventoryObjectsTypesEnum.NOTHING, packModel.Type,
+				Assert.AreNotEqual(InventoryObjectsTypesEnum.NOT_CONFIGURED, packModel.Type,
 				                   $"packModel.Type != NOTHING at {packModel.name}");
 			}
 

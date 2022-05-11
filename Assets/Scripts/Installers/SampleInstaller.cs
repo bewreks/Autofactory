@@ -1,7 +1,6 @@
 ﻿using Crafting;
 using Game;
 using Instantiate;
-using Inventories;
 using UniRx;
 using Zenject;
 
@@ -24,17 +23,11 @@ namespace Installers
 		public override void Start()
 		{
 			var gameController     = Container.Resolve<GameController>();
-			var gameModel          = Container.Resolve<IGameModel>();
 			var instantiateManager = Container.Resolve<InstantiateManager>();
 			var craftingController = Container.Resolve<CraftingController>();
 			_disposables.Add(gameController);
 			_disposables.Add(instantiateManager);
 			_disposables.Add(craftingController);
-
-			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.TEST_OBJECT, 1, out var edge);
-			craftingController.StartCraft(gameModel.PlayerModel.Inventory, gameModel.PlayerModel.Inventory, InventoryObjectsTypesEnum.GENERATOR);
-			// var windowsManager = Container.Resolve<WindowsManager>();
-			// windowsManager.OpenWindow<InventoryWindow>();
 		}
 	}
 }

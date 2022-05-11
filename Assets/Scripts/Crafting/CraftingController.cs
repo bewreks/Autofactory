@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Factories;
 using Installers;
 using Inventories;
+using ModestTree;
 using UniRx;
 using Zenject;
 
@@ -41,6 +42,10 @@ namespace Crafting
 						if (_craftingMap.TryGetValue(task, out var queue))
 						{
 							queue.Dequeue();
+							if (queue.IsEmpty())
+							{
+								_craftingMap.Remove(task);
+							}
 						}
 					});
 					_endedTasks.Clear();

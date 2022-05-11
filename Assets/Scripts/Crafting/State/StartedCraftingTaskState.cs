@@ -1,6 +1,7 @@
 ﻿using System;
 using Factories;
 using Inventories;
+using UnityEngine;
 
 namespace Crafting.State
 {
@@ -16,7 +17,14 @@ namespace Crafting.State
 			spentTime += tickTime;
 			if (spentTime >= model.CraftingTime)
 			{
-				to.AddItems(model.CraftingResult.model.Type, model.CraftingResult.count, out int edge);
+				if (to.AddItems(model.CraftingResult.model.Type, model.CraftingResult.count, out int edge))
+				{
+					Debug.Log("CRAFTING COMPLETE");
+				}
+				else
+				{
+					Debug.Log("CRAFTING FAIL");
+				}
 				taskComplete?.Invoke();
 				
 				Factory.ReturnItem(this);

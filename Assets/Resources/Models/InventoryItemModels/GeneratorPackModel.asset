@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85d35c09752241739eea388021661fe1, type: 3}
   m_Name: GeneratorPackModel
   m_EditorClassIdentifier: 
-  type: 2
+  type: 3
   maxPackSize: 100
-  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 6a24e49fed193b545ad53ba32dbdf6ec, type: 3}
+  instance: {fileID: 3621568170023806016, guid: dfade23669b470e449e21b4e0e23c8dc, type: 3}

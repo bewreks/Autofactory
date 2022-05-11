@@ -36,6 +36,26 @@ namespace Crafting
 			return craftingModel;
 		}
 
+		public static CraftingModel GetZeroTestModel()
+		{
+			var craftingModel = CreateInstance<CraftingModel>();
+			craftingModel.craftingTime = 0;
+			craftingModel.craftingResult = new CraftingNeed
+			                               {
+				                               count = 1,
+				                               model = InventoryPackModel.GetTestModel()
+			                               };
+			craftingModel.craftingNeeds = new[]
+			                              {
+				                              new CraftingNeed
+				                              {
+					                              count = 1,
+					                              model = InventoryPackModel.GetNothingTestModel()
+				                              }
+			                              };
+			return craftingModel;
+		}
+
 #endif
 	}
 

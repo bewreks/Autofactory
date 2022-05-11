@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Factories;
 using Installers;
+using UnityEngine;
 using Zenject;
 
 namespace Inventories
@@ -142,8 +143,9 @@ namespace Inventories
 					value.Initialize(null, _settings.GetModel(type));
 					_packs.Add(type, value);
 				}
-				catch (Exception)
+				catch (Exception e)
 				{
+					Debug.Log($"{e}");
 					return false;
 				}
 			}

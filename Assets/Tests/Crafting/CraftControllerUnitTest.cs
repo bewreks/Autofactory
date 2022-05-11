@@ -67,6 +67,21 @@ namespace Tests.Crafting
         }
     
         [UnityTest]
+        public IEnumerator StartOfZeroTimeCraftTest()
+        {
+            _craftSettings.Models.Clear();
+            _craftSettings.Models.Add(CraftingModel.GetZeroTestModel());
+            _craftSettings.Prepare();
+            _inventory.AddItems(InventoryObjectsTypesEnum.NOTHING, 1, out var edge);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     1);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
+            _craftingController.StartCraft(_inventory, _inventory, InventoryObjectsTypesEnum.TEST_OBJECT);
+            yield return new WaitForSeconds(.1f);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     0);
+            Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 1);
+        }
+    
+        [UnityTest]
         public IEnumerator StartOfCraftWithoutStartTest()
         {
             Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     0);

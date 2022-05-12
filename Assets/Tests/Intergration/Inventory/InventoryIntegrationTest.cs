@@ -6,7 +6,7 @@ using NUnit.Framework;
 using UnityEngine.TestTools;
 using Zenject;
 
-namespace Tests.Inventory
+namespace Tests.Intergration.Inventory
 {
 	public class InventoryIntegrationTest : ZenjectIntegrationTestFixture
 	{

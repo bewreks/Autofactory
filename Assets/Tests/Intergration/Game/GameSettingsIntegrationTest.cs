@@ -4,7 +4,7 @@ using NUnit.Framework;
 using UnityEngine.TestTools;
 using Zenject;
 
-namespace Tests.Game
+namespace Tests.Intergration.Game
 {
     public class GameSettingsIntegrationTest : ZenjectIntegrationTestFixture
     {

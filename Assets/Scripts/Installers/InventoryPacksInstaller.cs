@@ -8,8 +8,7 @@ using Zenject;
 
 namespace Installers
 {
-	[CreateAssetMenu(fileName = "InventoryPacksModelsManager",
-		                menuName = "Models/Inventory/InventoryPacksModelsManager")]
+	[CreateAssetMenu(fileName = "InventoryPacksModelsManager", menuName = "Installers/InventoryInstaller")]
 	public class InventoryPacksInstaller : ScriptableObjectInstaller<InventoryPacksInstaller>
 	{
 		[SerializeField] private InventoryPacksModelsSettings settings;

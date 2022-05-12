@@ -1,16 +1,11 @@
-using System;
 using System.Collections;
 using System.Linq;
-using Windows;
-using Windows.InventoryWindow;
-using Windows.TestWindows;
 using Installers;
 using NUnit.Framework;
 using UnityEngine.TestTools;
-using UniRx;
 using Zenject;
 
-namespace Tests.Windows
+namespace Tests.Intergration.Windows
 {
 	public class WindowsIntegrationTest : ZenjectIntegrationTestFixture
 	{

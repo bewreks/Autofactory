@@ -1,19 +1,21 @@
-﻿using UnityEngine;
+﻿using Buildings.Models;
+using Buildings.Views;
+using UnityEngine;
 
 namespace Inventories
 {
-	[CreateAssetMenu(fileName = "NewPackModel", menuName = "Models/Inventory/InventoryPack", order = 0)]
+	[CreateAssetMenu(fileName = "NewPackModel", menuName = "Models/Inventory/InventoryPacks/Base", order = 0)]
 	public class InventoryPackModel : ScriptableObject
 	{
 		[SerializeField] private InventoryObjectsTypesEnum type        = InventoryObjectsTypesEnum.NOT_CONFIGURED;
 		[SerializeField] private int                       maxPackSize = 100;
 		[SerializeField] private Sprite                    icon;
-		[SerializeField] private BuildingView              instance;
+		[SerializeField] private BuildingModel             buildingModel;
 
-		public InventoryObjectsTypesEnum Type        => type;
-		public int                MaxPackSize => maxPackSize;
-		public Sprite             Icon        => icon;
-		public BuildingView       Instance    => instance;
+		public InventoryObjectsTypesEnum Type          => type;
+		public int                       MaxPackSize   => maxPackSize;
+		public Sprite                    Icon          => icon;
+		public BuildingModel             BuildingModel => buildingModel;
 
 #if UNITY_INCLUDE_TESTS
 		public static InventoryPackModel GetTestModel()
@@ -22,7 +24,6 @@ namespace Inventories
 			inventoryPackModel.type        = InventoryObjectsTypesEnum.TEST_OBJECT;
 			inventoryPackModel.maxPackSize = 50;
 			inventoryPackModel.icon        = SpriteHelper.GetBlankSprite(128, 128);
-			inventoryPackModel.instance    = Resources.Load<BuildingView>("InstanceModels/TestObjectModel");
 			return inventoryPackModel;
 		}
 
@@ -32,7 +33,6 @@ namespace Inventories
 			inventoryPackModel.type        = InventoryObjectsTypesEnum.NOTHING;
 			inventoryPackModel.maxPackSize = 50;
 			inventoryPackModel.icon        = SpriteHelper.GetBlankSprite(128, 128);
-			inventoryPackModel.instance    = Resources.Load<BuildingView>("InstanceModels/TestObjectModel");
 			return inventoryPackModel;
 		}
 #endif
@@ -44,5 +44,6 @@ namespace Inventories
 		TEST_OBJECT,
 		NOT_CONFIGURED,
 		GENERATOR,
+		BASE_ELECTRIC_POLE
 	}
 }

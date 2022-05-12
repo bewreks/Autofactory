@@ -5,7 +5,7 @@ using NUnit.Framework;
 using UnityEngine.TestTools;
 using Zenject;
 
-namespace Tests.Crafting
+namespace Tests.Intergration.Crafting
 {
 	public class CraftingSettingsIntegrationTest : ZenjectIntegrationTestFixture
 	{

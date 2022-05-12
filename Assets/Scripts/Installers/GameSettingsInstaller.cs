@@ -20,14 +20,16 @@ namespace Installers
 	{
 		[Header("Global game settings")]
 		[SerializeField] private LayerMask  _groundMask;
+		[SerializeField] private LayerMask  _electricBuildingMask;
 		[Header("Player game settings")]
 		[SerializeField] private GameObject _playerPrefab;
 		[SerializeField] private float      _rotationSpeed = 0.05f;
 		[SerializeField] private float      _moveSpeed     = 1.5f;
 
-		public GameObject PlayerPrefab  => _playerPrefab;
-		public LayerMask  GroundMask    => _groundMask;
-		public float      RotationSpeed => _rotationSpeed;
-		public float      MoveSpeed     => _moveSpeed;
+		public GameObject PlayerPrefab         => _playerPrefab;
+		public LayerMask  GroundMask           => _groundMask;
+		public float      RotationSpeed        => _rotationSpeed;
+		public float      MoveSpeed            => _moveSpeed;
+		public LayerMask  ElectricBuildingMask => _electricBuildingMask;
 	}
 }

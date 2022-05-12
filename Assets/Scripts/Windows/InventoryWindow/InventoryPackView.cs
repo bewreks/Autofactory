@@ -42,7 +42,8 @@ namespace Windows.InventoryWindow
 		public void Dispose()
 		{
 			_sizeSub?.Dispose();
-			_sizeSub     = null;
+			_sizeSub          =  null;
+			_pack.PackIsEmpty -= OnEmpty;
 		}
 	}
 }

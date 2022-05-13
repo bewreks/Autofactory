@@ -36,6 +36,7 @@ namespace Installers
 
 			var gameModel = Container.Resolve<IGameModel>();
 			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.BASE_ELECTRIC_POLE, 10, out var edge);
+			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.GENERATOR, 10, out edge);
 			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.TEST_OBJECT, 1, out edge);
 		}
 	}

@@ -30,10 +30,7 @@ namespace Electricity
 
 		public void Add(Vector3 position, ElectricPoleBuildingModel electricBuildingModel)
 		{
-			var electricityHalfSize = electricBuildingModel.ElectricitySize / 2;
-			_poles.Add(new Rect(new Vector2(position.x - electricityHalfSize, position.z - electricityHalfSize),
-			                    new Vector2(electricBuildingModel.ElectricitySize,
-			                                electricBuildingModel.ElectricitySize)));
+			_poles.Add(BuildingHelper.GetPoleRect(position, electricBuildingModel.ElectricitySize));
 		}
 
 		public void Dispose()

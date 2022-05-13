@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Inventories;
-using NUnit.Framework;
 using UnityEngine;
 using Zenject;
 
@@ -45,8 +44,8 @@ namespace Installers
 			{
 				return model;
 			}
-			Assert.Fail($"Model of type {type} not found");
-			return null;
+
+			throw new Exception($"Model of type {type} not found");
 		}
 
 #if UNITY_INCLUDE_TESTS

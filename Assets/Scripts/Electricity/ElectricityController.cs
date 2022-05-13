@@ -78,8 +78,8 @@ namespace Electricity
 
 		public void AddGenerator(Vector3 generatorPosition, BaseGeneratorBuildingModel generatorModel)
 		{
-			var rect = new Rect(new Vector2(generatorPosition.x, generatorPosition.z),
-			                    generatorModel.BuildingSize);
+			var rect = BuildingHelper.GetGeneratorRect(generatorPosition, generatorModel.BuildingSize);
+			
 			if (!AddGenerator(generatorPosition, generatorModel, rect))
 			{
 				_generators.Add((generatorPosition, generatorModel, rect));

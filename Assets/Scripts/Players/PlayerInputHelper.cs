@@ -56,9 +56,9 @@ namespace Players
 		                                          DiContainer               diContainer)
 		{
 			var inventory = model.PlayerModel.Inventory;
-			if (inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT) > 0)
+			if (inventory.ItemsCount(type) > 0)
 			{
-				model.SelectedPack     = inventory.GetPacks(InventoryObjectsTypesEnum.TEST_OBJECT);
+				model.SelectedPack     = inventory.GetPacks(type);
 				model.InstantiablePack = instantiateManager.InstantiatePreview();
 				Factory.ReturnItem(gameState);
 				return Factory.GetFactoryItem<SelectedItemGameState>(diContainer);

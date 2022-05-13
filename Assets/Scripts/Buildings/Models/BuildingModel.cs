@@ -20,13 +20,7 @@ namespace Buildings.Models
 		{
 			if (instance.Collider)
 			{
-				var boxCollider = instance.Collider;
-				var boxSize     = boxCollider.size;
-				var size        = new Vector2(boxSize.x, boxSize.z) / 0.5f;
-				
-				size.x       = Mathf.Ceil(size.x);
-				size.y       = Mathf.Ceil(size.y);
-				BuildingSize = size;
+				BuildingSize = instance.Collider.size.GetBuildingSize();
 			}
 			else
 			{

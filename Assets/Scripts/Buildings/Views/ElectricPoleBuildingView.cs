@@ -67,5 +67,11 @@ namespace Buildings.Views
 				_electricityController.AddToNet(transformCache.position, electricModel);
 			}
 		}
+
+		private void OnDrawGizmos()
+		{
+			var rect = BuildingHelper.GetPoleRect(transform.position, 7);
+			rect.DrawGizmo(Color.blue);
+		}
 	}
 }

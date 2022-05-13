@@ -44,6 +44,15 @@ namespace Game.States
 
 			if (Input.GetKeyUp(KeyCode.Alpha2))
 			{
+				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.GENERATOR,
+				                                          model,
+				                                          this,
+				                                          _instantiateManager,
+				                                          _diContainer);
+			}
+
+			if (Input.GetKeyUp(KeyCode.Alpha3))
+			{
 				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.TEST_OBJECT,
 				                                          model,
 				                                          this,

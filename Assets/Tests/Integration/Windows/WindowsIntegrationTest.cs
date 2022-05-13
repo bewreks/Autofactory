@@ -5,7 +5,7 @@ using NUnit.Framework;
 using UnityEngine.TestTools;
 using Zenject;
 
-namespace Tests.Intergration.Windows
+namespace Tests.Integration.Windows
 {
 	public class WindowsIntegrationTest : ZenjectIntegrationTestFixture
 	{

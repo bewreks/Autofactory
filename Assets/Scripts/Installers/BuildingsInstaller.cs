@@ -41,5 +41,9 @@ namespace Installers
 
 			return true;
 		}
+
+#if UNITY_INCLUDE_TESTS
+		public List<BuildingModel> Models => _models;
+#endif
 	}
 }

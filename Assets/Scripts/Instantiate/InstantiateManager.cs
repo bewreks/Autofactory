@@ -15,12 +15,7 @@ namespace Instantiate
 
 		private float SetStep(float coordX)
 		{
-			if (coordX < 0)
-			{
-				coordX -= 0.5f;
-			}
-
-			return (int)(coordX / 0.5) * 0.5f;
+			return (int)coordX;
 		}
 
 		public void Dispose() { }

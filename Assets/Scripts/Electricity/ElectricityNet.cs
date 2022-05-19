@@ -1,63 +1,147 @@
 ﻿using System;
 using System.Collections.Generic;
-using Buildings.Models;
-using UniRx;
+using System.Linq;
+using Electricity.Controllers;
+using ModestTree;
 using UnityEngine;
 
 namespace Electricity
 {
 	public class ElectricityNet : IDisposable
 	{
-		public int ID { get; private set; }
-		
-		private List<Rect>                               _poles      = new List<Rect>();
-		private List<(Rect, BaseGeneratorBuildingModel)> _generators = new List<(Rect, BaseGeneratorBuildingModel)>();
+		public int   ID    { get; private set; }
+		public float Power { get; private set; }
 
-		private FloatReactiveProperty _netPower = new FloatReactiveProperty();
-		public IReadOnlyReactiveProperty<float> NetPower => _netPower;
+		private List<ElectricityPoleController> _poles      = new List<ElectricityPoleController>();
+		private List<GeneratorController>       _generators = new List<GeneratorController>();
+
+		public void Dispose()
+		{
+			ID    = -1;
+			Power = 0;
+			_poles.Clear();
+			_generators.ForEach(controller => controller.ChangeOfPower -= OnUpdatePower);
+			_generators.Clear();
+		}
 
 		public void Initialize(int net)
 		{
 			ID = net;
 		}
 
-		public void Add(ElectricityNet net)
+		public void AddPole(ElectricityPoleController poleController)
 		{
-			_poles.AddRange(net._poles);
-			_generators.AddRange(net._generators);
-			_netPower.SetValueAndForceNotify(_netPower.Value + net._netPower.Value);
+			_poles.Add(poleController);
 		}
 
-		public void Add(Vector3 position, ElectricPoleBuildingModel electricBuildingModel)
+		public bool IsPoleInWires(ElectricityPoleController newPoleController)
 		{
-			_poles.Add(BuildingHelper.GetPoleRect(position, electricBuildingModel.ElectricitySize));
-		}
-
-		public void Dispose()
-		{
-			ID = -1;
-			_poles.Clear();
-			_generators.Clear();
-			_netPower?.Dispose();
-		}
-
-		public bool Intersect(Rect rect)
-		{
-			foreach (var pole in _poles)
+			return _poles.Any(container =>
 			{
-				if (pole.Overlaps(rect))
+				var distance = Vector3.Distance(container.Position, newPoleController.Position);
+				return distance <= container.Wires ||
+				       distance <= newPoleController.Wires;
+			});
+		}
+
+		public bool RemovePole(Vector3 position, out ElectricityNet[] nets)
+		{
+			var firstContainer = _poles.First(container => container.Position == position);
+			_poles.Remove(firstContainer);
+
+			var tempList = new List<ElectricityNet>();
+
+			while (!_poles.IsEmpty())
+			{
+				var tempNet = new ElectricityNet();
+				tempNet._poles.Add(_poles[0]);
+				_poles.RemoveAt(0);
+
+				for (var i = 0; i < _poles.Count; i++)
 				{
-					return true;
+					if (tempNet.IsPoleInWires(_poles[i]))
+					{
+						tempNet._poles.Add(_poles[i]);
+						_poles.RemoveAt(i);
+						i = -1;
+					}
 				}
+
+				tempList.Add(tempNet);
 			}
 
+			(_poles, tempList[0]._poles) = (tempList[0]._poles, _poles);
+			tempList.RemoveAt(0);
+			nets = tempList.ToArray();
+			return !tempList.IsEmpty();
+		}
+
+#if UNITY_INCLUDE_TESTS
+		public List<ElectricityPoleController> Poles      => _poles;
+		public List<GeneratorController>       Generators => _generators;
+#endif
+		public void AddNet(ElectricityNet newNet)
+		{
+			newNet.StopUpdates();
+			newNet._poles.ForEach(AddPole);
+			Power += newNet.Power;
+			newNet._generators.ForEach(generator =>
+			{
+				generator.RemoveNet(newNet);
+				_generators.Add(generator);
+				generator.AddNet(this);
+				generator.ChangeOfPower += OnUpdatePower;
+			});
+			newNet.Dispose();
+		}
+
+		private void StopUpdates()
+		{
+			_generators.ForEach(generator => generator.ChangeOfPower -= OnUpdatePower);
+		}
+
+		public void AddGenerator(GeneratorController generator)
+		{
+			_generators.Add(generator);
+			generator.AddNet(this);
+			generator.ChangeOfPower += OnUpdatePower;
+			Power += generator.PartOfPower;
+		}
+
+		private void OnUpdatePower(float oldPower, float newPower)
+		{
+			Power -= oldPower;
+			Power += newPower;
+		}
+
+		public bool IsBuildingInElectricity(GeneratorController generator, out ElectricityPoleController pole)
+		{
+			// pole = null;
+			// foreach (var controller in _poles.Where(electricity =>
+			//          {
+			// 	         var overlaps = electricity.Electricity.Overlaps(generator.BuildingRect);
+			// 	         if (overlaps)
+			// 	         {
+			// 		         pole = electricity;
+			// 	         }
+			//
+			// 	         return overlaps;
+			//          }))
+			// 	return true;
+			// return false;
+			pole = null;
 			return false;
 		}
 
-		public void Add(Rect position, BaseGeneratorBuildingModel model)
+		public void RemoveGenerator(GeneratorController generator)
 		{
-			_netPower.SetValueAndForceNotify(_netPower.Value + model.Power);
-			_generators.Add((position, model));
+			if (_generators.Contains(generator))
+			{
+				Power                   -= generator.PartOfPower;
+				generator.ChangeOfPower -= OnUpdatePower;
+				generator.RemoveNet(this);
+				_generators.Remove(generator);
+			}
 		}
 	}
 }

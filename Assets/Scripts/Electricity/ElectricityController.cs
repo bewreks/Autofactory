@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Buildings.Models;
+using Electricity.Controllers;
 using Factories;
-using ModestTree;
 using UnityEngine;
 
 namespace Electricity
@@ -11,15 +11,15 @@ namespace Electricity
 	{
 		private Dictionary<int, ElectricityNet> _nets = new Dictionary<int, ElectricityNet>();
 
-		private List<(Vector3, BaseGeneratorBuildingModel, Rect)> _generators =
-			new List<(Vector3, BaseGeneratorBuildingModel, Rect)>();
-		
-		private List<(Vector3, BaseGeneratorBuildingModel, Rect)> _toRemove =
-			new List<(Vector3, BaseGeneratorBuildingModel, Rect)>();
+		private List<GeneratorController> _generators =
+			new List<GeneratorController>();
+
+		private List<GeneratorController> _toRemove =
+			new List<GeneratorController>();
 
 		private IDFactory _idFactory = new IDFactory();
 
-		public void AddToNet(Vector3 position, ElectricPoleBuildingModel poleBuildingModel, int netId)
+		public ElectricityPoleController AddPole(Vector3 position, ElectricPoleBuildingModel poleBuildingModel, int netId)
 		{
 			if (!_nets.TryGetValue(netId, out var net))
 			{
@@ -28,26 +28,30 @@ namespace Electricity
 				_nets.Add(netId, net);
 			}
 
-			net.Add(position, poleBuildingModel);
-			
+			var poleController = new ElectricityPoleController(position, poleBuildingModel);
+			net.AddPole(poleController);
+
 			foreach (var generator in _generators)
 			{
-				if (AddGenerator(generator.Item1, generator.Item2, generator.Item3))
+				if (AddGenerator(generator))
 				{
 					_toRemove.Add(generator);
 				}
 			}
-			
+
 			foreach (var generator in _toRemove)
 			{
 				_generators.Remove(generator);
 			}
+
 			_toRemove.Clear();
+
+			return poleController;
 		}
 
-		public void AddToNet(Vector3 position, ElectricPoleBuildingModel poleBuildingModel)
+		public ElectricityPoleController AddPole(Vector3 position, ElectricPoleBuildingModel poleBuildingModel)
 		{
-			AddToNet(position, poleBuildingModel, _idFactory.Pop());
+			return AddPole(position, poleBuildingModel, _idFactory.Pop());
 		}
 
 		public void Unite(List<int> nets)
@@ -58,7 +62,7 @@ namespace Electricity
 				{
 					if (_nets.TryGetValue(nets[0], out var newNet))
 					{
-						net.Add(newNet);
+						net.AddNet(newNet);
 						_idFactory.Push(newNet.ID);
 						_nets.Remove(newNet.ID);
 						newNet.Dispose();
@@ -76,28 +80,51 @@ namespace Electricity
 			}
 		}
 
-		public void AddGenerator(Vector3 generatorPosition, BaseGeneratorBuildingModel generatorModel)
+		public GeneratorController AddGenerator(Vector3 generatorPosition, BaseGeneratorBuildingModel generatorModel)
 		{
-			var rect = BuildingHelper.GetGeneratorRect(generatorPosition, generatorModel.BuildingSize);
-			
-			if (!AddGenerator(generatorPosition, generatorModel, rect))
+			var generator = new GeneratorController(generatorPosition, generatorModel);
+			if (!AddGenerator(generator))
 			{
-				_generators.Add((generatorPosition, generatorModel, rect));
+				_generators.Add(generator);
 			}
+
+			return generator;
 		}
 
-		public bool AddGenerator(Vector3 generatorPosition, BaseGeneratorBuildingModel generatorModel, Rect rect)
+		public bool AddGenerator(GeneratorController generator)
 		{
 			foreach (var net in _nets.Values)
 			{
-				if (net.Intersect(rect))
+				if (net.IsBuildingInElectricity(generator, out var fsadf))
 				{
-					net.Add(rect, generatorModel);
+					net.AddGenerator(generator);
 					return true;
 				}
 			}
 
 			return false;
+		}
+
+		public ElectricityNet GetNet(int netId)
+		{
+			_nets.TryGetValue(netId, out var net);
+			return net;
+		}
+
+#if UNITY_INCLUDE_TESTS
+		public List<GeneratorController> Generators => _generators;
+#endif
+		public void RemoveGenerator(GeneratorController generator)
+		{
+			generator.Nets.ForEach(net =>
+			{
+				net.RemoveGenerator(generator);
+			});
+		}
+
+		public void RemovePole(ElectricityPoleController pole)
+		{
+			
 		}
 	}
 }

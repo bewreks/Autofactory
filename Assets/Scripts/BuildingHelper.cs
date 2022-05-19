@@ -2,7 +2,7 @@
 
 public static class BuildingHelper
 {
-	public static readonly float UnitSize     = 0.5f;
+	public static readonly float UnitSize     = 1f;
 	public static readonly float UnitHalfSize = UnitSize / 2;
 
 	public static Vector2 GetBuildingSize(this Vector3 size)
@@ -22,16 +22,15 @@ public static class BuildingHelper
 	public static Rect GetPoleRect(Vector3 position, float size)
 	{
 		var halfSize = size / 2;
-		var quadSize = size / 4;
-		return new Rect(new Vector2(position.x - quadSize + UnitHalfSize, position.z - quadSize + UnitHalfSize),
-		                new Vector2(halfSize,                             halfSize));
+		return new Rect(new Vector2(position.x - halfSize + UnitHalfSize, position.z - halfSize + UnitHalfSize),
+		                new Vector2(size,                                 size));
 	}
 
 	public static void DrawGizmo(this Rect rect, Color color)
 	{
 #if UNITY_EDITOR
 		Gizmos.color = color;
-		
+
 		Gizmos.DrawLine(new Vector3(rect.xMin, 0, rect.yMin),
 		                new Vector3(rect.xMin, 0, rect.yMax));
 		Gizmos.DrawLine(new Vector3(rect.xMin, 0, rect.yMax),

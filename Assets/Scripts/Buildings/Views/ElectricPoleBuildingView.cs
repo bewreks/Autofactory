@@ -11,7 +11,7 @@ namespace Buildings.Views
 	public class ElectricPoleBuildingView : BuildingView
 	{
 		[Inject] private ElectricityController _electricityController;
-		
+
 		private int _netID = -1;
 
 		public int NetID => _netID;
@@ -30,15 +30,15 @@ namespace Buildings.Views
 		{
 			var transformCache = transform;
 			var electricModel  = (ElectricPoleBuildingModel)_model;
-			
+
 			var hits = Physics.SphereCastAll(transformCache.position,
 			                                 electricModel.WireRadius,
 			                                 transformCache.forward,
 			                                 electricModel.WireRadius,
 			                                 gameSettings.ElectricBuildingMask);
-			
+
 			var nets = new List<int>();
-			
+
 			foreach (var hit in hits.Select(hit => hit.collider.gameObject.GetComponent<ElectricPoleBuildingView>())
 			                        .Where(view => view != null))
 			{
@@ -60,18 +60,27 @@ namespace Buildings.Views
 
 			if (nets.Count >= 1)
 			{
-				_electricityController.AddToNet(transformCache.position, electricModel, nets.First());
+				_electricityController.AddPole(transformCache.position, electricModel, nets.First());
 			}
 			else
 			{
-				_electricityController.AddToNet(transformCache.position, electricModel);
+				_electricityController.AddPole(transformCache.position, electricModel);
 			}
 		}
 
 		private void OnDrawGizmos()
 		{
-			var rect = BuildingHelper.GetPoleRect(transform.position, 7);
+			var electricModel = (ElectricPoleBuildingModel)_model;
+			var position      = transform.position;
+			var rect = electricModel
+				           ? BuildingHelper.GetPoleRect(position, electricModel.ElectricitySize)
+				           : BuildingHelper.GetPoleRect(position, 7);
+
 			rect.DrawGizmo(Color.blue);
+			rect = electricModel
+				       ? BuildingHelper.GetPoleRect(position, electricModel.WireRadius)
+				       : BuildingHelper.GetPoleRect(position, 7);
+			rect.DrawGizmo(Color.yellow);
 		}
 	}
 }

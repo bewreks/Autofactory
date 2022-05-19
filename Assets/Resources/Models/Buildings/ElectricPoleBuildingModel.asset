@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 4
   instance: {fileID: 3005922543460145641, guid: cdcf1432ed684084db4eac3881849d2e, type: 3}
-  wireRadius: 8
-  electricityRadius: 7
+  wireRadius: 17
+  electricitySize: 7

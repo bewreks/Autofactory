@@ -26,7 +26,7 @@ namespace Game.States
 				return Factory.GetFactoryItem<NormalGameState>(_diContainer);
 			}
 
-			if (Input.GetMouseButtonUp(0) && !model.InstantiablePack.Triggered)
+			if (Input.GetMouseButtonUp(0))
 			{
 				_instantiateManager.InstantiateFinal();
 				

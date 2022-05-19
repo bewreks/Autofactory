@@ -119,13 +119,17 @@ namespace Tests.Electricity
 			Assert.AreEqual(_generatorModel.Power / 2, secondNet.Power);
 			Assert.AreEqual(1,                         secondNet.Generators.Count);
 			Assert.AreEqual(2,                         generator.Nets.Count);
+			Debug.Log("Before remove generator 1");
 			secondNet.RemoveGenerator(generator);
+			Debug.Log("Remove generator 1");
 			Assert.AreEqual(_generatorModel.Power, net.Power);
 			Assert.AreEqual(0,                     secondNet.Power);
 			Assert.AreEqual(1,                     net.Generators.Count);
 			Assert.AreEqual(0,                     secondNet.Generators.Count);
 			Assert.AreEqual(1,                     generator.Nets.Count);
+			Debug.Log("Before remove generator 2");
 			net.RemoveGenerator(generator);
+			Debug.Log("Remove generator 2");
 			Assert.AreEqual(0, net.Power);
 			Assert.AreEqual(0, secondNet.Power);
 			Assert.AreEqual(0, net.Generators.Count);

@@ -110,27 +110,15 @@ namespace Electricity
 
 		private void OnUpdatePower(float oldPower, float newPower)
 		{
+			Debug.Log($"old {oldPower}, new {newPower}");
 			Power -= oldPower;
 			Power += newPower;
 		}
 
 		public bool IsBuildingInElectricity(GeneratorController generator, out ElectricityPoleController pole)
 		{
-			// pole = null;
-			// foreach (var controller in _poles.Where(electricity =>
-			//          {
-			// 	         var overlaps = electricity.Electricity.Overlaps(generator.BuildingRect);
-			// 	         if (overlaps)
-			// 	         {
-			// 		         pole = electricity;
-			// 	         }
-			//
-			// 	         return overlaps;
-			//          }))
-			// 	return true;
-			// return false;
 			pole = null;
-			return false;
+			return _poles.Any(pole => pole.Electricity.Overlaps(generator.BuildingRect));
 		}
 
 		public void RemoveGenerator(GeneratorController generator)

@@ -35,7 +35,7 @@ namespace Electricity.Controllers
 
 		public void RemoveNet(ElectricityNet net)
 		{
-			if (!Nets.Contains(net))
+			if (Nets.Contains(net))
 			{
 				Nets.Remove(net);
 				UpdatePowerPart();

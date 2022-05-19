@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Buildings.Models;
 using Electricity.Controllers;
 using Factories;
@@ -116,7 +117,7 @@ namespace Electricity
 #endif
 		public void RemoveGenerator(GeneratorController generator)
 		{
-			generator.Nets.ForEach(net =>
+			generator.Nets.ToList().ForEach(net =>
 			{
 				net.RemoveGenerator(generator);
 			});

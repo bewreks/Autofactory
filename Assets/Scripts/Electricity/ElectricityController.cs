@@ -119,13 +119,18 @@ namespace Electricity
 		{
 			generator.Nets.ToList().ForEach(net =>
 			{
-				net.RemoveGenerator(generator);
+				// net.RemoveGenerator(generator);
 			});
 		}
 
 		public void RemovePole(ElectricityPoleController pole)
 		{
 			
+		}
+
+		public void ReturnGenerators(IEnumerable<GeneratorController> generators)
+		{
+			_generators.AddRange(generators);
 		}
 	}
 }

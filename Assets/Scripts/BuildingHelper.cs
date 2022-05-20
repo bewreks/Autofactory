@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Electricity.Controllers;
+using UnityEngine;
 
 public static class BuildingHelper
 {
@@ -44,5 +47,14 @@ public static class BuildingHelper
 		Gizmos.DrawLine(new Vector3(rect.xMin, 0, rect.yMax),
 		                new Vector3(rect.xMax, 0, rect.yMin));
 #endif
+	}
+
+	public static void UnitePoles(this List<ElectricityPoleController> poles, List<ElectricityPoleController> newNet)
+	{
+		foreach (var pole in poles.Where(pole => !newNet.Contains(pole)))
+		{
+			newNet.Add(pole);
+			pole.NearlyPoles.UnitePoles(newNet);
+		}
 	}
 }

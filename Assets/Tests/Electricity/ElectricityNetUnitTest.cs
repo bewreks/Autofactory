@@ -1,6 +1,7 @@
 using Buildings.Models;
 using Electricity;
 using Electricity.Controllers;
+using Factories;
 using NUnit.Framework;
 using UnityEngine;
 using Zenject;
@@ -19,26 +20,34 @@ namespace Tests.Electricity
 
 			_poleModel      = Resources.Load<ElectricPoleBuildingModel>("Models/Buildings/ElectricPoleBuildingModel");
 			_generatorModel = Resources.Load<BaseGeneratorBuildingModel>("Models/Buildings/BaseGeneratorBuildingModel");
+			Container.Bind<ElectricityController>().FromNew().AsCached();
+		}
+
+		public override void Teardown()
+		{
+			base.Teardown();
+
+			Container.Unbind<ElectricityController>();
 		}
 
 		[Test]
 		public void AddPoleToNetTest()
 		{
-			var net = new ElectricityNet();
+			var net = Factory.GetFactoryItem<ElectricityNet>(Container);
+
 			net.Initialize(0);
-			net.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
-			Assert.AreEqual(1, net.Poles.Count);
-			var poleInRadius = new ElectricityPoleController(new Vector3(0, 0, _poleModel.WireRadius), _poleModel);
-			var poleNotInRadius =
-				new ElectricityPoleController(new Vector3(0, 0, _poleModel.WireRadius + 1), _poleModel);
-			Assert.IsTrue(net.IsPoleInWires(poleInRadius));
-			Assert.IsFalse(net.IsPoleInWires(poleNotInRadius));
+			var mainPole = new ElectricityPoleController(Vector3.zero, _poleModel);
+			net.AddPole(mainPole);
+			net.TestNet(0, 0, 1);
+			net.TestNetWire(new Vector3(0, 0, _poleModel.WireRadius),     _poleModel, true);
+			net.TestNetWire(new Vector3(0, 0, _poleModel.WireRadius + 1), _poleModel, false);
+			mainPole.TestPole(0, 0);
 		}
 
 		[Test]
 		public void RemovePoleFromNetTest()
 		{
-			var net = new ElectricityNet();
+			var net = Factory.GetFactoryItem<ElectricityNet>(Container);
 			net.Initialize(0);
 			var zero = new ElectricityPoleController(Vector3.zero,                                 _poleModel);
 			var one  = new ElectricityPoleController(new Vector3(0, 0, _poleModel.WireRadius),     _poleModel);
@@ -46,102 +55,101 @@ namespace Tests.Electricity
 			net.AddPole(zero);
 			net.AddPole(one);
 			net.AddPole(two);
-			Assert.AreEqual(3, net.Poles.Count);
 
-			net.RemovePole(one.Position, out var nets);
-			Assert.AreEqual(1,            net.Poles.Count);
-			Assert.AreEqual(Vector3.zero, net.Poles[0].Position);
+			net.TestNet(0, 0, 3);
+			zero.TestPole(1, 0);
+			one.TestPole(2, 0);
+			two.TestPole(1, 0);
 
-			Assert.AreEqual(1,            nets.Length);
-			Assert.AreEqual(1,            nets[0].Poles.Count);
+			net.RemovePole(one, out var nets);
+
+			net.TestNet(0, 0, 1);
+			Assert.AreEqual(zero.Position, net.Poles[0].Position);
+
+			Assert.AreEqual(1, nets.Length);
+			nets[0].TestNet(0, 0, 1);
 			Assert.AreEqual(two.Position, nets[0].Poles[0].Position);
 		}
 
 		[Test]
 		public void AddGeneratorToNetTest()
 		{
-			var net = new ElectricityNet();
+			var net = Factory.GetFactoryItem<ElectricityNet>(Container);
 			net.Initialize(0);
-			net.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
-			net.AddGenerator(new GeneratorController(Vector3.one, _generatorModel));
-			Assert.AreEqual(_generatorModel.Power, net.Power);
-			Assert.AreEqual(1,                     net.Generators.Count);
+			var pole      = new ElectricityPoleController(Vector3.zero, _poleModel);
+			var generator = new GeneratorController(Vector3.one, _generatorModel);
+			net.AddPole(pole);
+			net.AddGenerator(generator);
+
+			net.TestNet(_generatorModel.Power, 1, 1);
+			pole.TestPole(0, 1);
 		}
 
 		[Test]
 		public void AddGeneratorToNetsTest()
 		{
 			var generator = new GeneratorController(Vector3.one, _generatorModel);
-			var net       = new ElectricityNet();
-			var secondNet = new ElectricityNet();
+			var net       = Factory.GetFactoryItem<ElectricityNet>(Container);
+			var secondNet = Factory.GetFactoryItem<ElectricityNet>(Container);
 			net.Initialize(0);
 			net.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
 			net.AddGenerator(generator);
-			Assert.AreEqual(_generatorModel.Power, net.Power);
-			Assert.AreEqual(1,                     net.Generators.Count);
+			net.TestNet(_generatorModel.Power, 1, 1);
+
 			secondNet.Initialize(1);
 			secondNet.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
 			secondNet.AddGenerator(generator);
-			Assert.AreEqual(_generatorModel.Power / 2, net.Power);
-			Assert.AreEqual(_generatorModel.Power / 2, secondNet.Power);
-			Assert.AreEqual(1,                         secondNet.Generators.Count);
-			Assert.AreEqual(2,                         generator.Nets.Count);
+
+			net.TestNet(_generatorModel.Power / 2, 1, 1);
+			secondNet.TestNet(_generatorModel.Power / 2, 1, 1);
+			generator.TestGenerator(2, 2);
 		}
 
 		[Test]
 		public void RemoveGeneratorFromNetTest()
 		{
-			var net = new ElectricityNet();
+			var net = Factory.GetFactoryItem<ElectricityNet>(Container);
 			net.Initialize(0);
 			net.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
 			var generator = new GeneratorController(Vector3.one, _generatorModel);
 			net.AddGenerator(generator);
-			Assert.AreEqual(_generatorModel.Power, net.Power);
-			Assert.AreEqual(1,                     net.Generators.Count);
+			net.TestNet(_generatorModel.Power, 1, 1);
+
 			net.RemoveGenerator(generator);
-			Assert.AreEqual(0, net.Power);
-			Assert.AreEqual(0, net.Generators.Count);
+			net.TestNet(0, 0, 1);
 		}
 
 		[Test]
 		public void RemoveGeneratorFromNetsTest()
 		{
 			var generator = new GeneratorController(Vector3.one, _generatorModel);
-			var net       = new ElectricityNet();
-			var secondNet = new ElectricityNet();
+			var net       = Factory.GetFactoryItem<ElectricityNet>(Container);
+			var secondNet = Factory.GetFactoryItem<ElectricityNet>(Container);
 			net.Initialize(0);
 			net.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
 			net.AddGenerator(generator);
 			secondNet.Initialize(1);
 			secondNet.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
 			secondNet.AddGenerator(generator);
-			Assert.AreEqual(_generatorModel.Power / 2, net.Power);
-			Assert.AreEqual(_generatorModel.Power / 2, secondNet.Power);
-			Assert.AreEqual(1,                         secondNet.Generators.Count);
-			Assert.AreEqual(2,                         generator.Nets.Count);
-			Debug.Log("Before remove generator 1");
+			net.TestNet(_generatorModel.Power / 2, 1, 1);
+			secondNet.TestNet(_generatorModel.Power / 2, 1, 1);
+			generator.TestGenerator(2, 2);
 			secondNet.RemoveGenerator(generator);
-			Debug.Log("Remove generator 1");
-			Assert.AreEqual(_generatorModel.Power, net.Power);
-			Assert.AreEqual(0,                     secondNet.Power);
-			Assert.AreEqual(1,                     net.Generators.Count);
-			Assert.AreEqual(0,                     secondNet.Generators.Count);
-			Assert.AreEqual(1,                     generator.Nets.Count);
-			Debug.Log("Before remove generator 2");
+			net.TestNet(_generatorModel.Power, 1, 1);
+			secondNet.TestNet(0, 0, 1);
+			generator.TestGenerator(1, 1);
+
 			net.RemoveGenerator(generator);
-			Debug.Log("Remove generator 2");
-			Assert.AreEqual(0, net.Power);
-			Assert.AreEqual(0, secondNet.Power);
-			Assert.AreEqual(0, net.Generators.Count);
-			Assert.AreEqual(0, secondNet.Generators.Count);
-			Assert.AreEqual(0, generator.Nets.Count);
+			net.TestNet(0, 0, 1);
+			secondNet.TestNet(0, 0, 1);
+			generator.TestGenerator(0, 0);
 		}
 
 		[Test]
 		public void UniteNetsTest()
 		{
-			var net       = new ElectricityNet();
-			var secondNet = new ElectricityNet();
+			var net       = Factory.GetFactoryItem<ElectricityNet>(Container);
+			var secondNet = Factory.GetFactoryItem<ElectricityNet>(Container);
 			net.Initialize(0);
 			net.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
 			net.AddGenerator(new GeneratorController(Vector3.one, _generatorModel));
@@ -149,12 +157,40 @@ namespace Tests.Electricity
 			secondNet.AddPole(new ElectricityPoleController(Vector3.left, _poleModel));
 			secondNet.AddGenerator(new GeneratorController(-Vector3.one, _generatorModel));
 			net.AddNet(secondNet);
-			Assert.AreEqual(_generatorModel.Power * 2, net.Power);
-			Assert.AreEqual(2,                         net.Generators.Count);
-			Assert.AreEqual(2,                         net.Poles.Count);
-			Assert.AreEqual(0,                         secondNet.Power);
-			Assert.AreEqual(0,                         secondNet.Generators.Count);
-			Assert.AreEqual(0,                         secondNet.Poles.Count);
+			net.TestNet(_generatorModel.Power * 2, 2, 2);
+			secondNet.TestNet(0, 0, 0);
+		}
+	}
+
+	internal static class ElectricityTestHelper
+	{
+		public static void TestNet(this ElectricityNet net, float power, int generatorsCount, int polesCount)
+		{
+			Assert.AreEqual(power,           net.Power);
+			Assert.AreEqual(generatorsCount, net.Generators.Count);
+			Assert.AreEqual(polesCount,      net.Poles.Count);
+		}
+
+		public static void TestPole(this ElectricityPoleController pole,
+		                            int                            neighborPolesCount,
+		                            int                            neighborGeneratorsCount)
+		{
+			Assert.AreEqual(neighborPolesCount,      pole.NearlyPoles.Count);
+			Assert.AreEqual(neighborGeneratorsCount, pole.NearlyGenerators.Count);
+		}
+
+		public static void TestNetWire(this ElectricityNet       net,
+		                               Vector3                   position,
+		                               ElectricPoleBuildingModel model,
+		                               bool                      result)
+		{
+			Assert.AreEqual(result, net.IsPoleInWires(new ElectricityPoleController(position, model)));
+		}
+
+		public static void TestGenerator(this GeneratorController generator, int netsCount, int neighbourPolesCount)
+		{
+			Assert.AreEqual(netsCount,           generator.Nets.Count);
+			Assert.AreEqual(neighbourPolesCount, generator.NearlyPoles.Count);
 		}
 	}
 }

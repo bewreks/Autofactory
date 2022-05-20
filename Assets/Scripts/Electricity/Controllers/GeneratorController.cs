@@ -6,40 +6,32 @@ using UnityEngine;
 
 namespace Electricity.Controllers
 {
-	public class GeneratorController
+	public class GeneratorController : BuildingController
 	{
-		public event Action<float, float> ChangeOfPower;
-		public Vector3                    Position      { get; }
-		public BaseGeneratorBuildingModel Model         { get; }
-		public float                      PartOfPower   { get; private set; }
-		public List<ElectricityNet>       Nets          { get; }
-		public Rect                       BuildingRect { get; }
+		public event Action<float, float>      ChangeOfPower;
+		public BaseGeneratorBuildingModel      Model       { get; }
+		public float                           PartOfPower { get; private set; }
+		public List<ElectricityNet>            Nets        { get; }
+		public List<ElectricityPoleController> NearlyPoles { get; }
 
-		public GeneratorController(Vector3 position, BaseGeneratorBuildingModel model)
+		public GeneratorController(Vector3 position, BaseGeneratorBuildingModel model) : base(position, model)
 		{
-			Position      = position;
-			Model         = model;
-			PartOfPower   = model.Power;
-			Nets          = new List<ElectricityNet>();
-			BuildingRect = BuildingHelper.GetGeneratorRect(position, model.BuildingSize);
+			NearlyPoles = new List<ElectricityPoleController>();
+			Model       = model;
+			PartOfPower = model.Power;
+			Nets        = new List<ElectricityNet>();
 		}
 
 		public void AddNet(ElectricityNet net)
 		{
-			if (!Nets.Contains(net))
-			{
-				Nets.Add(net);
-				UpdatePowerPart();
-			}
+			Nets.Add(net);
+			UpdatePowerPart();
 		}
 
 		public void RemoveNet(ElectricityNet net)
 		{
-			if (Nets.Contains(net))
-			{
-				Nets.Remove(net);
-				UpdatePowerPart();
-			}
+			Nets.Remove(net);
+			UpdatePowerPart();
 		}
 
 		private void UpdatePowerPart()
@@ -58,6 +50,16 @@ namespace Electricity.Controllers
 			{
 				ChangeOfPower?.Invoke(oldPart, PartOfPower);
 			}
+		}
+
+		public void AddPole(ElectricityPoleController pole)
+		{
+			NearlyPoles.Add(pole);
+		}
+
+		public void RemovePole(ElectricityPoleController pole)
+		{
+			NearlyPoles.Remove(pole);
 		}
 	}
 }

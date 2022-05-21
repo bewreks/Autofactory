@@ -21,7 +21,8 @@ namespace Tests.Electricity
 			_poleModel      = Resources.Load<ElectricPoleBuildingModel>("Models/Buildings/ElectricPoleBuildingModel");
 			_generatorModel = Resources.Load<BaseGeneratorBuildingModel>("Models/Buildings/BaseGeneratorBuildingModel");
 
-			_electricityController = new ElectricityController();
+			Container.Bind<ElectricityController>().FromNew().AsSingle();
+			_electricityController = Container.Resolve<ElectricityController>();
 		}
 
 		public override void Teardown()
@@ -29,6 +30,7 @@ namespace Tests.Electricity
 			base.Teardown();
 			_electricityController.Dispose();
 			_electricityController = null;
+			Container.Unbind<ElectricityController>();
 		}
 
 		[Test]

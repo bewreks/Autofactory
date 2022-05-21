@@ -5,11 +5,14 @@ using Buildings.Models;
 using Electricity.Controllers;
 using Factories;
 using UnityEngine;
+using Zenject;
 
 namespace Electricity
 {
 	public class ElectricityController : IDisposable
 	{
+		[Inject] private DiContainer _container;
+		
 		private Dictionary<int, ElectricityNet> _nets = new Dictionary<int, ElectricityNet>();
 
 		private List<GeneratorController> _generators =
@@ -24,7 +27,7 @@ namespace Electricity
 		{
 			if (!_nets.TryGetValue(netId, out var net))
 			{
-				net = Factory.GetFactoryItem<ElectricityNet>();
+				net = Factory.GetFactoryItem<ElectricityNet>(_container);
 				net.Initialize(netId);
 				_nets.Add(netId, net);
 			}
@@ -119,13 +122,26 @@ namespace Electricity
 		{
 			generator.Nets.ToList().ForEach(net =>
 			{
-				// net.RemoveGenerator(generator);
+				net.RemoveGenerator(generator);
 			});
 		}
 
 		public void RemovePole(ElectricityPoleController pole)
 		{
-			
+			var id = pole.Net.ID;
+			if (pole.Net.RemovePole(pole, out var nets))
+			{
+				foreach (var net in nets)
+				{
+					net.Initialize(_idFactory.Pop());
+				}
+			}
+
+			if (pole.Net.ID == -1)
+			{
+				Factory.ReturnItem(pole.Net);
+				_nets.Remove(id);
+			}
 		}
 
 		public void ReturnGenerators(IEnumerable<GeneratorController> generators)

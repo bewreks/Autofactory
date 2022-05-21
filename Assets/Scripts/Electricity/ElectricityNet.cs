@@ -57,6 +57,12 @@ namespace Electricity
 			_electricityController.ReturnGenerators(pole.NearlyGenerators
 			                                            .Where(generator => generator.NearlyPoles.IsEmpty()));
 
+			if (_poles.IsEmpty())
+			{
+				Dispose();
+				return false;
+			}
+			
 			if (pole.NearlyPoles.Count <= 1)
 			{
 				return false;

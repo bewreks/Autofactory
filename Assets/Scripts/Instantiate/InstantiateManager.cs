@@ -1,8 +1,7 @@
 ﻿using System;
-using Buildings;
+using Buildings.Models;
 using Buildings.Views;
 using Game;
-using Inventories;
 using UnityEngine;
 using Zenject;
 
@@ -15,7 +14,13 @@ namespace Instantiate
 
 		private float SetStep(float coordX)
 		{
-			return (int)coordX;
+			if (coordX < 0)
+			{
+				coordX -= 1;
+			}
+
+			var x = (int)coordX;
+			return x;
 		}
 
 		public void Dispose() { }
@@ -27,10 +32,15 @@ namespace Instantiate
 			hit.z = SetStep(hit.z);
 
 			var preview =
-				_container.InstantiatePrefabForComponent<BuildingView>(_model.SelectedPack.Model.BuildingModel.Instance,
-				                                                       hit,
-				                                                       Quaternion.identity,
-				                                                       null);
+				_container
+					.InstantiatePrefabForComponent<BuildingView>(
+					                                                            _model.SelectedPack
+						                                                            .Model
+						                                                            .BuildingModel
+						                                                            .Instance,
+					                                                            hit,
+					                                                            Quaternion.identity,
+					                                                            null);
 			preview.SetModel(_model.SelectedPack.Model.BuildingModel);
 			return preview;
 		}
@@ -45,7 +55,6 @@ namespace Instantiate
 
 		public void InstantiateFinal()
 		{
-			//TODO проверить удаление
 			_model.SelectedPack.Remove();
 			var view = _model.InstantiablePack;
 			view.FinalInstantiate();

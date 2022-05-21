@@ -9,12 +9,12 @@ namespace Buildings.Models
 	public class BuildingModel : ScriptableObject
 	{
 		[SerializeField] private InventoryObjectsTypesEnum type;
-		[SerializeField] private BuildingView              instance;
+		[SerializeField] private BuildingView          instance;
 
 
-		public InventoryObjectsTypesEnum Type         => type;
-		public BuildingView              Instance     => instance;
-		public Vector2                   BuildingSize { get; private set; }
+		public InventoryObjectsTypesEnum   Type         => type;
+		public BuildingView Instance     => instance;
+		public Vector2                     BuildingSize { get; private set; }
 
 		private void Awake()
 		{

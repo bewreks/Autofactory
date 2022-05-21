@@ -16,15 +16,7 @@ namespace Buildings.Views
 
 		public int NetID => _netID;
 
-		public override void SetModel(BuildingModel model)
-		{
-			base.SetModel(model);
-
-			if (!(_model is ElectricPoleBuildingModel))
-			{
-				throw new NullReferenceException($"{model.name} is not electric model");
-			}
-		}
+		protected override Type ModelType => typeof(ElectricPoleBuildingModel);
 
 		public override void FinalInstantiate()
 		{

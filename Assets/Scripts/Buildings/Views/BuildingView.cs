@@ -1,19 +1,23 @@
-﻿using Buildings.Models;
+﻿using System;
+using Buildings.Models;
 using Installers;
 using UnityEngine;
 using Zenject;
 
 namespace Buildings.Views
 {
-	public class BuildingView : MonoBehaviour
+	public abstract class BuildingView : MonoBehaviour
+		
 	{
 		[Inject] protected GameSettings gameSettings;
 
 		[SerializeField] protected BoxCollider _collider;
 		[SerializeField] protected Renderer _renderer;
+		
+		protected abstract Type ModelType { get; }
 
-		public BoxCollider   Collider  => _collider;
-		public Renderer      Renderer  => _renderer;
+		public BoxCollider   Collider => _collider;
+		public Renderer      Renderer => _renderer;
 		public BuildingModel Model     => _model;
 		public bool          Triggered { get; private set; }
 
@@ -43,8 +47,13 @@ namespace Buildings.Views
 			rendererMaterial.color = _color;
 		}
 
-		public virtual void SetModel(BuildingModel model)
+		public void SetModel(BuildingModel model)
 		{
+			if (model.GetType() != ModelType )
+			{
+				throw new NullReferenceException($"{model.name} is not {ModelType} model");
+			}
+			
 			_model = model;
 		}
 

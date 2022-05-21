@@ -10,15 +10,7 @@ namespace Buildings.Views
 	{
 		[Inject] private ElectricityController _electricityController;
 
-		public override void SetModel(BuildingModel model)
-		{
-			base.SetModel(model);
-
-			if (!(_model is BaseGeneratorBuildingModel))
-			{
-				throw new NullReferenceException($"{model.name} is not electric model");
-			}
-		}
+		protected override Type ModelType => typeof(BaseGeneratorBuildingModel);
 
 		public override void FinalInstantiate()
 		{

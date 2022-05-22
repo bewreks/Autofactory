@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Buildings.Colliders;
 using Buildings.Models;
 using Inventories;
 using UnityEngine;
@@ -23,10 +24,13 @@ namespace Installers
 	[Serializable]
 	public class BuildingsModelsSettings
 	{
-		[SerializeField] private List<BuildingModel> _models = new List<BuildingModel>();
+		[SerializeField] private List<BuildingModel>       _models = new List<BuildingModel>();
+		[SerializeField] private ElectricitySquareCollider _squareCollider;
 
 		private Dictionary<InventoryObjectsTypesEnum, BuildingModel> _buildingsMap =
 			new Dictionary<InventoryObjectsTypesEnum, BuildingModel>();
+
+		public ElectricitySquareCollider SquareCollider => _squareCollider;
 
 		public bool Prepare()
 		{

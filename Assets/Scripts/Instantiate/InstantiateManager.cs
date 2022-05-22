@@ -58,7 +58,6 @@ namespace Instantiate
 			_model.SelectedPack.Remove();
 			var view = _model.InstantiablePack;
 			view.FinalInstantiate();
-			view.Collider.isTrigger = false;
 		}
 	}
 }

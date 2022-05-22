@@ -10,9 +10,10 @@ namespace Buildings.Views
 	{
 		[Inject] private ElectricityController _electricityController;
 
-		protected override Type ModelType => typeof(BaseGeneratorBuildingModel);
+		protected override Type ModelType     => typeof(BaseGeneratorBuildingModel);
+		protected override int  BuildingLayer => gameSettings.GeneratorLayer;
 
-		public override void FinalInstantiate()
+		protected override void OnFinalInstantiate()
 		{
 			var transformCache = transform;
 			var generatorModel = (BaseGeneratorBuildingModel)_model;

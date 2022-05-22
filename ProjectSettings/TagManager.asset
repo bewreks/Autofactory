@@ -5,7 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - ElectricConsumptions
+  - Generators
+  - ElectricSquare
+  - ElectricWires
+  - ElectricPoles
   - Building
+  - PlayerTag
   layers:
   - Default
   - TransparentFX
@@ -14,13 +20,13 @@ TagManager:
   - Water
   - UI
   - Ground
-  - Building
-  - ElectricBuildings
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - ElectricPoles
+  - Generators
+  - ElectricConsumptions
+  - ElectricSquare
+  - ElectricWires
+  - BuildingPreview
   - 
   - 
   - 

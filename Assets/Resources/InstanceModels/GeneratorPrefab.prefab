@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5897081410615762342}
   - component: {fileID: 5897081410615762341}
   - component: {fileID: 5897081410615762340}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 3777179834640418242}
   - component: {fileID: 1139856078144057602}
   - component: {fileID: 955354446190306344}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GeneratorPrefab
   m_TagString: Building
   m_Icon: {fileID: 0}

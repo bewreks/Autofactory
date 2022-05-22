@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2082789190166346204}
   - component: {fileID: 6944941332242248805}
   - component: {fileID: 2778997273925475291}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 6014292702033954803}
   - component: {fileID: 1884722193020313358}
   - component: {fileID: 2604088224241190361}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 8076231589972691133}
   - component: {fileID: 1095214973707901080}
   - component: {fileID: 1189579151785181410}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -254,7 +254,7 @@ GameObject:
   - component: {fileID: 8565568253840419392}
   - component: {fileID: 7885264041680415015}
   - component: {fileID: 4234489536646891454}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Capsule (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -336,7 +336,7 @@ GameObject:
   - component: {fileID: 2697359441309699428}
   - component: {fileID: 2697359441309699429}
   - component: {fileID: 2697359441309699426}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -452,7 +452,7 @@ GameObject:
   - component: {fileID: 2697359441311348585}
   - component: {fileID: 2697359441311348628}
   - component: {fileID: 2697359441311348629}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,9 +538,9 @@ GameObject:
   - component: {fileID: 3539833746634402910}
   - component: {fileID: 4152974703473698841}
   - component: {fileID: 7725726359976022173}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerPrefab
-  m_TagString: Untagged
+  m_TagString: PlayerTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -613,7 +613,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 656870398689320174}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlayerViewContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

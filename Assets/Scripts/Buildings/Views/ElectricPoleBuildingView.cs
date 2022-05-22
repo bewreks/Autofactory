@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Buildings.Colliders;
 using Buildings.Models;
 using Electricity;
+using Installers;
 using UnityEngine;
 using Zenject;
 
@@ -10,16 +12,21 @@ namespace Buildings.Views
 {
 	public class ElectricPoleBuildingView : BuildingView
 	{
-		[Inject] private ElectricityController _electricityController;
+		[Inject] private ElectricityController   _electricityController;
+		[Inject] private DiContainer             _container;
+		[Inject] private BuildingsModelsSettings _buildingSettings;
 
 		private int _netID = -1;
 
 		public int NetID => _netID;
 
-		protected override Type ModelType => typeof(ElectricPoleBuildingModel);
+		protected override Type ModelType     => typeof(ElectricPoleBuildingModel);
+		protected override int  BuildingLayer => gameSettings.PoleLayer;
 
-		public override void FinalInstantiate()
+		protected override void OnFinalInstantiate()
 		{
+			_container.InstantiatePrefabForComponent<ElectricitySquareCollider>(_buildingSettings.SquareCollider, _bottom);
+			
 			var transformCache = transform;
 			var electricModel  = (ElectricPoleBuildingModel)_model;
 
@@ -27,7 +34,7 @@ namespace Buildings.Views
 			                                 electricModel.WireRadius,
 			                                 transformCache.forward,
 			                                 electricModel.WireRadius,
-			                                 gameSettings.ElectricBuildingMask);
+			                                 gameSettings.ElectricPoleMask);
 
 			var nets = new List<int>();
 

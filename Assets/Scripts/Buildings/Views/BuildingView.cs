@@ -13,8 +13,10 @@ namespace Buildings.Views
 
 		[SerializeField] protected BoxCollider _collider;
 		[SerializeField] protected Renderer    _renderer;
+		[SerializeField] protected Transform   _bottom;
 
-		protected abstract Type ModelType { get; }
+		protected abstract Type ModelType     { get; }
+		protected abstract int  BuildingLayer { get; }
 
 		public BoxCollider   Collider  => _collider;
 		public Renderer      Renderer  => _renderer;
@@ -28,13 +30,20 @@ namespace Buildings.Views
 
 		private void Start()
 		{
+			if (!_bottom)
+			{
+				_bottom = transform;
+			}
+
 			var rendererMaterial = _renderer.material;
 			_color = rendererMaterial.color;
 			_error = new Color(1, 0, 0, 0.5f);
+			gameObject.layer = gameSettings.PreviewLayer;
 		}
 
 		private void OnTriggerEnter(Collider other)
 		{
+			Debug.Log($"Building collide with {other.name}");
 			Triggered = true;
 			var rendererMaterial = _renderer.material;
 			rendererMaterial.color = _error;
@@ -42,6 +51,7 @@ namespace Buildings.Views
 
 		private void OnTriggerExit(Collider other)
 		{
+			Debug.Log($"Building end colliding with {other.name}");
 			Triggered = false;
 			var rendererMaterial = _renderer.material;
 			rendererMaterial.color = _color;
@@ -57,6 +67,14 @@ namespace Buildings.Views
 			_model = model;
 		}
 
-		public virtual void FinalInstantiate() { }
+		public void FinalInstantiate()
+		{
+			gameObject.layer    = BuildingLayer;
+			_collider.isTrigger = false;
+
+			OnFinalInstantiate();
+		}
+
+		protected abstract void OnFinalInstantiate();
 	}
 }

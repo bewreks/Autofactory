@@ -7,17 +7,17 @@ using Zenject;
 namespace Buildings.Views
 {
 	public abstract class BuildingView : MonoBehaviour
-		
+
 	{
 		[Inject] protected GameSettings gameSettings;
 
 		[SerializeField] protected BoxCollider _collider;
-		[SerializeField] protected Renderer _renderer;
-		
+		[SerializeField] protected Renderer    _renderer;
+
 		protected abstract Type ModelType { get; }
 
-		public BoxCollider   Collider => _collider;
-		public Renderer      Renderer => _renderer;
+		public BoxCollider   Collider  => _collider;
+		public Renderer      Renderer  => _renderer;
 		public BuildingModel Model     => _model;
 		public bool          Triggered { get; private set; }
 
@@ -49,11 +49,11 @@ namespace Buildings.Views
 
 		public void SetModel(BuildingModel model)
 		{
-			if (model.GetType() != ModelType )
+			if (model.GetType() != ModelType)
 			{
 				throw new NullReferenceException($"{model.name} is not {ModelType} model");
 			}
-			
+
 			_model = model;
 		}
 

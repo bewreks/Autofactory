@@ -7,7 +7,6 @@ using Zenject;
 namespace Buildings.Views
 {
 	public abstract class BuildingView : MonoBehaviour
-
 	{
 		[Inject] protected GameSettings gameSettings;
 
@@ -43,18 +42,22 @@ namespace Buildings.Views
 
 		private void OnTriggerEnter(Collider other)
 		{
-			Debug.Log($"Building collide with {other.name}");
-			Triggered = true;
-			var rendererMaterial = _renderer.material;
-			rendererMaterial.color = _error;
+			if (gameObject.layer == gameSettings.PreviewLayer)
+			{
+				var rendererMaterial = _renderer.material;
+				rendererMaterial.color = _error;
+				Triggered              = true;
+			}
 		}
 
 		private void OnTriggerExit(Collider other)
 		{
-			Debug.Log($"Building end colliding with {other.name}");
-			Triggered = false;
-			var rendererMaterial = _renderer.material;
-			rendererMaterial.color = _color;
+			if (gameObject.layer == gameSettings.PreviewLayer)
+			{
+				var rendererMaterial = _renderer.material;
+				rendererMaterial.color = _color;
+				Triggered              = false;
+			}
 		}
 
 		public void SetModel(BuildingModel model)

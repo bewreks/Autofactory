@@ -10,7 +10,7 @@ namespace Electricity
 {
 	public class ElectricityNet : IDisposable
 	{
-		[Inject] private ElectricityController _electricityController;
+		[Inject] private ElectricityController_old _electricityController;
 		[Inject] private DiContainer           _diContainer;
 		
 		public int   ID    { get; private set; }

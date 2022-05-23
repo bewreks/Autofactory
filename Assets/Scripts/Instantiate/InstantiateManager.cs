@@ -34,13 +34,13 @@ namespace Instantiate
 			var preview =
 				_container
 					.InstantiatePrefabForComponent<BuildingView>(
-					                                                            _model.SelectedPack
-						                                                            .Model
-						                                                            .BuildingModel
-						                                                            .Instance,
-					                                                            hit,
-					                                                            Quaternion.identity,
-					                                                            null);
+					                                             _model.SelectedPack
+					                                                   .Model
+					                                                   .BuildingModel
+					                                                   .Instance,
+					                                             hit,
+					                                             Quaternion.identity,
+					                                             null);
 			preview.SetModel(_model.SelectedPack.Model.BuildingModel);
 			return preview;
 		}

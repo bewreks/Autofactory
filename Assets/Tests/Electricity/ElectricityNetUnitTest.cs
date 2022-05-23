@@ -20,14 +20,14 @@ namespace Tests.Electricity
 
 			_poleModel      = Resources.Load<ElectricPoleBuildingModel>("Models/Buildings/ElectricPoleBuildingModel");
 			_generatorModel = Resources.Load<BaseGeneratorBuildingModel>("Models/Buildings/BaseGeneratorBuildingModel");
-			Container.Bind<ElectricityController>().FromNew().AsCached();
+			Container.Bind<ElectricityController_old>().FromNew().AsCached();
 		}
 
 		public override void Teardown()
 		{
 			base.Teardown();
 
-			Container.Unbind<ElectricityController>();
+			Container.Unbind<ElectricityController_old>();
 		}
 
 		[Test]

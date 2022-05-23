@@ -10,7 +10,7 @@ namespace Tests.Electricity
 	[TestFixture]
 	public class ElectricityControllerUnitTest : ZenjectUnitTestFixture
 	{
-		private ElectricityController      _electricityController;
+		private ElectricityController_old      _electricityController;
 		private ElectricPoleBuildingModel  _poleModel;
 		private BaseGeneratorBuildingModel _generatorModel;
 
@@ -21,8 +21,8 @@ namespace Tests.Electricity
 			_poleModel      = Resources.Load<ElectricPoleBuildingModel>("Models/Buildings/ElectricPoleBuildingModel");
 			_generatorModel = Resources.Load<BaseGeneratorBuildingModel>("Models/Buildings/BaseGeneratorBuildingModel");
 
-			Container.Bind<ElectricityController>().FromNew().AsSingle();
-			_electricityController = Container.Resolve<ElectricityController>();
+			Container.Bind<ElectricityController_old>().FromNew().AsSingle();
+			_electricityController = Container.Resolve<ElectricityController_old>();
 		}
 
 		public override void Teardown()
@@ -30,7 +30,7 @@ namespace Tests.Electricity
 			base.Teardown();
 			_electricityController.Dispose();
 			_electricityController = null;
-			Container.Unbind<ElectricityController>();
+			Container.Unbind<ElectricityController_old>();
 		}
 
 		[Test]

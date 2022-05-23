@@ -12,7 +12,7 @@ namespace Buildings.Views
 {
 	public class ElectricPoleBuildingView : BuildingView
 	{
-		[Inject] private ElectricityController   _electricityController;
+		[Inject] private ElectricityController_old   _electricityController;
 		[Inject] private DiContainer             _container;
 		[Inject] private BuildingsModelsSettings _buildingSettings;
 
@@ -25,8 +25,12 @@ namespace Buildings.Views
 
 		protected override void OnFinalInstantiate()
 		{
-			_container.InstantiatePrefabForComponent<ElectricitySquareCollider>(_buildingSettings.SquareCollider, _bottom);
-			
+			var squareCollider =
+				_container.InstantiatePrefabForComponent<ElectricitySquareCollider>(_buildingSettings.SquareCollider,
+																				    _bottom);
+
+			squareCollider.Pole = this;
+
 			var transformCache = transform;
 			var electricModel  = (ElectricPoleBuildingModel)_model;
 

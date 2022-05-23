@@ -9,7 +9,7 @@ using Zenject;
 
 namespace Electricity
 {
-	public class ElectricityController : IDisposable
+	public class ElectricityController_old : IDisposable
 	{
 		[Inject] private DiContainer _container;
 		
@@ -104,6 +104,17 @@ namespace Electricity
 					net.AddGenerator(generator);
 					return true;
 				}
+			}
+
+			return false;
+		}
+
+		public bool AddGenerator(GeneratorController generator, int netId)
+		{
+			if (_nets.TryGetValue(netId, out var net))
+			{
+				net.AddGenerator(generator);
+				return true;
 			}
 
 			return false;

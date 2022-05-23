@@ -1,6 +1,7 @@
 ﻿using System;
 using Buildings.Models;
 using Electricity;
+using Electricity.Controllers;
 using UnityEngine;
 using Zenject;
 
@@ -8,17 +9,17 @@ namespace Buildings.Views
 {
 	public class GeneratorBuildingView : BuildingView
 	{
-		[Inject] private ElectricityController _electricityController;
+		[Inject] private ElectricityController_old _electricityController;
 
 		protected override Type ModelType     => typeof(BaseGeneratorBuildingModel);
 		protected override int  BuildingLayer => gameSettings.GeneratorLayer;
 
+		public BaseGeneratorBuildingModel GeneratorModel      => (BaseGeneratorBuildingModel)_model;
+		public GeneratorController        GeneratorController { get; private set; }
+		
 		protected override void OnFinalInstantiate()
 		{
-			var transformCache = transform;
-			var generatorModel = (BaseGeneratorBuildingModel)_model;
-
-			_electricityController.AddGenerator(transformCache.position, generatorModel);
+			GeneratorController = new GeneratorController(transform.position, GeneratorModel);
 		}
 
 		private void OnDrawGizmos()

@@ -11,7 +11,7 @@ namespace Electricity.Controllers
 		public event Action<float, float>      ChangeOfPower;
 		public BaseGeneratorBuildingModel      Model       { get; }
 		public float                           PartOfPower { get; private set; }
-		public List<ElectricityNet>            Nets        { get; }
+		public List<ElectricityNet_Old>            Nets        { get; }
 		public List<ElectricityPoleController> NearlyPoles { get; }
 
 		public GeneratorController(Vector3 position, BaseGeneratorBuildingModel model) : base(position, model)
@@ -19,16 +19,16 @@ namespace Electricity.Controllers
 			NearlyPoles = new List<ElectricityPoleController>();
 			Model       = model;
 			PartOfPower = model.Power;
-			Nets        = new List<ElectricityNet>();
+			Nets        = new List<ElectricityNet_Old>();
 		}
 
-		public void AddNet(ElectricityNet net)
+		public void AddNet(ElectricityNet_Old net)
 		{
 			Nets.Add(net);
 			UpdatePowerPart();
 		}
 
-		public void RemoveNet(ElectricityNet net)
+		public void RemoveNet(ElectricityNet_Old net)
 		{
 			Nets.Remove(net);
 			UpdatePowerPart();

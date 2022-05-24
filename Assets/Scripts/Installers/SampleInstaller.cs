@@ -16,7 +16,7 @@ namespace Installers
 
 			Container.Bind<GameController>().FromNew().AsSingle();
 			Container.Bind<CraftingController>().FromNew().AsSingle();
-			Container.Bind<ElectricityController_old>().FromNew().AsSingle();
+			Container.BindInterfacesTo<ElectricityController>().FromNew().AsSingle();
 			Container.Bind<WindowsManager>().FromNew().AsSingle();
 			Container.Bind<InstantiateManager>().FromNew().AsSingle();
 		}
@@ -28,7 +28,7 @@ namespace Installers
 			var gameController        = Container.Resolve<GameController>();
 			var instantiateManager    = Container.Resolve<InstantiateManager>();
 			var craftingController    = Container.Resolve<CraftingController>();
-			var electricityController = Container.Resolve<ElectricityController_old>();
+			var electricityController = Container.Resolve<IElectricityController>();
 			_disposables.Add(gameController);
 			_disposables.Add(instantiateManager);
 			_disposables.Add(craftingController);

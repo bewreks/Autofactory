@@ -24,13 +24,15 @@ namespace Installers
 	[Serializable]
 	public class BuildingsModelsSettings
 	{
-		[SerializeField] private List<BuildingModel>       _models = new List<BuildingModel>();
-		[SerializeField] private ElectricitySquareCollider _squareCollider;
+		[SerializeField] private List<BuildingModel> _models = new List<BuildingModel>();
+		[SerializeField] private ColliderView        _squareCollider;
+		[SerializeField] private ColliderView        _wiresCollider;
 
 		private Dictionary<InventoryObjectsTypesEnum, BuildingModel> _buildingsMap =
 			new Dictionary<InventoryObjectsTypesEnum, BuildingModel>();
 
-		public ElectricitySquareCollider SquareCollider => _squareCollider;
+		public ColliderView SquareCollider => _squareCollider;
+		public ColliderView WiresCollider  => _wiresCollider;
 
 		public bool Prepare()
 		{

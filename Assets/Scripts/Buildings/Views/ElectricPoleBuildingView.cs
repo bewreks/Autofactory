@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Buildings.Colliders;
 using Buildings.Models;
 using Electricity;
+using Electricity.Controllers;
 using Installers;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using Zenject;
 
@@ -12,7 +13,7 @@ namespace Buildings.Views
 {
 	public class ElectricPoleBuildingView : BuildingView
 	{
-		[Inject] private ElectricityController_old   _electricityController;
+		[Inject] private IElectricityController  _electricityController;
 		[Inject] private DiContainer             _container;
 		[Inject] private BuildingsModelsSettings _buildingSettings;
 
@@ -20,16 +21,70 @@ namespace Buildings.Views
 
 		public int NetID => _netID;
 
-		protected override Type ModelType     => typeof(ElectricPoleBuildingModel);
-		protected override int  BuildingLayer => gameSettings.PoleLayer;
+		protected override Type                      ModelType      => typeof(ElectricPoleBuildingModel);
+		protected override int                       BuildingLayer  => gameSettings.PoleLayer;
+		public             ElectricPoleBuildingModel PoleModel      => (ElectricPoleBuildingModel)_model;
+		public             ElectricityPoleController PoleController { get; private set; }
 
 		protected override void OnFinalInstantiate()
 		{
-			var squareCollider =
-				_container.InstantiatePrefabForComponent<ElectricitySquareCollider>(_buildingSettings.SquareCollider,
-																				    _bottom);
+			PoleController = new ElectricityPoleController(transform.position, PoleModel);
 
-			squareCollider.Pole = this;
+			var colliderView =
+				_container.InstantiatePrefabForComponent<ColliderView>(_buildingSettings.SquareCollider, _bottom);
+
+			colliderView.TriggerCollider.OnTriggerEnterAsObservable().Subscribe(other =>
+			{
+				_electricityController.AddPole(PoleController);
+				var generatorBuildingView = other.GetComponent<GeneratorBuildingView>();
+				if (generatorBuildingView)
+				{
+					_electricityController.AddGeneratorToNet(generatorBuildingView.GeneratorController, PoleController);
+				}
+
+				var consumptionBuildingView = other.GetComponent<ElectricityConsumptionBuildingView>();
+				if (consumptionBuildingView)
+				{
+					_electricityController.AddBuilding(consumptionBuildingView.BuildingController, PoleController);
+				}
+			}).AddTo(_disposables);
+			colliderView.TriggerCollider.OnTriggerExitAsObservable().Subscribe(other =>
+			{
+				var generatorBuildingView = other.GetComponent<GeneratorBuildingView>();
+				if (generatorBuildingView)
+				{
+					_electricityController.RemoveGeneratorFromNet(generatorBuildingView.GeneratorController, PoleController);
+				}
+
+				var consumptionBuildingView = other.GetComponent<ElectricityConsumptionBuildingView>();
+				if (consumptionBuildingView)
+				{
+					_electricityController.RemoveBuilding(consumptionBuildingView.BuildingController, PoleController);
+				}
+			}).AddTo(_disposables);
+
+			colliderView =
+				_container.InstantiatePrefabForComponent<ColliderView>(_buildingSettings.WiresCollider, _bottom);
+
+			colliderView.TriggerCollider.OnTriggerEnterAsObservable().Subscribe(other =>
+			{
+				_electricityController.AddPole(PoleController);
+				var poleBuildingView = other.GetComponent<ElectricPoleBuildingView>();
+				if (poleBuildingView)
+				{
+					_electricityController.MergePoles(poleBuildingView.PoleController, PoleController);
+				}
+			}).AddTo(_disposables);
+			colliderView.TriggerCollider.OnTriggerExitAsObservable().Subscribe(other =>
+			{
+				var poleBuildingView = other.GetComponent<ElectricPoleBuildingView>();
+				if (poleBuildingView)
+				{
+					_electricityController.UnmergePoles(poleBuildingView.PoleController, PoleController);
+				}
+			}).AddTo(_disposables);
+
+			/*squareCollider.Pole = this;
 
 			var transformCache = transform;
 			var electricModel  = (ElectricPoleBuildingModel)_model;
@@ -68,7 +123,7 @@ namespace Buildings.Views
 			else
 			{
 				_electricityController.AddPole(transformCache.position, electricModel);
-			}
+			}*/
 		}
 
 		private void OnDrawGizmos()

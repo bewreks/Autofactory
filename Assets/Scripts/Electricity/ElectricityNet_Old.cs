@@ -8,7 +8,7 @@ using Zenject;
 
 namespace Electricity
 {
-	public class ElectricityNet : IDisposable
+	public class ElectricityNet_Old : IDisposable
 	{
 		[Inject] private ElectricityController_old _electricityController;
 		[Inject] private DiContainer           _diContainer;
@@ -48,9 +48,9 @@ namespace Electricity
 			_poles.Add(pole);
 		}
 
-		public bool RemovePole(ElectricityPoleController pole, out ElectricityNet[] nets)
+		public bool RemovePole(ElectricityPoleController pole, out ElectricityNet_Old[] nets)
 		{
-			nets = Array.Empty<ElectricityNet>();
+			nets = Array.Empty<ElectricityNet_Old>();
 			_poles.Remove(pole);
 			pole.RemoveSelfFromNearlyPoles();
 			pole.RemoveSelfFromNearlyGenerators();
@@ -89,10 +89,10 @@ namespace Electricity
 			_generators.Clear();
 			_generators.AddRange(list[i].SelectMany(controller => controller.NearlyGenerators).Distinct());
 
-			var newNets = new List<ElectricityNet>();
+			var newNets = new List<ElectricityNet_Old>();
 			for (i = 1; i < list.Count; i++)
 			{
-				var net = Factory.GetFactoryItem<ElectricityNet>(_diContainer);
+				var net = Factory.GetFactoryItem<ElectricityNet_Old>(_diContainer);
 				net._poles.AddRange(list[i]);
 				net._generators.AddRange(list[i].SelectMany(controller => controller.NearlyGenerators).Distinct());
 				net.Recalculate();
@@ -136,7 +136,7 @@ namespace Electricity
 			return _poles.Any(container => container.InPoleWire(newPoleController));
 		}
 	
-		public void AddNet(ElectricityNet newNet)
+		public void AddNet(ElectricityNet_Old newNet)
 		{
 			Power += newNet.Power;
 			newNet.StopUpdates();

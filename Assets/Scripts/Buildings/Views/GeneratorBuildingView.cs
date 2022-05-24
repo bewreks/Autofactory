@@ -9,7 +9,7 @@ namespace Buildings.Views
 {
 	public class GeneratorBuildingView : BuildingView
 	{
-		[Inject] private ElectricityController_old _electricityController;
+		[Inject] private IElectricityController _electricityController;
 
 		protected override Type ModelType     => typeof(BaseGeneratorBuildingModel);
 		protected override int  BuildingLayer => gameSettings.GeneratorLayer;
@@ -20,6 +20,8 @@ namespace Buildings.Views
 		protected override void OnFinalInstantiate()
 		{
 			GeneratorController = new GeneratorController(transform.position, GeneratorModel);
+			
+			_electricityController.AddGenerator(GeneratorController);
 		}
 
 		private void OnDrawGizmos()

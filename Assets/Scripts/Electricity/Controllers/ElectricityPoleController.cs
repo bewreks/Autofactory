@@ -12,7 +12,7 @@ namespace Electricity.Controllers
 		public ElectricPoleBuildingModel       Model            { get; }
 		public List<ElectricityPoleController> NearlyPoles      { get; }
 		public List<GeneratorController>       NearlyGenerators { get; }
-		public ElectricityNet                  Net              {get; private set; }
+		public ElectricityNet_Old                  Net              { get; private set; }
 
 		public ElectricityPoleController(Vector3 position, ElectricPoleBuildingModel model) : base(position, model)
 		{
@@ -50,7 +50,7 @@ namespace Electricity.Controllers
 			       distance <= pole.Wires;
 		}
 
-		public void SetNet(ElectricityNet net)
+		public void SetNet(ElectricityNet_Old net)
 		{
 			Net = net;
 		}

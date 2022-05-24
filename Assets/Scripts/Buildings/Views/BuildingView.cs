@@ -1,18 +1,22 @@
 ﻿using System;
 using Buildings.Models;
 using Installers;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
 using Zenject;
 
 namespace Buildings.Views
 {
-	public abstract class BuildingView : MonoBehaviour
+	public abstract class BuildingView : MonoBehaviour, IDisposable
 	{
 		[Inject] protected GameSettings gameSettings;
 
 		[SerializeField] protected BoxCollider _collider;
 		[SerializeField] protected Renderer    _renderer;
 		[SerializeField] protected Transform   _bottom;
+
+		protected CompositeDisposable _disposables = new CompositeDisposable();
 
 		protected abstract Type ModelType     { get; }
 		protected abstract int  BuildingLayer { get; }
@@ -38,26 +42,17 @@ namespace Buildings.Views
 			_color = rendererMaterial.color;
 			_error = new Color(1, 0, 0, 0.5f);
 			gameObject.layer = gameSettings.PreviewLayer;
-		}
 
-		private void OnTriggerEnter(Collider other)
-		{
-			if (gameObject.layer == gameSettings.PreviewLayer)
+			_collider.OnTriggerEnterAsObservable().Subscribe(_ =>
 			{
-				var rendererMaterial = _renderer.material;
 				rendererMaterial.color = _error;
 				Triggered              = true;
-			}
-		}
-
-		private void OnTriggerExit(Collider other)
-		{
-			if (gameObject.layer == gameSettings.PreviewLayer)
+			}).AddTo(_disposables);
+			_collider.OnTriggerExitAsObservable().Subscribe(_ =>
 			{
-				var rendererMaterial = _renderer.material;
 				rendererMaterial.color = _color;
 				Triggered              = false;
-			}
+			}).AddTo(_disposables);
 		}
 
 		public void SetModel(BuildingModel model)
@@ -72,10 +67,22 @@ namespace Buildings.Views
 
 		public void FinalInstantiate()
 		{
-			gameObject.layer    = BuildingLayer;
 			_collider.isTrigger = false;
+			gameObject.layer    = BuildingLayer;
+			_disposables.Dispose();
+			_disposables = new CompositeDisposable();
 
 			OnFinalInstantiate();
+		}
+
+		private void OnDestroy()
+		{
+			Dispose();
+		}
+
+		public void Dispose()
+		{
+			_disposables?.Dispose();
 		}
 
 		protected abstract void OnFinalInstantiate();

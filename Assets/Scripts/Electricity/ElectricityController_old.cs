@@ -13,7 +13,7 @@ namespace Electricity
 	{
 		[Inject] private DiContainer _container;
 		
-		private Dictionary<int, ElectricityNet> _nets = new Dictionary<int, ElectricityNet>();
+		private Dictionary<int, ElectricityNet_Old> _nets = new Dictionary<int, ElectricityNet_Old>();
 
 		private List<GeneratorController> _generators =
 			new List<GeneratorController>();
@@ -27,7 +27,7 @@ namespace Electricity
 		{
 			if (!_nets.TryGetValue(netId, out var net))
 			{
-				net = Factory.GetFactoryItem<ElectricityNet>(_container);
+				net = Factory.GetFactoryItem<ElectricityNet_Old>(_container);
 				net.Initialize(netId);
 				_nets.Add(netId, net);
 			}
@@ -120,7 +120,7 @@ namespace Electricity
 			return false;
 		}
 
-		public ElectricityNet GetNet(int netId)
+		public ElectricityNet_Old GetNet(int netId)
 		{
 			_nets.TryGetValue(netId, out var net);
 			return net;

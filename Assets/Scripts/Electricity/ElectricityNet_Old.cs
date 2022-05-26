@@ -48,6 +48,11 @@ namespace Electricity
 			_poles.Add(pole);
 		}
 
+		public bool RemovePole(ElectricityPoleController pole)
+		{
+			return false;
+		}
+
 		public bool RemovePole(ElectricityPoleController pole, out ElectricityNet_Old[] nets)
 		{
 			nets = Array.Empty<ElectricityNet_Old>();

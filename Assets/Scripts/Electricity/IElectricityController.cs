@@ -15,6 +15,7 @@ namespace Electricity
 		void UnmergePoles(ElectricityPoleController newPole, ElectricityPoleController mainPole);
 
 		void AddPole(ElectricityPoleController pole);
+		void RemovePole(ElectricityPoleController pole);
 
 		void AddGeneratorToNet(GeneratorController      generator, ElectricityPoleController pole);
 		void RemoveGeneratorFromNet(GeneratorController generator, ElectricityPoleController pole);

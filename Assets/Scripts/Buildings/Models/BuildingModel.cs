@@ -1,4 +1,5 @@
-﻿using Buildings.Views;
+﻿using Buildings.Interfaces;
+using Buildings.Views;
 using Helpers;
 using Inventories;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine;
 namespace Buildings.Models
 {
 	[CreateAssetMenu(fileName = "NewBuildingModel", menuName = "Models/Buildings/BaseBuildingModel", order = 0)]
-	public class BuildingModel : ScriptableObject
+	public class BuildingModel : ScriptableObject, IBuildingModel
 	{
 		[SerializeField] private InventoryObjectsTypesEnum type;
 		[SerializeField] private BuildingView          instance;

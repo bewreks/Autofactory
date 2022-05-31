@@ -17,17 +17,17 @@ namespace Tests.Electricity
 	{
 
 		private ElectricityController      _electricityController;
-		private ElectricPoleBuildingModel  _poleModel;
+		private ElectricalPoleModel  _poleModel;
 		private BaseGeneratorBuildingModel _generatorModel;
-		private ElectricBuildingModel      _electricBuildingModel;
+		private ElectricalBuildingModel      _electricalBuildingModel;
 
 		public override void Setup()
 		{
 			base.Setup();
 
-			_poleModel             = Resources.Load<ElectricPoleBuildingModel>(BuildingHelper.POLE_PATH);
+			_poleModel             = Resources.Load<ElectricalPoleModel>(BuildingHelper.POLE_PATH);
 			_generatorModel        = Resources.Load<BaseGeneratorBuildingModel>(BuildingHelper.GENERATOR_PATH);
-			_electricBuildingModel = Resources.Load<ElectricBuildingModel>(BuildingHelper.ELECTRIC_BUILDING_PATH);
+			_electricalBuildingModel = Resources.Load<ElectricalBuildingModel>(BuildingHelper.ELECTRIC_BUILDING_PATH);
 
 			Container.Bind<ElectricityController>().FromNew().AsSingle();
 			_electricityController = Container.Resolve<ElectricityController>();
@@ -45,7 +45,7 @@ namespace Tests.Electricity
 		[UnityTest]
 		public IEnumerator AddSinglePoleTest()
 		{
-			_electricityController.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
+			_electricityController.AddPole(new ElectricalPoleController(Vector3.zero, _poleModel));
 			yield return null;
 			_electricityController.Datas.Nets[0].TestNet(0, 0, 1, 0);
 		}
@@ -61,7 +61,7 @@ namespace Tests.Electricity
 		[UnityTest]
 		public IEnumerator AddSingleBuildingTest()
 		{
-			_electricityController.AddBuilding(new ElectricalBuildingController(Vector3.zero, _electricBuildingModel));
+			_electricityController.AddBuilding(new ElectricalBuildingController(Vector3.zero, _electricalBuildingModel));
 			yield return null;
 			_electricityController.TestController(0, 0, 1);
 		}
@@ -69,8 +69,8 @@ namespace Tests.Electricity
 		[UnityTest]
 		public IEnumerator AddTwoSeparatePolesTest()
 		{
-			_electricityController.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
-			_electricityController.AddPole(new ElectricityPoleController(Vector3.zero, _poleModel));
+			_electricityController.AddPole(new ElectricalPoleController(Vector3.zero, _poleModel));
+			_electricityController.AddPole(new ElectricalPoleController(Vector3.zero, _poleModel));
 			yield return null;
 			_electricityController.TestController(2, 0, 0);
 		}
@@ -78,8 +78,8 @@ namespace Tests.Electricity
 		[UnityTest]
 		public IEnumerator AddTwoSeparatePolesAndUniteTest()
 		{
-			var first  = new ElectricityPoleController(Vector3.zero, _poleModel);
-			var second = new ElectricityPoleController(Vector3.zero, _poleModel);
+			var first  = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var second = new ElectricalPoleController(Vector3.zero, _poleModel);
 			_electricityController.AddPole(first);
 			_electricityController.AddPole(second);
 			_electricityController.MergePoles(first, second);
@@ -92,8 +92,8 @@ namespace Tests.Electricity
 		[UnityTest]
 		public IEnumerator AddTwoSeparatePolesAndUniteAfterFrameTest()
 		{
-			var first  = new ElectricityPoleController(Vector3.zero, _poleModel);
-			var second = new ElectricityPoleController(Vector3.zero, _poleModel);
+			var first  = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var second = new ElectricalPoleController(Vector3.zero, _poleModel);
 			_electricityController.AddPole(first);
 			_electricityController.AddPole(second);
 			yield return null;
@@ -107,7 +107,7 @@ namespace Tests.Electricity
 		[UnityTest]
 		public IEnumerator AddPoleGeneratorAndUniteTest()
 		{
-			var pole      = new ElectricityPoleController(Vector3.zero, _poleModel);
+			var pole      = new ElectricalPoleController(Vector3.zero, _poleModel);
 			var generator = new GeneratorController(Vector3.zero, _generatorModel);
 			_electricityController.AddPole(pole);
 			_electricityController.AddGenerator(generator);

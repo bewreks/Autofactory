@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Electricity.Controllers;
+using Electricity.Interfaces;
 using Helpers;
 
 namespace Electricity
@@ -10,32 +10,35 @@ namespace Electricity
 		public int   ID    { get; private set; }
 		public float Power { get; private set; }
 
-		private List<ElectricityPoleController>    _poles      = new List<ElectricityPoleController>();
-		private List<GeneratorController>          _generators = new List<GeneratorController>();
-		private List<ElectricalBuildingController> _buildings  = new List<ElectricalBuildingController>();
+		private List<IElectricalPoleController>     _poles      = new List<IElectricalPoleController>();
+		private List<IGeneratorController>          _generators = new List<IGeneratorController>();
+		private List<IElectricalBuildingController> _buildings  = new List<IElectricalBuildingController>();
 
 		public void Initialize(int netId)
 		{
 			ID = netId;
 		}
 
-		public void Initialize(int netId, List<ElectricityPoleController> poles)
+		public void Initialize(int netId, List<IElectricalPoleController> poles)
 		{
 			Initialize(netId);
 			_poles.AddRange(poles);
 		}
 
-		public void AddPole(ElectricityPoleController pole)
+		public void AddPole(IElectricalPoleController pole)
 		{
 			pole.SetNet(this);
 			_poles.Add(pole);
 		}
 
-		public void RemovePole(ElectricityPoleController pole)
+		public void RemovePole(IElectricalPoleController pole)
 		{
 			pole.SetNet(null);
 			_poles.Remove(pole);
-			pole.RemoveSelfFromNearlyPoles();
+			foreach (var nearlyPole in pole.NearlyPoles)
+			{
+				nearlyPole.RemovePole(pole);
+			}
 			pole.NearlyPoles.Clear();
 		}
 
@@ -52,22 +55,22 @@ namespace Electricity
 			ID = -1;
 		}
 
-		public void AddGenerators(List<GeneratorController> generators)
+		public void AddGenerators(List<IGeneratorController> generators)
 		{
 			_generators.AddUniqueRange(generators);
 			generators.ForEach(generator => generator.AddNet(this));
 		}
 
-		public void AddBuildings(List<ElectricalBuildingController> buildings)
+		public void AddBuildings(List<IElectricalBuildingController> buildings)
 		{
 			_buildings.AddUniqueRange(buildings);
 			buildings.ForEach(building => building.AddNet(this));
 		}
 
 #if UNITY_INCLUDE_TESTS
-		public List<GeneratorController>          Generators => _generators;
-		public List<ElectricityPoleController>    Poles      => _poles;
-		public List<ElectricalBuildingController> Buildings  => _buildings;
+		public List<IGeneratorController>          Generators => _generators;
+		public List<IElectricalPoleController>     Poles      => _poles;
+		public List<IElectricalBuildingController> Buildings  => _buildings;
 #endif
 	}
 }

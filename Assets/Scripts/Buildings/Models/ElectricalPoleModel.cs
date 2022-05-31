@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using Buildings.Interfaces;
+using UnityEngine;
 
 namespace Buildings.Models
 {
 	[CreateAssetMenu(fileName = "ElectricPoleBuildingModel", menuName = "Models/Buildings/ElectricPoleBuildingModel", order = 0)]
-	public class ElectricPoleBuildingModel : BuildingModel
+	public class ElectricalPoleModel : BuildingModel, IElectricalPoleModel
 	{
 		[SerializeField] private float wireRadius;
 		[SerializeField] private float electricitySize;

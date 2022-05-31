@@ -22,14 +22,14 @@ namespace Buildings.Views
 
 		public int NetID => _netID;
 
-		protected override Type                      ModelType      => typeof(ElectricPoleBuildingModel);
+		protected override Type                      ModelType      => typeof(ElectricalPoleModel);
 		protected override int                       BuildingLayer  => gameSettings.PoleLayer;
-		public             ElectricPoleBuildingModel PoleModel      => (ElectricPoleBuildingModel)_model;
-		public             ElectricityPoleController PoleController { get; private set; }
+		public             ElectricalPoleModel PoleModel      => (ElectricalPoleModel)_model;
+		public             ElectricalPoleController PoleController { get; private set; }
 
 		protected override void OnFinalInstantiate()
 		{
-			PoleController = new ElectricityPoleController(transform.position, PoleModel);
+			PoleController = new ElectricalPoleController(transform.position, PoleModel);
 
 			var colliderView =
 				_container.InstantiatePrefabForComponent<ColliderView>(_buildingSettings.SquareCollider, _bottom);
@@ -129,7 +129,7 @@ namespace Buildings.Views
 
 		private void OnDrawGizmos()
 		{
-			var electricModel = (ElectricPoleBuildingModel)_model;
+			var electricModel = (ElectricalPoleModel)_model;
 			var position      = transform.position;
 			var rect = electricModel
 				           ? BuildingHelper.GetPoleRect(position, electricModel.ElectricitySize)

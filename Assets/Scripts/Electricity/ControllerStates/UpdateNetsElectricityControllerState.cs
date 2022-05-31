@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Electricity.Controllers;
+using Electricity.Interfaces;
 using Factories;
 using Helpers;
 using ModestTree;
@@ -28,7 +28,7 @@ namespace Electricity.ControllerStates
 				newNet.AddPole(pole);
 			}
 
-			var toRemove = new List<List<ElectricityPoleController>>();
+			var toRemove = new List<List<IElectricalPoleController>>();
 			foreach (var pole in _datas.PolesToRemove)
 			{
 				toRemove.Add(pole.NearlyPoles);
@@ -37,12 +37,12 @@ namespace Electricity.ControllerStates
 			
 			foreach (var neighbours in toRemove)
 			{
-				var list = new List<List<ElectricityPoleController>>();
+				var list = new List<List<IElectricalPoleController>>();
 				var i    = -1;
 				foreach (var nearlyPole in neighbours.Where(nearlyPole => i < 0 || 
 				                                                          !list[i].Contains(nearlyPole)))
 				{
-					list.Add(new List<ElectricityPoleController>());
+					list.Add(new List<IElectricalPoleController>());
 					list[++i].Add(nearlyPole);
 					nearlyPole.NearlyPoles.UnitePoles(list[i]);
 				}
@@ -152,7 +152,7 @@ namespace Electricity.ControllerStates
 			return newNet;
 		}
 
-		private ElectricityNet CreateNewNet(IDFactory idFactory, List<ElectricityPoleController> poles)
+		private ElectricityNet CreateNewNet(IDFactory idFactory, List<IElectricalPoleController> poles)
 		{
 			var newNet = Factory.GetFactoryItem<ElectricityNet>();
 			newNet.Initialize(idFactory.Pop(), poles);

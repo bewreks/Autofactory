@@ -1,4 +1,5 @@
 ﻿using System;
+using Buildings.Interfaces;
 using Buildings.Models;
 using Electricity;
 using Electricity.Controllers;
@@ -10,11 +11,11 @@ namespace Buildings.Views
 	{
 		[Inject] private IElectricityController _electricityController;
 
-		protected override Type ModelType     => typeof(ElectricBuildingModel);
+		protected override Type ModelType     => typeof(ElectricalBuildingModel);
 		protected override int  BuildingLayer => gameSettings.ConsumptionLayer;
 
 		public ElectricalBuildingController        BuildingController { get; private set; }
-		public ElectricBuildingModel BuildingModel      => (ElectricBuildingModel)Model;
+		public IElectricalBuildingModel BuildingModel      => (IElectricalBuildingModel)Model;
 
 		protected override void OnFinalInstantiate()
 		{

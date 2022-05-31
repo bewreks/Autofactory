@@ -1,36 +1,48 @@
 ﻿using System.Collections.Generic;
-using Buildings.Models;
+using Buildings.Interfaces;
+using Electricity.Interfaces;
+using Helpers;
 using UnityEngine;
 
 namespace Electricity.Controllers
 {
-	public class ElectricalBuildingController : BuildingController
+	public class ElectricalBuildingController : BuildingController, IElectricalBuildingController
 	{
 		public List<ElectricityNet>            Nets        { get; }
-		public List<ElectricityPoleController> NearlyPoles { get; }
-		public ElectricBuildingModel           Model       { get; }
+		public List<IElectricalPoleController> NearlyPoles { get; }
+		public IElectricalBuildingModel        Model       { get; }
 
-		public ElectricalBuildingController(Vector3 position, ElectricBuildingModel model) :
+		public ElectricalBuildingController(Vector3 position, IElectricalBuildingModel model) :
 			base(position, model)
 		{
-			NearlyPoles = new List<ElectricityPoleController>();
+			NearlyPoles = new List<IElectricalPoleController>();
 			Model       = model;
 			Nets        = new List<ElectricityNet>();
 		}
 
-		public void AddNet(ElectricityNet electricityNet)
+		public void AddNet(ElectricityNet net)
 		{
-			throw new System.NotImplementedException();
+			Nets.AddUnique(net);
 		}
 
-		public void AddPole(ElectricityPoleController electricityPoleController)
+		public void RemoveNet(ElectricityNet net)
 		{
-			throw new System.NotImplementedException();
+			Nets.Remove(net);
 		}
 
-		public void RemovePoles(List<ElectricityPoleController> poles)
+		public void AddPole(IElectricalPoleController pole)
 		{
-			throw new System.NotImplementedException();
+			NearlyPoles.AddUnique(pole);
+		}
+
+		public void RemovePole(IElectricalPoleController pole)
+		{
+			NearlyPoles.Remove(pole);
+		}
+
+		public void RemovePoles(List<IElectricalPoleController> poles)
+		{
+			NearlyPoles.RemoveAll(poles.Contains);
 		}
 	}
 }

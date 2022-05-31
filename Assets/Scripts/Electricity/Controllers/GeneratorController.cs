@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Buildings.Models;
+using Buildings.Interfaces;
+using Electricity.Interfaces;
 using Helpers;
 using ModestTree;
 using UniRx;
@@ -9,20 +9,21 @@ using UnityEngine;
 
 namespace Electricity.Controllers
 {
-	public class GeneratorController : BuildingController
+	public class GeneratorController : BuildingController, IGeneratorController
 	{
-		public FloatReactiveProperty ActualPower = new FloatReactiveProperty();
+		private FloatReactiveProperty _actualPower = new FloatReactiveProperty();
 
-		public BaseGeneratorBuildingModel      Model       { get; }
-		public List<ElectricityNet>            Nets        { get; }
-		public List<ElectricityPoleController> NearlyPoles { get; }
+		public IReadOnlyReactiveProperty<float> ActualPower => _actualPower;
+		public IGeneratorModel                  Model       { get; }
+		public List<ElectricityNet>             Nets        { get; }
+		public List<IElectricalPoleController>  NearlyPoles { get; }
 
-		public GeneratorController(Vector3 position, BaseGeneratorBuildingModel model) : base(position, model)
+		public GeneratorController(Vector3 position, IGeneratorModel model) : base(position, model)
 		{
-			NearlyPoles       = new List<ElectricityPoleController>();
+			NearlyPoles       = new List<IElectricalPoleController>();
 			Model             = model;
 			Nets              = new List<ElectricityNet>();
-			ActualPower.Value = model.Power;
+			_actualPower.Value = model.Power;
 		}
 
 		public void AddNet(ElectricityNet net)
@@ -53,21 +54,21 @@ namespace Electricity.Controllers
 
 			if (Math.Abs(old - newPart) > float.Epsilon)
 			{
-				ActualPower.SetValueAndForceNotify(newPart);
+				_actualPower.SetValueAndForceNotify(newPart);
 			}
 		}
 
-		public void AddPole(ElectricityPoleController pole)
+		public void AddPole(IElectricalPoleController pole)
 		{
 			NearlyPoles.AddUnique(pole);
 		}
 
-		public void RemovePole(ElectricityPoleController pole)
+		public void RemovePole(IElectricalPoleController pole)
 		{
 			NearlyPoles.Remove(pole);
 		}
 
-		public void RemovePoles(List<ElectricityPoleController> poles)
+		public void RemovePoles(List<IElectricalPoleController> poles)
 		{
 			NearlyPoles.RemoveAll(poles.Contains);
 		}

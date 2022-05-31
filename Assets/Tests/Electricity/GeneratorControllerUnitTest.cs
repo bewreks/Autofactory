@@ -1,28 +1,28 @@
-using System;
 using System.Linq;
-using Buildings.Models;
+using Buildings.Interfaces;
 using Electricity;
 using Electricity.Controllers;
+using Electricity.Interfaces;
 using Helpers;
-using NUnit.Framework;
-using UnityEngine;
-using Zenject;
 using Moq;
+using NUnit.Framework;
 using Tests.Helpers;
 using UniRx;
+using UnityEngine;
+using Zenject;
 
 namespace Tests.Electricity
 {
 	[TestFixture]
-	public class GeneratorUnitTest : ZenjectUnitTestFixture
+	public class GeneratorControllerUnitTest : ZenjectUnitTestFixture
 	{
-		private BaseGeneratorBuildingModel _model;
-		private GeneratorController        _generatorController;
+		private IGeneratorModel     _model;
+		private GeneratorController _generatorController;
 
 		public override void Setup()
 		{
 			base.Setup();
-			_model               = Resources.Load<BaseGeneratorBuildingModel>(BuildingHelper.GENERATOR_PATH);
+			_model               = ElectricityTestHelper.GetGeneratorModelMock().Object;
 			_generatorController = new GeneratorController(Vector3.zero, _model);
 		}
 
@@ -41,7 +41,7 @@ namespace Tests.Electricity
 		[Test]
 		public void AddPoleTest()
 		{
-			var poleMock = ElectricityTestHelper.GetPoleControllerMock();
+			var poleMock = new Mock<IElectricalPoleController>();
 			_generatorController.AddPole(poleMock.Object);
 			Assert.AreEqual(1, _generatorController.NearlyPoles.Count);
 		}
@@ -49,7 +49,7 @@ namespace Tests.Electricity
 		[Test]
 		public void DoubleAddPoleTest()
 		{
-			var poleMock = ElectricityTestHelper.GetPoleControllerMock();
+			var poleMock = new Mock<IElectricalPoleController>();
 			_generatorController.AddPole(poleMock.Object);
 			_generatorController.AddPole(poleMock.Object);
 			Assert.AreEqual(1, _generatorController.NearlyPoles.Count);
@@ -58,8 +58,8 @@ namespace Tests.Electricity
 		[Test]
 		public void RemovePolesTest()
 		{
-			var poleMock       = ElectricityTestHelper.GetPoleControllerMock();
-			var secondPoleMock = ElectricityTestHelper.GetPoleControllerMock();
+			var poleMock       = new Mock<IElectricalPoleController>();
+			var secondPoleMock = new Mock<IElectricalPoleController>();
 			_generatorController.AddPole(poleMock.Object);
 			_generatorController.AddPole(secondPoleMock.Object);
 			Assert.AreEqual(2, _generatorController.NearlyPoles.Count);
@@ -70,7 +70,7 @@ namespace Tests.Electricity
 		[Test]
 		public void RemovePoleTest()
 		{
-			var poleMock = ElectricityTestHelper.GetPoleControllerMock();
+			var poleMock = new Mock<IElectricalPoleController>();
 			_generatorController.AddPole(poleMock.Object);
 			Assert.AreEqual(1, _generatorController.NearlyPoles.Count);
 			_generatorController.RemovePole(poleMock.Object);

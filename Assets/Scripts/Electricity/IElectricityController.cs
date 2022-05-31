@@ -1,23 +1,23 @@
 ﻿using System;
-using Electricity.Controllers;
+using Electricity.Interfaces;
 
 namespace Electricity
 {
 	public interface IElectricityController : IDisposable
 	{
-		void AddGenerator(GeneratorController            generator);
-		void RemoveGenerator(GeneratorController         generator);
-		void AddBuilding(ElectricalBuildingController    building);
-		void RemoveBuilding(ElectricalBuildingController building);
+		void AddGenerator(IGeneratorController            generator);
+		void RemoveGenerator(IGeneratorController         generator);
+		void AddBuilding(IElectricalBuildingController    building);
+		void RemoveBuilding(IElectricalBuildingController building);
 
-		void MergePoles(ElectricityPoleController   newPole, ElectricityPoleController mainPole);
+		void MergePoles(IElectricalPoleController   newPole, IElectricalPoleController mainPole);
 
-		void AddPole(ElectricityPoleController pole);
-		void RemovePole(ElectricityPoleController pole);
+		void AddPole(IElectricalPoleController pole);
+		void RemovePole(IElectricalPoleController pole);
 
-		void AddGeneratorToNet(GeneratorController              generator, ElectricityPoleController pole);
-		void RemoveGeneratorFromNet(GeneratorController         generator, ElectricityPoleController pole);
-		void AddBuildingToNet(ElectricalBuildingController      building,  ElectricityPoleController pole);
-		void RemoveBuildingFromNet(ElectricalBuildingController building,  ElectricityPoleController pole);
+		void AddGeneratorToNet(IGeneratorController              generator, IElectricalPoleController pole);
+		void RemoveGeneratorFromNet(IGeneratorController         generator, IElectricalPoleController pole);
+		void AddBuildingToNet(IElectricalBuildingController      building,  IElectricalPoleController pole);
+		void RemoveBuildingFromNet(IElectricalBuildingController building,  IElectricalPoleController pole);
 	}
 }

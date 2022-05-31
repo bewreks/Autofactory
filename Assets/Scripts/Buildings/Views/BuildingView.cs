@@ -1,4 +1,5 @@
 ﻿using System;
+using Buildings.Interfaces;
 using Buildings.Models;
 using Installers;
 using UniRx;
@@ -23,13 +24,13 @@ namespace Buildings.Views
 
 		public BoxCollider   Collider  => _collider;
 		public Renderer      Renderer  => _renderer;
-		public BuildingModel Model     => _model;
+		public IBuildingModel Model     => _model;
 		public bool          Triggered { get; private set; }
 
 		private Color _color;
 		private Color _error;
 
-		protected BuildingModel _model;
+		protected IBuildingModel _model;
 
 		private void Start()
 		{
@@ -55,7 +56,7 @@ namespace Buildings.Views
 			}).AddTo(_disposables);
 		}
 
-		public void SetModel(BuildingModel model)
+		public void SetModel(IBuildingModel model)
 		{
 			if (model.GetType() != ModelType)
 			{

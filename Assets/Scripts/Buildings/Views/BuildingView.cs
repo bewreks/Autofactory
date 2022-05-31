@@ -75,6 +75,11 @@ namespace Buildings.Views
 			OnFinalInstantiate();
 		}
 
+		public void RemoveInstance()
+		{
+			OnRemoveInstance();
+		}
+
 		private void OnDestroy()
 		{
 			Dispose();
@@ -86,5 +91,6 @@ namespace Buildings.Views
 		}
 
 		protected abstract void OnFinalInstantiate();
+		protected abstract void OnRemoveInstance();
 	}
 }

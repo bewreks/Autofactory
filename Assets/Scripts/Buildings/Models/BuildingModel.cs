@@ -1,5 +1,5 @@
-﻿using System;
-using Buildings.Views;
+﻿using Buildings.Views;
+using Helpers;
 using Inventories;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace Buildings.Models
 		public BuildingView Instance     => instance;
 		public Vector2                     BuildingSize { get; private set; }
 
-		private void Awake()
+		public virtual void Awake()
 		{
 			if (instance.Collider)
 			{

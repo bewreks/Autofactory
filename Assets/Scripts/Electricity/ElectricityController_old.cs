@@ -9,11 +9,12 @@ using Zenject;
 
 namespace Electricity
 {
+	/*
 	public class ElectricityController_old : IDisposable
 	{
 		[Inject] private DiContainer _container;
 		
-		private Dictionary<int, ElectricityNet_Old> _nets = new Dictionary<int, ElectricityNet_Old>();
+		private Dictionary<int, ElectricityNet> _nets = new Dictionary<int, ElectricityNet>();
 
 		private List<GeneratorController> _generators =
 			new List<GeneratorController>();
@@ -27,7 +28,7 @@ namespace Electricity
 		{
 			if (!_nets.TryGetValue(netId, out var net))
 			{
-				net = Factory.GetFactoryItem<ElectricityNet_Old>(_container);
+				net = Factory.GetFactoryItem<ElectricityNet>(_container);
 				net.Initialize(netId);
 				_nets.Add(netId, net);
 			}
@@ -120,7 +121,7 @@ namespace Electricity
 			return false;
 		}
 
-		public ElectricityNet_Old GetNet(int netId)
+		public ElectricityNet GetNet(int netId)
 		{
 			_nets.TryGetValue(netId, out var net);
 			return net;
@@ -159,5 +160,5 @@ namespace Electricity
 		{
 			_generators.AddRange(generators);
 		}
-	}
+	}*/
 }

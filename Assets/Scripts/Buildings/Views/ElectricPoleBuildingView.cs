@@ -3,6 +3,7 @@ using Buildings.Colliders;
 using Buildings.Models;
 using Electricity;
 using Electricity.Controllers;
+using Helpers;
 using Installers;
 using UniRx;
 using UniRx.Triggers;
@@ -42,10 +43,10 @@ namespace Buildings.Views
 					_electricityController.AddGeneratorToNet(generatorBuildingView.GeneratorController, PoleController);
 				}
 
-				var consumptionBuildingView = other.GetComponent<ElectricityConsumptionBuildingView>();
+				var consumptionBuildingView = other.GetComponent<ElectricBuildingView>();
 				if (consumptionBuildingView)
 				{
-					_electricityController.AddBuilding(consumptionBuildingView.BuildingController, PoleController);
+					_electricityController.AddBuildingToNet(consumptionBuildingView.BuildingController, PoleController);
 				}
 			}).AddTo(_disposables);
 			colliderView.TriggerCollider.OnTriggerExitAsObservable().Subscribe(other =>
@@ -56,10 +57,10 @@ namespace Buildings.Views
 					_electricityController.RemoveGeneratorFromNet(generatorBuildingView.GeneratorController, PoleController);
 				}
 
-				var consumptionBuildingView = other.GetComponent<ElectricityConsumptionBuildingView>();
+				var consumptionBuildingView = other.GetComponent<ElectricBuildingView>();
 				if (consumptionBuildingView)
 				{
-					_electricityController.RemoveBuilding(consumptionBuildingView.BuildingController, PoleController);
+					_electricityController.RemoveBuildingFromNet(consumptionBuildingView.BuildingController, PoleController);
 				}
 			}).AddTo(_disposables);
 
@@ -77,11 +78,6 @@ namespace Buildings.Views
 			}).AddTo(_disposables);
 			colliderView.TriggerCollider.OnTriggerExitAsObservable().Subscribe(other =>
 			{
-				var poleBuildingView = other.GetComponent<ElectricPoleBuildingView>();
-				if (poleBuildingView)
-				{
-					_electricityController.UnmergePoles(poleBuildingView.PoleController, PoleController);
-				}
 			}).AddTo(_disposables);
 
 			/*squareCollider.Pole = this;
@@ -124,6 +120,11 @@ namespace Buildings.Views
 			{
 				_electricityController.AddPole(transformCache.position, electricModel);
 			}*/
+		}
+
+		protected override void OnRemoveInstance()
+		{
+			_electricityController.RemovePole(PoleController);
 		}
 
 		private void OnDrawGizmos()

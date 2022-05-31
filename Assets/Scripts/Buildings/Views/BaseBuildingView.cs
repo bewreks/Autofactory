@@ -11,5 +11,10 @@ namespace Buildings.Views
 		{
 			
 		}
+
+		protected override void OnRemoveInstance()
+		{
+			
+		}
 	}
 }

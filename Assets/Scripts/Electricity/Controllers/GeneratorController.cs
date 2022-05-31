@@ -1,34 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Buildings.Models;
+using Helpers;
 using ModestTree;
+using UniRx;
 using UnityEngine;
 
 namespace Electricity.Controllers
 {
 	public class GeneratorController : BuildingController
 	{
-		public event Action<float, float>      ChangeOfPower;
+		public  Subject<float> ActualPower = new Subject<float>();
+		private float          _oldValue;
+		
 		public BaseGeneratorBuildingModel      Model       { get; }
-		public float                           PartOfPower { get; private set; }
-		public List<ElectricityNet_Old>            Nets        { get; }
+		public List<ElectricityNet>            Nets        { get; }
 		public List<ElectricityPoleController> NearlyPoles { get; }
 
 		public GeneratorController(Vector3 position, BaseGeneratorBuildingModel model) : base(position, model)
 		{
 			NearlyPoles = new List<ElectricityPoleController>();
 			Model       = model;
-			PartOfPower = model.Power;
-			Nets        = new List<ElectricityNet_Old>();
+			Nets        = new List<ElectricityNet>();
+			ActualPower.OnNext(model.Power);
+			_oldValue = 0;
 		}
 
-		public void AddNet(ElectricityNet_Old net)
+		public void AddNet(ElectricityNet net)
 		{
-			Nets.Add(net);
+			Nets.AddUnique(net);
 			UpdatePowerPart();
 		}
 
-		public void RemoveNet(ElectricityNet_Old net)
+		public void RemoveNet(ElectricityNet net)
 		{
 			Nets.Remove(net);
 			UpdatePowerPart();
@@ -36,30 +41,40 @@ namespace Electricity.Controllers
 
 		private void UpdatePowerPart()
 		{
-			var oldPart = PartOfPower;
+			float newPart;
 			if (Nets.IsEmpty())
 			{
-				PartOfPower = Model.Power;
+				newPart = Model.Power;
 			}
 			else
 			{
-				PartOfPower = Model.Power / Nets.Count;
+				newPart = Model.Power / Nets.Count;
 			}
 
-			if (Math.Abs(oldPart - PartOfPower) > float.Epsilon)
+			if (Math.Abs(_oldValue - newPart) > float.Epsilon)
 			{
-				ChangeOfPower?.Invoke(oldPart, PartOfPower);
+				_oldValue = newPart;
+				ActualPower.OnNext(newPart);
 			}
 		}
 
 		public void AddPole(ElectricityPoleController pole)
 		{
-			NearlyPoles.Add(pole);
+			NearlyPoles.AddUnique(pole);
 		}
 
 		public void RemovePole(ElectricityPoleController pole)
 		{
 			NearlyPoles.Remove(pole);
+		}
+
+		public void RemovePoles(List<ElectricityPoleController> poles)
+		{
+			NearlyPoles.RemoveAll(poles.Contains);
+			foreach (var pole in poles.Where(pole => !NearlyPoles.Select(_ => _.Net).Distinct().Contains(pole.Net)))
+			{
+				Nets.Remove(pole.Net);
+			}
 		}
 	}
 }

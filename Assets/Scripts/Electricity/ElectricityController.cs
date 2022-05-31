@@ -1,211 +1,201 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using Electricity.Controllers;
 using Electricity.ControllerStates;
 using Factories;
+using Helpers;
 using UniRx;
+using Zenject;
 
 namespace Electricity
 {
 	public class ElectricityController : IElectricityController
 	{
+		[Inject] private DiContainer _container;
+
 		private IDFactory _idFactory = new IDFactory();
 
 		private CompositeDisposable _disposables = new CompositeDisposable();
 
-		private List<ElectricityPoleController>                        _polesToAdd;
-		private List<ElectricityPoleController>                        _polesToRemove;
-		private List<GeneratorController>                              _generatorsToAdd;
-		private List<GeneratorController>                              _generatorsToRemove;
-		private List<BuildingPolePair>                                 _consumptionsToAdd;
-		private List<BuildingPolePair>                                 _consumptionsToRemove;
-		private List<GeneratorPolePair>                                _generatorsPairToAdd;
-		private List<GeneratorPolePair>                                _generatorsPairToRemove;
-		private Dictionary<ElectricityPoleController, List<PolesPair>> _toMerge;
-		private Dictionary<ElectricityPoleController, List<PolesPair>> _toUnmerge;
+		private ElectricityControllerDatas _datas = new ElectricityControllerDatas();
 
 		private ElectricityControllerState _state;
 
-		private Dictionary<int, ElectricityNet_Old> _nets = new Dictionary<int, ElectricityNet_Old>();
-
 		public ElectricityController()
 		{
-			_polesToAdd             = new List<ElectricityPoleController>();
-			_polesToRemove          = new List<ElectricityPoleController>();
-			_generatorsToAdd        = new List<GeneratorController>();
-			_generatorsToRemove     = new List<GeneratorController>();
-			_consumptionsToAdd      = new List<BuildingPolePair>();
-			_consumptionsToRemove   = new List<BuildingPolePair>();
-			_generatorsPairToAdd    = new List<GeneratorPolePair>();
-			_generatorsPairToRemove = new List<GeneratorPolePair>();
-			_toMerge                = new Dictionary<ElectricityPoleController, List<PolesPair>>();
-			_toUnmerge              = new Dictionary<ElectricityPoleController, List<PolesPair>>();
+			_datas.Buildings  = new List<ElectricalBuildingController>();
+			_datas.Generators = new List<GeneratorController>();
+			_datas.Nets       = new Dictionary<int, ElectricityNet>();
+
+			_datas.ToMerge            = new List<PolesPair>();
+			_datas.PolesToAdd         = new List<ElectricityPoleController>();
+			_datas.PolesToRemove      = new List<ElectricityPoleController>();
+			_datas.BuildingsToAdd     = new List<ElectricalBuildingController>();
+			_datas.BuildingsToRemove  = new List<ElectricalBuildingController>();
+			_datas.BuildingsPairToAdd = new Dictionary<ElectricityPoleController, List<ElectricalBuildingController>>();
+			_datas.BuildingsPairToRemove =
+				new Dictionary<ElectricalBuildingController, List<ElectricityPoleController>>();
+			_datas.GeneratorsToAdd        = new List<GeneratorController>();
+			_datas.GeneratorsToRemove     = new List<GeneratorController>();
+			_datas.GeneratorsPairToAdd    = new Dictionary<ElectricityPoleController, List<GeneratorController>>();
+			_datas.GeneratorsPairToRemove = new Dictionary<GeneratorController, List<ElectricityPoleController>>();
 
 			_state = new WaitingElectricityControllerState();
-			_state.Initialize(_polesToAdd,
-			                  _polesToRemove,
-			                  _generatorsToAdd,
-			                  _generatorsToRemove,
-			                  _consumptionsToAdd,
-			                  _consumptionsToRemove,
-			                  _generatorsPairToAdd,
-			                  _generatorsPairToRemove,
-			                  _toMerge,
-			                  _toUnmerge,
-			                  _nets);
+			_state.Initialize(_datas);
 
-			Observable.EveryUpdate().Subscribe(l =>
-			{
-				while (!_state.Waiting)
-				{
-					_state = _state.Do(_idFactory);
-				}
-				// 1. Добавляем столбам без мержей новые сети
-				// 2. Объединяем столбы в сеть
-				// 3. Удаляем столбы без разделения на подсети
-				// 4. Разделяем сети
-				// 5. Добавляем новые здания в сети 
-			}).AddTo(_disposables);
+			Observable.EveryUpdate().Subscribe(l => { _state = _state.Do(_idFactory); }).AddTo(_disposables);
 		}
 
 		public void AddGenerator(GeneratorController generator)
 		{
-			_generatorsToAdd.Add(generator);
+			_datas.GeneratorsToAdd.Add(generator);
+			SwitchState();
 		}
 
 		public void RemoveGenerator(GeneratorController generator)
 		{
-			_generatorsToRemove.Add(generator);
+			_datas.GeneratorsToRemove.Add(generator);
+			SwitchState();
 		}
 
-		public void AddBuilding(ElectricityConsumptionBuildingController building, ElectricityPoleController pole)
+		public void AddBuilding(ElectricalBuildingController building)
 		{
-			_consumptionsToAdd.Add(new BuildingPolePair
-			                       {
-				                       Building = building,
-				                       Pole     = pole
-			                       });
+			_datas.BuildingsToAdd.AddUnique(building);
+			SwitchState();
 		}
 
-		public void RemoveBuilding(ElectricityConsumptionBuildingController building, ElectricityPoleController pole)
+		public void RemoveBuilding(ElectricalBuildingController building)
 		{
-			_consumptionsToRemove.Add(new BuildingPolePair
-			                          {
-				                          Building = building,
-				                          Pole     = pole
-			                          });
+			_datas.BuildingsToRemove.AddUnique(building);
+			SwitchState();
+		}
+
+		public void AddBuildingToNet(ElectricalBuildingController building, ElectricityPoleController pole)
+		{
+			_datas.BuildingsPairToAdd.AddUnique(pole, building);
+			SwitchState();
+		}
+
+		public void RemoveBuildingFromNet(ElectricalBuildingController building, ElectricityPoleController pole)
+		{
+			_datas.BuildingsPairToRemove.AddUnique(building, pole);
+			SwitchState();
 		}
 
 		public void MergePoles(ElectricityPoleController newPole, ElectricityPoleController mainPole)
 		{
 			var pair = new PolesPair(mainPole, newPole);
-
-			if (_toMerge.ContainsKey(mainPole))
-			{
-				pair.To   = mainPole;
-				pair.From = newPole;
-			}
-
-			if (!_toMerge.TryGetValue(pair.To, out var list))
-			{
-				list = new List<PolesPair>();
-				_toMerge.Add(pair.To, list);
-			}
-
-			list.Add(pair);
-		}
-
-		public void UnmergePoles(ElectricityPoleController newPole, ElectricityPoleController mainPole)
-		{
-			var pair = new PolesPair(mainPole, newPole);
-
-			if (_toUnmerge.ContainsKey(mainPole))
-			{
-				pair.To   = mainPole;
-				pair.From = newPole;
-			}
-
-			if (!_toUnmerge.TryGetValue(pair.To, out var list))
-			{
-				list = new List<PolesPair>();
-				_toMerge.Add(pair.To, list);
-			}
-
-			list.Add(pair);
+			_datas.ToMerge.Add(pair);
+			SwitchState();
 		}
 
 		public void AddPole(ElectricityPoleController pole)
 		{
-			_polesToAdd.Add(pole);
+			_datas.PolesToAdd.AddUnique(pole);
+			SwitchState();
 		}
 
 		public void RemovePole(ElectricityPoleController pole)
 		{
-			_polesToRemove.Add(pole);
+			_datas.PolesToRemove.AddUnique(pole);
+			SwitchState();
 		}
 
 		public void AddGeneratorToNet(GeneratorController generator, ElectricityPoleController pole)
 		{
-			_generatorsPairToAdd.Add(new GeneratorPolePair
-			                         {
-				                         Generator = generator,
-				                         Pole      = pole
-			                         });
+			_datas.GeneratorsPairToAdd.AddUnique(pole, generator);
+			SwitchState();
 		}
 
 		public void RemoveGeneratorFromNet(GeneratorController generator, ElectricityPoleController pole)
 		{
-			_generatorsPairToAdd.Remove(new GeneratorPolePair
-			                            {
-				                            Generator = generator,
-				                            Pole      = pole
-			                            });
+			_datas.GeneratorsPairToRemove.AddUnique(generator, pole);
+			SwitchState();
+		}
+
+		private void SwitchState()
+		{
+			if (_state is WaitingElectricityControllerState)
+			{
+				_state = Factory.GetFactoryItem<UpdateNetsElectricityControllerState>().Initialize(_state);
+			}
 		}
 
 		public void Dispose()
 		{
 			_disposables?.Dispose();
+			_datas.Dispose();
 		}
+
+#if UNITY_INCLUDE_TESTS
+		public ElectricityControllerDatas Datas => _datas;
+#endif
 	}
 
 	public class PolesPair
 	{
-		public ElectricityPoleController From;
-		public ElectricityPoleController To;
+		private ElectricityPoleController _main;
+		private ElectricityPoleController _new;
 
-		public ElectricityNet_Old[] Nets;
+		public ElectricityPoleController Main => _main;
+		public ElectricityPoleController New  => _new;
 
-		public PolesPair(ElectricityPoleController from, ElectricityPoleController to)
+		public PolesPair(ElectricityPoleController mainPole, ElectricityPoleController newPole)
 		{
-			From = from;
-			To   = to;
+			_main = mainPole;
+			_new  = newPole;
+		}
+	}
+
+	public struct ElectricityControllerDatas : IDisposable
+	{
+		#region Temp data
+
+		public List<ElectricityPoleController>                                           PolesToAdd;
+		public List<ElectricityPoleController>                                           PolesToRemove;
+		public List<GeneratorController>                                                 GeneratorsToAdd;
+		public List<GeneratorController>                                                 GeneratorsToRemove;
+		public Dictionary<ElectricityPoleController, List<GeneratorController>>          GeneratorsPairToAdd;
+		public Dictionary<GeneratorController, List<ElectricityPoleController>>          GeneratorsPairToRemove;
+		public List<ElectricalBuildingController>                                        BuildingsToAdd;
+		public List<ElectricalBuildingController>                                        BuildingsToRemove;
+		public Dictionary<ElectricityPoleController, List<ElectricalBuildingController>> BuildingsPairToAdd;
+		public Dictionary<ElectricalBuildingController, List<ElectricityPoleController>> BuildingsPairToRemove;
+		public List<PolesPair>                                                           ToMerge;
+
+		#endregion
+
+		#region Main data
+
+		public Dictionary<int, ElectricityNet>    Nets;
+		public List<GeneratorController>          Generators;
+		public List<ElectricalBuildingController> Buildings;
+
+		#endregion
+
+		public void Dispose()
+		{
+			Buildings.Clear();
+			Generators.Clear();
+			Nets.Clear();
 			
-			Nets = new[]{From.Net, To.Net}.Where(_ => _ != null).ToArray();
-		}
-	}
-
-	public struct BuildingPolePair
-	{
-		public ElectricityPoleController                Pole;
-		public ElectricityConsumptionBuildingController Building;
-	}
-
-	public struct GeneratorPolePair
-	{
-		public ElectricityPoleController Pole;
-		public GeneratorController       Generator;
-	}
-
-	public class ElectricityNet
-	{
-		public void Initialize(int pop)
-		{
-			throw new System.NotImplementedException();
+			ClearTemp();
 		}
 
-		public void AddPole(ElectricityPoleController pole)
+		public void ClearTemp()
 		{
-			throw new System.NotImplementedException();
+
+			ToMerge.Clear();
+			PolesToAdd.Clear();
+			PolesToRemove.Clear();
+			BuildingsToAdd.Clear();
+			BuildingsToRemove.Clear();
+			BuildingsPairToAdd.Clear();
+			BuildingsPairToRemove.Clear();
+			GeneratorsToAdd.Clear();
+			GeneratorsToRemove.Clear();
+			GeneratorsPairToAdd.Clear();
+			GeneratorsPairToRemove.Clear();
 		}
 	}
 }

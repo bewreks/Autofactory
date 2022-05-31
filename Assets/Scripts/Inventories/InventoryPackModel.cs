@@ -1,5 +1,6 @@
 ﻿using Buildings.Models;
 using Buildings.Views;
+using Helpers;
 using UnityEngine;
 
 namespace Inventories
@@ -44,6 +45,7 @@ namespace Inventories
 		TEST_OBJECT,
 		NOT_CONFIGURED,
 		GENERATOR,
-		BASE_ELECTRIC_POLE
+		BASE_ELECTRIC_POLE,
+		ELECTRICAL_BUILDING
 	}
 }

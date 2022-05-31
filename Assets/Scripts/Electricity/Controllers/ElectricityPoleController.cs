@@ -1,23 +1,26 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Buildings.Models;
+using Helpers;
 using UnityEngine;
 
 namespace Electricity.Controllers
 {
 	public class ElectricityPoleController : BuildingController
 	{
-		public float                           Wires            { get; }
-		public Rect                            Electricity      { get; }
-		public ElectricPoleBuildingModel       Model            { get; }
-		public List<ElectricityPoleController> NearlyPoles      { get; }
-		public List<GeneratorController>       NearlyGenerators { get; }
-		public ElectricityNet_Old                  Net              { get; private set; }
+		public float                              Wires            { get; }
+		public Rect                               Electricity      { get; }
+		public ElectricPoleBuildingModel          Model            { get; }
+		public List<ElectricityPoleController>    NearlyPoles      { get; }
+		public List<GeneratorController>          NearlyGenerators { get; }
+		public List<ElectricalBuildingController> NearlyBuildings  { get; }
+		public ElectricityNet                     Net              { get; private set; }
 
 		public ElectricityPoleController(Vector3 position, ElectricPoleBuildingModel model) : base(position, model)
 		{
 			NearlyPoles      = new List<ElectricityPoleController>();
 			NearlyGenerators = new List<GeneratorController>();
+			NearlyBuildings  = new List<ElectricalBuildingController>();
 			Model            = model;
 			Wires            = model.WireRadius;
 			Electricity      = BuildingHelper.GetPoleRect(position, model.ElectricitySize);
@@ -50,7 +53,7 @@ namespace Electricity.Controllers
 			       distance <= pole.Wires;
 		}
 
-		public void SetNet(ElectricityNet_Old net)
+		public void SetNet(ElectricityNet net)
 		{
 			Net = net;
 		}
@@ -62,12 +65,12 @@ namespace Electricity.Controllers
 				nearlyPole.AddPole(this);
 			}
 
-			NearlyPoles.AddRange(nearlyPoles);
+			NearlyPoles.AddUniqueRange(nearlyPoles);
 		}
 
-		public void AddGenerators(GeneratorController[] generators)
+		public void AddGenerators(List<GeneratorController> generators)
 		{
-			NearlyGenerators.AddRange(generators);
+			NearlyGenerators.AddUniqueRange(generators);
 
 			foreach (var generator in generators)
 			{
@@ -92,6 +95,16 @@ namespace Electricity.Controllers
 				{
 					nearlyGenerator.RemoveNet(Net);
 				}
+			}
+		}
+
+		public void AddBuildings(List<ElectricalBuildingController> buildings)
+		{
+			NearlyBuildings.AddUniqueRange(buildings);
+			
+			foreach (var building in buildings)
+			{
+				building.AddPole(this);
 			}
 		}
 	}

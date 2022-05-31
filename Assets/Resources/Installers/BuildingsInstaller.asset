@@ -16,4 +16,6 @@ MonoBehaviour:
     _models:
     - {fileID: 11400000, guid: 3668e4def5b168e40bef71c8dce39ef5, type: 2}
     - {fileID: 11400000, guid: e4d0ebb5d6a83ae49893e34b78f02c83, type: 2}
+    - {fileID: 11400000, guid: f8353728da6c345809820c26f6fc7cb4, type: 2}
     _squareCollider: {fileID: 2591268598595394200, guid: 2e594a5a923f3174e88f7729042e6009, type: 3}
+    _wiresCollider: {fileID: 0}

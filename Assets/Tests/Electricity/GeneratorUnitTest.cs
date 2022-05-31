@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Buildings.Models;
 using Electricity;
 using Electricity.Controllers;
@@ -55,41 +56,63 @@ namespace Tests.Electricity
 		}
 
 		[Test]
-		public void AddNet()
+		public void RemovePolesTest()
 		{
-			var prevValue = 0;
-			var newValue  = _model.Power;
+			var poleMock       = ElectricityTestHelper.GetPoleControllerMock();
+			var secondPoleMock = ElectricityTestHelper.GetPoleControllerMock();
+			_generatorController.AddPole(poleMock.Object);
+			_generatorController.AddPole(secondPoleMock.Object);
+			Assert.AreEqual(2, _generatorController.NearlyPoles.Count);
+			_generatorController.RemovePoles(new []{ poleMock.Object, secondPoleMock.Object }.ToList());
+			Assert.AreEqual(0, _generatorController.NearlyPoles.Count);
+		}
+
+		[Test]
+		public void RemovePoleTest()
+		{
+			var poleMock = ElectricityTestHelper.GetPoleControllerMock();
+			_generatorController.AddPole(poleMock.Object);
+			Assert.AreEqual(1, _generatorController.NearlyPoles.Count);
+			_generatorController.RemovePole(poleMock.Object);
+			Assert.AreEqual(0, _generatorController.NearlyPoles.Count);
+		}
+
+		[Test]
+		public void AddNetTest()
+		{
+			var prevValue = -10f;
+			var newValue  = -10f;
 			var wasCalled = false;
 			var netMock   = new Mock<ElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
-			                                     .Select(pair => pair)
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     Assert.AreEqual(prevValue, tuple.Item1);
-				                                     Assert.AreEqual(newValue,  tuple.Item2);
+				                                     prevValue = tuple.Item1;
+				                                     newValue  = tuple.Item2;
 				                                     wasCalled = true;
 			                                     });
 
 			_generatorController.AddNet(netMock.Object);
 			disposable.Dispose();
+			Assert.AreEqual(0,            prevValue);
+			Assert.AreEqual(_model.Power, newValue);
 			Assert.IsTrue(wasCalled);
 		}
 
 		[Test]
-		public void DoubleNet()
+		public void DoubleNetTest()
 		{
-			var prevValue = 0;
-			var newValue  = _model.Power;
+			var prevValue = -10f;
+			var newValue  = -10f;
 			var wasCalled = false;
 			var netMock   = new Mock<ElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
-			                                     .Select(pair => pair)
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     Assert.AreEqual(prevValue, tuple.Item1);
-				                                     Assert.AreEqual(newValue,  tuple.Item2);
+				                                     prevValue = tuple.Item1;
+				                                     newValue  = tuple.Item2;
 				                                     wasCalled = true;
 			                                     });
 
@@ -97,92 +120,84 @@ namespace Tests.Electricity
 			Assert.IsTrue(wasCalled);
 			wasCalled = false;
 			_generatorController.AddNet(netMock.Object);
+			Assert.AreEqual(0,            prevValue);
+			Assert.AreEqual(_model.Power, newValue);
 			Assert.IsFalse(wasCalled);
 			disposable.Dispose();
 		}
 
 		[Test]
-		public void RemoveNet()
+		public void RemoveNetTest()
 		{
-			var prevValue = 0;
-			var newValue  = _model.Power;
+			var prevValue = -10f;
+			var newValue  = -10f;
 			var wasCalled = false;
 			var netMock   = new Mock<ElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
-			                                     .Select(pair => pair)
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     Assert.AreEqual(prevValue, tuple.Item1);
-				                                     Assert.AreEqual(newValue,  tuple.Item2);
+				                                     prevValue = tuple.Item1;
+				                                     newValue  = tuple.Item2;
 				                                     wasCalled = true;
 			                                     });
 
 			_generatorController.AddNet(netMock.Object);
-			Assert.IsTrue(wasCalled);
 			wasCalled = false;
 			_generatorController.RemoveNet(netMock.Object);
+			Assert.AreEqual(0,            prevValue);
+			Assert.AreEqual(_model.Power, newValue);
 			Assert.IsFalse(wasCalled);
 			disposable.Dispose();
 		}
 
 		[Test]
-		public void AddTwoNets()
+		public void AddTwoNetsTest()
 		{
-			var prevValue     = 0f;
-			var newValue      = _model.Power;
+			var prevValue     = -10f;
+			var newValue      = -10f;
 			var wasCalled     = false;
 			var netMock       = new Mock<ElectricityNet>();
 			var secondNetMock = new Mock<ElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
-			                                     .Select(pair => pair)
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     Assert.AreEqual(prevValue, tuple.Item1);
-				                                     Assert.AreEqual(newValue,  tuple.Item2);
+				                                     prevValue = tuple.Item1;
+				                                     newValue  = tuple.Item2;
 				                                     wasCalled = true;
 			                                     });
 
 			_generatorController.AddNet(netMock.Object);
-			Assert.IsTrue(wasCalled);
-			wasCalled = false;
-			prevValue = _model.Power;
-			newValue  = _model.Power/2;
 			_generatorController.AddNet(secondNetMock.Object);
+			Assert.AreEqual(_model.Power,     prevValue);
+			Assert.AreEqual(_model.Power / 2, newValue);
 			Assert.IsTrue(wasCalled);
 			disposable.Dispose();
 		}
 
 		[Test]
-		public void RemoveOneOfTwoNets()
+		public void RemoveOneOfTwoNetsTest()
 		{
-			var prevValue     = 0f;
-			var newValue      = _model.Power;
+			var prevValue     = -10f;
+			var newValue      = -10f;
 			var wasCalled     = false;
 			var netMock       = new Mock<ElectricityNet>();
 			var secondNetMock = new Mock<ElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
-			                                     .Select(pair => pair)
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     Assert.AreEqual(prevValue, tuple.Item1);
-				                                     Assert.AreEqual(newValue,  tuple.Item2);
+				                                     prevValue = tuple.Item1;
+				                                     newValue  = tuple.Item2;
 				                                     wasCalled = true;
 			                                     });
 
 			_generatorController.AddNet(netMock.Object);
-			Assert.IsTrue(wasCalled);
-			wasCalled = false;
-			prevValue = _model.Power;
-			newValue  = _model.Power/2;
 			_generatorController.AddNet(secondNetMock.Object);
-			Assert.IsTrue(wasCalled);
-			wasCalled = false;
-			prevValue = _model.Power/2;
-			newValue  = _model.Power;
 			_generatorController.RemoveNet(secondNetMock.Object);
+			Assert.AreEqual(_model.Power / 2, prevValue);
+			Assert.AreEqual(_model.Power,     newValue);
 			Assert.IsTrue(wasCalled);
 			disposable.Dispose();
 		}

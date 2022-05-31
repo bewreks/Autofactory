@@ -11,20 +11,18 @@ namespace Electricity.Controllers
 {
 	public class GeneratorController : BuildingController
 	{
-		public  Subject<float> ActualPower = new Subject<float>();
-		private float          _oldValue;
-		
+		public FloatReactiveProperty ActualPower = new FloatReactiveProperty();
+
 		public BaseGeneratorBuildingModel      Model       { get; }
 		public List<ElectricityNet>            Nets        { get; }
 		public List<ElectricityPoleController> NearlyPoles { get; }
 
 		public GeneratorController(Vector3 position, BaseGeneratorBuildingModel model) : base(position, model)
 		{
-			NearlyPoles = new List<ElectricityPoleController>();
-			Model       = model;
-			Nets        = new List<ElectricityNet>();
-			ActualPower.OnNext(model.Power);
-			_oldValue = 0;
+			NearlyPoles       = new List<ElectricityPoleController>();
+			Model             = model;
+			Nets              = new List<ElectricityNet>();
+			ActualPower.Value = model.Power;
 		}
 
 		public void AddNet(ElectricityNet net)
@@ -41,6 +39,8 @@ namespace Electricity.Controllers
 
 		private void UpdatePowerPart()
 		{
+			var old = ActualPower.Value;
+
 			float newPart;
 			if (Nets.IsEmpty())
 			{
@@ -51,10 +51,9 @@ namespace Electricity.Controllers
 				newPart = Model.Power / Nets.Count;
 			}
 
-			if (Math.Abs(_oldValue - newPart) > float.Epsilon)
+			if (Math.Abs(old - newPart) > float.Epsilon)
 			{
-				_oldValue = newPart;
-				ActualPower.OnNext(newPart);
+				ActualPower.SetValueAndForceNotify(newPart);
 			}
 		}
 
@@ -71,10 +70,6 @@ namespace Electricity.Controllers
 		public void RemovePoles(List<ElectricityPoleController> poles)
 		{
 			NearlyPoles.RemoveAll(poles.Contains);
-			foreach (var pole in poles.Where(pole => !NearlyPoles.Select(_ => _.Net).Distinct().Contains(pole.Net)))
-			{
-				Nets.Remove(pole.Net);
-			}
 		}
 	}
 }

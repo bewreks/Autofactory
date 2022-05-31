@@ -119,6 +119,10 @@ namespace Electricity.ControllerStates
 			_datas.GeneratorsPairToRemove.ForEveryKey((generator, poles) =>
 			{
 				generator.RemovePoles(poles);
+				foreach (var pole in poles.Where(pole => !generator.NearlyPoles.Select(_ => _.Net).Distinct().Contains(pole.Net)))
+				{
+					generator.Nets.Remove(pole.Net);
+				}
 				if (generator.Nets.IsEmpty())
 				{
 					_datas.Generators.AddUnique(generator);

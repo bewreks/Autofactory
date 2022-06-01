@@ -15,7 +15,7 @@ namespace Electricity.Controllers
 		public List<IElectricalPoleController>     NearlyPoles      { get; }
 		public List<IGeneratorController>          NearlyGenerators { get; }
 		public List<IElectricalBuildingController> NearlyBuildings  { get; }
-		public ElectricityNet                      Net              { get; private set; }
+		public IElectricityNet                      Net              { get; private set; }
 
 
 		public ElectricalPoleController(Vector3 position, IElectricalPoleModel model) : base(position, model)
@@ -68,7 +68,7 @@ namespace Electricity.Controllers
 			NearlyPoles.RemoveAll(nearlyPoles.Contains);
 		}
 
-		public void SetNet(ElectricityNet net)
+		public void SetNet(IElectricityNet net)
 		{
 			Net = net;
 		}

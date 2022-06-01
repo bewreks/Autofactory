@@ -40,7 +40,7 @@ namespace Tests.Electricity
 		[Test]
 		public void AddNetTest()
 		{
-			var netMock = new Mock<ElectricityNet>();
+			var netMock = new Mock<IElectricityNet>();
 			_controller.AddNet(netMock.Object);
 			Assert.AreEqual(1, _controller.Nets.Count);
 		}
@@ -48,7 +48,7 @@ namespace Tests.Electricity
 		[Test]
 		public void DoubleNetTest()
 		{
-			var netMock = new Mock<ElectricityNet>();
+			var netMock = new Mock<IElectricityNet>();
 			_controller.AddNet(netMock.Object);
 			_controller.AddNet(netMock.Object);
 			Assert.AreEqual(1, _controller.Nets.Count);
@@ -57,7 +57,7 @@ namespace Tests.Electricity
 		[Test]
 		public void RemoveNetTest()
 		{
-			var netMock = new Mock<ElectricityNet>();
+			var netMock = new Mock<IElectricityNet>();
 			_controller.AddNet(netMock.Object);
 			_controller.RemoveNet(netMock.Object);
 			Assert.AreEqual(0, _controller.Nets.Count);
@@ -66,8 +66,8 @@ namespace Tests.Electricity
 		[Test]
 		public void AddTwoNetsTest()
 		{
-			var netMock       = new Mock<ElectricityNet>();
-			var secondNetMock = new Mock<ElectricityNet>();
+			var netMock       = new Mock<IElectricityNet>();
+			var secondNetMock = new Mock<IElectricityNet>();
 			_controller.AddNet(netMock.Object);
 			_controller.AddNet(secondNetMock.Object);
 			Assert.AreEqual(2, _controller.Nets.Count);
@@ -76,8 +76,8 @@ namespace Tests.Electricity
 		[Test]
 		public void RemoveOneOfTwoNetsTest()
 		{
-			var netMock       = new Mock<ElectricityNet>();
-			var secondNetMock = new Mock<ElectricityNet>();
+			var netMock       = new Mock<IElectricityNet>();
+			var secondNetMock = new Mock<IElectricityNet>();
 			_controller.AddNet(netMock.Object);
 			_controller.AddNet(secondNetMock.Object);
 			_controller.RemoveNet(secondNetMock.Object);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Buildings.Interfaces;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ namespace Electricity.Interfaces
 		public List<IElectricalPoleController>     NearlyPoles      { get; }
 		public List<IGeneratorController>          NearlyGenerators { get; }
 		public List<IElectricalBuildingController> NearlyBuildings  { get; }
-		public ElectricityNet                      Net              { get; }
+		public IElectricityNet                     Net              { get; }
 
 		public void AddGenerator(IGeneratorController                   generator);
 		public void RemoveGenerator(IGeneratorController                generator);
@@ -23,7 +22,7 @@ namespace Electricity.Interfaces
 		public void RemovePole(IElectricalPoleController                pole);
 		public void AddPoles(IElectricalPoleController[]                nearlyPoles);
 		public void RemovePoles(IElectricalPoleController[]             nearlyPoles);
-		public void SetNet(ElectricityNet                               net);
+		public void SetNet(IElectricityNet                              net);
 		public void AddBuilding(IElectricalBuildingController           building);
 		public void RemoveBuilding(IElectricalBuildingController        building);
 		public void AddBuildings(List<IElectricalBuildingController>    buildings);

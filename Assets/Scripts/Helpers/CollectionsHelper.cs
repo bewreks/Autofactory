@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 
 namespace Helpers
@@ -32,10 +33,13 @@ namespace Helpers
 
 		public static void AddUniqueRange<T>(this List<T> list, IEnumerable<T> dataEnum)
 		{
-			foreach (var data in dataEnum)
-			{
-				list.AddUnique(data);
-			}
+			list.AddUniqueRange(dataEnum, out var notUsed);
+		}
+		
+		public static void AddUniqueRange<T>(this List<T> list, IEnumerable<T> dataEnum, out IEnumerable<T> added)
+		{
+			added = dataEnum.Except(list);
+			list.AddRange(added);
 		}
 
 		public static void ForEveryKey<T, K>(this Dictionary<K, T> map, [NotNull] Action<K, T> @delegate)

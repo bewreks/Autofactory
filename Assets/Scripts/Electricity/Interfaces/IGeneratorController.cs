@@ -8,13 +8,13 @@ namespace Electricity.Interfaces
 	{
 		public IReadOnlyReactiveProperty<float> ActualPower { get; }
 		public IGeneratorModel                  Model       { get; }
-		public List<ElectricityNet>             Nets        { get; }
-		public List<IElectricalPoleController>   NearlyPoles { get; }
+		public List<IElectricityNet>            Nets        { get; }
+		public List<IElectricalPoleController>  NearlyPoles { get; }
 
-		public void AddNet(ElectricityNet net);
-		public void RemoveNet(ElectricityNet net);
-		public void AddPole(IElectricalPoleController pole);
-		public void RemovePole(IElectricalPoleController pole);
+		public void AddNet(IElectricityNet                      net);
+		public void RemoveNet(IElectricityNet                   net);
+		public void AddPole(IElectricalPoleController           pole);
+		public void RemovePole(IElectricalPoleController        pole);
 		public void RemovePoles(List<IElectricalPoleController> poles);
 	}
 }

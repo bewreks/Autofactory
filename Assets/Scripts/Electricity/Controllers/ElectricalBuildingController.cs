@@ -8,7 +8,7 @@ namespace Electricity.Controllers
 {
 	public class ElectricalBuildingController : BuildingController, IElectricalBuildingController
 	{
-		public List<ElectricityNet>            Nets        { get; }
+		public List<IElectricityNet>           Nets        { get; }
 		public List<IElectricalPoleController> NearlyPoles { get; }
 		public IElectricalBuildingModel        Model       { get; }
 
@@ -17,15 +17,15 @@ namespace Electricity.Controllers
 		{
 			NearlyPoles = new List<IElectricalPoleController>();
 			Model       = model;
-			Nets        = new List<ElectricityNet>();
+			Nets        = new List<IElectricityNet>();
 		}
 
-		public void AddNet(ElectricityNet net)
+		public void AddNet(IElectricityNet net)
 		{
 			Nets.AddUnique(net);
 		}
 
-		public void RemoveNet(ElectricityNet net)
+		public void RemoveNet(IElectricityNet net)
 		{
 			Nets.Remove(net);
 		}

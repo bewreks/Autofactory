@@ -83,7 +83,7 @@ namespace Tests.Electricity
 			var prevValue = -10f;
 			var newValue  = -10f;
 			var wasCalled = false;
-			var netMock   = new Mock<ElectricityNet>();
+			var netMock   = new Mock<IElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>
@@ -106,7 +106,7 @@ namespace Tests.Electricity
 			var prevValue = -10f;
 			var newValue  = -10f;
 			var wasCalled = false;
-			var netMock   = new Mock<ElectricityNet>();
+			var netMock   = new Mock<IElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>
@@ -132,7 +132,7 @@ namespace Tests.Electricity
 			var prevValue = -10f;
 			var newValue  = -10f;
 			var wasCalled = false;
-			var netMock   = new Mock<ElectricityNet>();
+			var netMock   = new Mock<IElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>
@@ -157,8 +157,8 @@ namespace Tests.Electricity
 			var prevValue     = -10f;
 			var newValue      = -10f;
 			var wasCalled     = false;
-			var netMock       = new Mock<ElectricityNet>();
-			var secondNetMock = new Mock<ElectricityNet>();
+			var netMock       = new Mock<IElectricityNet>();
+			var secondNetMock = new Mock<IElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>
@@ -182,8 +182,8 @@ namespace Tests.Electricity
 			var prevValue     = -10f;
 			var newValue      = -10f;
 			var wasCalled     = false;
-			var netMock       = new Mock<ElectricityNet>();
-			var secondNetMock = new Mock<ElectricityNet>();
+			var netMock       = new Mock<IElectricityNet>();
+			var secondNetMock = new Mock<IElectricityNet>();
 			var disposable = _generatorController.ActualPower
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>

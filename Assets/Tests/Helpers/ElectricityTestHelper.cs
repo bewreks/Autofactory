@@ -1,4 +1,3 @@
-using System;
 using Buildings.Interfaces;
 using Electricity;
 using Electricity.Controllers;
@@ -11,11 +10,11 @@ namespace Tests.Helpers
 {
 	internal static class ElectricityTestHelper
 	{
-		public static void TestNet(this ElectricityNet net,
-		                           float               power,
-		                           int                 generatorsCount,
-		                           int                 polesCount,
-		                           int                 buildingsCount)
+		public static void TestNet(this IElectricityNet net,
+		                           float                power,
+		                           int                  generatorsCount,
+		                           int                  polesCount,
+		                           int                  buildingsCount)
 		{
 			Assert.AreEqual(power,           net.Power,            $"Power is not {power}");
 			Assert.AreEqual(generatorsCount, net.Generators.Count, $"Generators count is not {generatorsCount}");

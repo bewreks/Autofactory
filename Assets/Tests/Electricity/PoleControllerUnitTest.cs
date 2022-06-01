@@ -187,7 +187,7 @@ namespace Tests.Electricity
 		[Test]
 		public void SetNetTest()
 		{
-			var net = new Mock<ElectricityNet>().Object;
+			var net = new Mock<IElectricityNet>().Object;
 			_poleController.SetNet(net);
 			Assert.AreEqual(net, _poleController.Net);
 		}
@@ -195,7 +195,7 @@ namespace Tests.Electricity
 		[Test]
 		public void SetNullNetTest()
 		{
-			var net = new Mock<ElectricityNet>().Object;
+			var net = new Mock<IElectricityNet>().Object;
 			_poleController.SetNet(net);
 			_poleController.SetNet(null);
 			Assert.IsNull(_poleController.Net);

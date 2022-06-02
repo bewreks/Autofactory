@@ -6,10 +6,10 @@ namespace Electricity.Interfaces
 {
 	public interface IGeneratorController : IBuildingController
 	{
-		public IReadOnlyReactiveProperty<float> ActualPower { get; }
-		public IGeneratorModel                  Model       { get; }
-		public List<IElectricityNet>            Nets        { get; }
-		public List<IElectricalPoleController>  NearlyPoles { get; }
+		public IReadOnlyReactiveProperty<(IGeneratorController, float)> ActualPower { get; }
+		public IGeneratorModel                                          Model       { get; }
+		public List<IElectricityNet>                                    Nets        { get; }
+		public List<IElectricalPoleController>                          NearlyPoles { get; }
 
 		public void AddNet(IElectricityNet                      net);
 		public void RemoveNet(IElectricityNet                   net);

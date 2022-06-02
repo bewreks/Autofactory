@@ -21,21 +21,31 @@ namespace Electricity
 		private List<IElectricalBuildingController> _buildings  = new List<IElectricalBuildingController>();
 
 		private CompositeDisposable _disposables          = new CompositeDisposable();
-		private CompositeDisposable _generatorDisposables = new CompositeDisposable();
+
+		private Dictionary<IGeneratorController, IDisposable> _generatorDisposables =
+			new Dictionary<IGeneratorController, IDisposable>();
 
 		private bool _stopPowerUpdates = true;
 
+#if UNITY_INCLUDE_TESTS
+		public bool StopPowerUpdates_Get => _stopPowerUpdates;
+#endif
+
 		public void Initialize(int netId)
 		{
-			ID                = netId;
-			_stopPowerUpdates = false;
+			ID = netId;
+			StartPowerUpdates();
 		}
 
 		public void Initialize(int netId, List<IElectricalPoleController> poles)
 		{
-			_poles.AddRange(poles);
+			StopPowerUpdates();
+			poles.UnitePoles(_poles);
+			_poles.ForEach(controller => controller.SetNet(this));
 			_generators.AddRange(_poles.AllGenerators());
+			_generators.ForEach(controller => controller.AddNet(this));
 			_buildings.AddRange(_poles.AllBuildings());
+			_buildings.ForEach(controller => controller.AddNet(this));
 			SetActualPower();
 
 			_generators.ForEach(generator =>
@@ -43,23 +53,23 @@ namespace Electricity
 				generator.ActualPower
 				         .PairWithPrevious()
 				         .Subscribe(OnGeneratorUpdate)
-				         .AddTo(_generatorDisposables);
+				         .AddTo(_generatorDisposables, generator);
 			});
 			Initialize(netId);
-			StartPowerUpdates();
 		}
 
 		private void SetActualPower()
 		{
-			Power = _generators.Sum(generator => generator.ActualPower.Value);
+			Power = _generators.Sum(generator => generator.ActualPower.Value.Item2);
 		}
 
-		private void OnGeneratorUpdate(Tuple<float, float> tuple)
+		private void OnGeneratorUpdate(Tuple<(IGeneratorController, float), (IGeneratorController, float)> tuple)
 		{
 			if (_stopPowerUpdates) return;
-
-			Power -= tuple.Item1;
-			Power += tuple.Item2;
+			if (!_generators.Contains(tuple.Item1.Item1)) return;
+			
+			Power -= tuple.Item1.Item2;
+			Power += tuple.Item2.Item2;
 		}
 
 		public void Unite(IElectricityNet net)
@@ -68,19 +78,24 @@ namespace Electricity
 			net.StopPowerUpdates();
 
 			_poles.AddUniqueRange(net.Poles);
+			_poles.ForEach(controller => controller.SetNet(this));
 			_buildings.AddUniqueRange(net.Buildings);
+			net.Buildings.ForEach(controller => controller.RemoveNet(net));
+			_buildings.ForEach(controller => controller.AddNet(this));
 			_generators.AddUniqueRange(net.Generators, out var added);
+			net.Generators.ForEach(controller => controller.RemoveNet(net));
+			_generators.ForEach(controller => controller.AddNet(this));
 			foreach (var generator in added)
 			{
 				generator.ActualPower
 				         .PairWithPrevious()
 				         .Subscribe(OnGeneratorUpdate)
-				         .AddTo(_generatorDisposables);
+				         .AddTo(_generatorDisposables, generator);
 			}
 
 			net.Generators.ForEach(generator => generator.RemoveNet(net));
 			SetActualPower();
-			
+
 			StartPowerUpdates();
 		}
 
@@ -91,7 +106,11 @@ namespace Electricity
 			_buildings.Clear();
 			_generators.Clear();
 			_disposables?.Dispose();
-			_generatorDisposables?.Dispose();
+			foreach (var disposable in _generatorDisposables.Values)
+			{
+				disposable.Dispose();
+			}
+			_generatorDisposables.Clear();
 		}
 
 		public void AddPole(IElectricalPoleController pole)
@@ -120,26 +139,54 @@ namespace Electricity
 
 		public void AddGenerator(IGeneratorController generator)
 		{
-			_generators.AddUnique(generator);
 			generator.AddNet(this);
+			generator.ActualPower
+			         .PairWithPrevious()
+			         .Subscribe(OnGeneratorUpdate)
+			         .AddTo(_generatorDisposables, generator);
+			Power += generator.ActualPower.Value.Item2;
+			_generators.AddUnique(generator);
 		}
 
 		public void RemoveGenerator(IGeneratorController generator)
 		{
+			Power += generator.ActualPower.Value.Item2;
 			_generators.Remove(generator);
+			if (_generatorDisposables.TryGetValue(generator, out var disposable))
+			{
+				disposable.Dispose();
+				_generatorDisposables.Remove(generator);
+			}
 			generator.RemoveNet(this);
 		}
 
 		public void AddGenerators(List<IGeneratorController> generators)
 		{
-			_generators.AddUniqueRange(generators);
 			generators.ForEach(generator => generator.AddNet(this));
+			foreach (var generator in generators)
+			{
+				generator.ActualPower
+				         .PairWithPrevious()
+				         .Subscribe(OnGeneratorUpdate)
+				         .AddTo(_generatorDisposables, generator);
+			}
+			
+			_generators.AddUniqueRange(generators);
+			SetActualPower();
 		}
 
 		public void RemoveGenerators(List<IGeneratorController> generators)
 		{
 			_generators.RemoveAll(generators.Contains);
-			generators.ForEach(generator => generator.RemoveNet(this));
+			generators.ForEach(generator =>
+			{
+				if (_generatorDisposables.TryGetValue(generator, out var disposable))
+				{
+					disposable.Dispose();
+					_generatorDisposables.Remove(generator);
+				}
+				generator.RemoveNet(this);
+			});
 		}
 
 		public void AddBuilding(IElectricalBuildingController building)

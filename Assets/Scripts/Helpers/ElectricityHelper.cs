@@ -21,20 +21,10 @@ namespace Helpers
 			var generators = new List<IGeneratorController>();
 			foreach (var pole in poles)
 			{
-				pole.NearlyPoles.UniteGenerators(generators);
+				generators.AddRange(pole.NearlyGenerators);
 			}
 
 			return generators.Distinct().ToList();
-		}
-
-		private static void UniteGenerators(this List<IElectricalPoleController> poles,
-		                                    List<IGeneratorController>           generators)
-		{
-			foreach (var pole in poles)
-			{
-				generators.AddRange(pole.NearlyGenerators);
-				pole.NearlyPoles.UniteGenerators(generators);
-			}
 		}
 
 		public static List<IElectricalBuildingController> AllBuildings(this List<IElectricalPoleController> poles)
@@ -42,20 +32,10 @@ namespace Helpers
 			var buildings = new List<IElectricalBuildingController>();
 			foreach (var pole in poles)
 			{
-				pole.NearlyPoles.UniteBuildings(buildings);
+				buildings.AddRange(pole.NearlyBuildings);
 			}
 
 			return buildings.Distinct().ToList();
-		}
-
-		private static void UniteBuildings(this List<IElectricalPoleController> poles,
-		                                   List<IElectricalBuildingController>  buildings)
-		{
-			foreach (var pole in poles)
-			{
-				buildings.AddRange(pole.NearlyBuildings);
-				pole.NearlyPoles.UniteBuildings(buildings);
-			}
 		}
 	}
 }

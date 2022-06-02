@@ -88,8 +88,8 @@ namespace Tests.Electricity
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     prevValue = tuple.Item1;
-				                                     newValue  = tuple.Item2;
+				                                     prevValue = tuple.Item1.Item2;
+				                                     newValue  = tuple.Item2.Item2;
 				                                     wasCalled = true;
 			                                     });
 
@@ -111,8 +111,8 @@ namespace Tests.Electricity
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     prevValue = tuple.Item1;
-				                                     newValue  = tuple.Item2;
+				                                     prevValue = tuple.Item1.Item2;
+				                                     newValue  = tuple.Item2.Item2;
 				                                     wasCalled = true;
 			                                     });
 
@@ -137,8 +137,8 @@ namespace Tests.Electricity
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     prevValue = tuple.Item1;
-				                                     newValue  = tuple.Item2;
+				                                     prevValue = tuple.Item1.Item2;
+				                                     newValue  = tuple.Item2.Item2;
 				                                     wasCalled = true;
 			                                     });
 
@@ -163,8 +163,8 @@ namespace Tests.Electricity
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     prevValue = tuple.Item1;
-				                                     newValue  = tuple.Item2;
+				                                     prevValue = tuple.Item1.Item2;
+				                                     newValue  = tuple.Item2.Item2;
 				                                     wasCalled = true;
 			                                     });
 
@@ -188,8 +188,8 @@ namespace Tests.Electricity
 			                                     .PairWithPrevious()
 			                                     .Subscribe(tuple =>
 			                                     {
-				                                     prevValue = tuple.Item1;
-				                                     newValue  = tuple.Item2;
+				                                     prevValue = tuple.Item1.Item2;
+				                                     newValue  = tuple.Item2.Item2;
 				                                     wasCalled = true;
 			                                     });
 

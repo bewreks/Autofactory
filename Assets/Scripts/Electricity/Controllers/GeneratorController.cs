@@ -11,19 +11,20 @@ namespace Electricity.Controllers
 {
 	public class GeneratorController : BuildingController, IGeneratorController
 	{
-		private FloatReactiveProperty _actualPower = new FloatReactiveProperty();
+		private ReactiveProperty<(IGeneratorController, float)> _actualPower =
+			new ReactiveProperty<(IGeneratorController, float)>();
 
-		public IReadOnlyReactiveProperty<float> ActualPower => _actualPower;
-		public IGeneratorModel                  Model       { get; }
-		public List<IElectricityNet>             Nets        { get; }
-		public List<IElectricalPoleController>  NearlyPoles { get; }
+		public IReadOnlyReactiveProperty<(IGeneratorController, float)> ActualPower => _actualPower;
+		public IGeneratorModel                                          Model       { get; }
+		public List<IElectricityNet>                                    Nets        { get; }
+		public List<IElectricalPoleController>                          NearlyPoles { get; }
 
 		public GeneratorController(Vector3 position, IGeneratorModel model) : base(position, model)
 		{
-			NearlyPoles       = new List<IElectricalPoleController>();
-			Model             = model;
-			Nets              = new List<IElectricityNet>();
-			_actualPower.Value = model.Power;
+			NearlyPoles        = new List<IElectricalPoleController>();
+			Model              = model;
+			Nets               = new List<IElectricityNet>();
+			_actualPower.Value = (this, model.Power);
 		}
 
 		public void AddNet(IElectricityNet net)
@@ -52,9 +53,9 @@ namespace Electricity.Controllers
 				newPart = Model.Power / Nets.Count;
 			}
 
-			if (Math.Abs(old - newPart) > float.Epsilon)
+			if (Math.Abs(old.Item2 - newPart) > float.Epsilon)
 			{
-				_actualPower.SetValueAndForceNotify(newPart);
+				_actualPower.SetValueAndForceNotify((this, newPart));
 			}
 		}
 

@@ -72,6 +72,10 @@ namespace Electricity
 
 		public void AddBuildingToNet(IElectricalBuildingController building, IElectricalPoleController pole)
 		{
+			if (pole.Net == null)
+			{
+				_datas.PolesToAdd.AddUnique(pole);
+			}
 			_datas.BuildingsPairToAdd.AddUnique(pole, building);
 			SwitchState();
 		}
@@ -84,6 +88,10 @@ namespace Electricity
 
 		public void MergePoles(IElectricalPoleController newPole, IElectricalPoleController mainPole)
 		{
+			if (mainPole.Net == null)
+			{
+				_datas.PolesToAdd.AddUnique(mainPole);
+			}
 			var pair = new PolesPair(mainPole, newPole);
 			_datas.ToMerge.Add(pair);
 			SwitchState();
@@ -91,6 +99,7 @@ namespace Electricity
 
 		public void AddPole(IElectricalPoleController pole)
 		{
+			if (pole.Net != null) return;
 			_datas.PolesToAdd.AddUnique(pole);
 			SwitchState();
 		}
@@ -103,6 +112,10 @@ namespace Electricity
 
 		public void AddGeneratorToNet(IGeneratorController generator, IElectricalPoleController pole)
 		{
+			if (pole.Net == null)
+			{
+				_datas.PolesToAdd.AddUnique(pole);
+			}
 			_datas.GeneratorsPairToAdd.AddUnique(pole, generator);
 			SwitchState();
 		}

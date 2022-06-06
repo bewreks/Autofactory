@@ -24,22 +24,44 @@ namespace Tests.Helpers
 
 		public static void TestPole(this ElectricalPoleController pole,
 		                            int                           neighborPolesCount,
-		                            int                           neighborGeneratorsCount)
+		                            int                           neighborGeneratorsCount,
+		                            int                           neighborBuildingsCount)
 		{
-			Assert.AreEqual(neighborPolesCount,      pole.NearlyPoles.Count);
-			Assert.AreEqual(neighborGeneratorsCount, pole.NearlyGenerators.Count);
+			Assert.AreEqual(neighborPolesCount,      
+			                pole.NearlyPoles.Count, 
+			                $"Pole's nearly poles count is not {neighborPolesCount}");
+			
+			Assert.AreEqual(neighborGeneratorsCount, 
+			                pole.NearlyGenerators.Count, 
+			                $"Pole's nearly generators count is not {neighborGeneratorsCount}");
+			
+			Assert.AreEqual(neighborBuildingsCount,  
+			                pole.NearlyBuildings.Count, 
+			                $"Pole's nearly buildings count is not {neighborBuildingsCount}");
 		}
 
 		public static void TestGenerator(this GeneratorController generator, int netsCount, int neighbourPolesCount)
 		{
-			Assert.AreEqual(netsCount,           generator.Nets.Count);
-			Assert.AreEqual(neighbourPolesCount, generator.NearlyPoles.Count);
+			Assert.AreEqual(netsCount, 
+			                generator.Nets.Count, 
+			                $"Generator's nets count is not {netsCount}");
+			
+			Assert.AreEqual(neighbourPolesCount, 
+			                generator.NearlyPoles.Count,
+			                $"Generator's nearly poles count is not {neighbourPolesCount}");
 		}
 
-		public static void TestBuilding(this GeneratorController generator, int netsCount, int neighbourPolesCount)
+		public static void TestBuilding(this ElectricalBuildingController building,
+		                                int                               netsCount,
+		                                int                               neighbourPolesCount)
 		{
-			Assert.AreEqual(netsCount,           generator.Nets.Count);
-			Assert.AreEqual(neighbourPolesCount, generator.NearlyPoles.Count);
+			Assert.AreEqual(netsCount,           
+			                building.Nets.Count,
+			                $"Building's nets count is not {netsCount}");
+			
+			Assert.AreEqual(neighbourPolesCount, 
+			                building.NearlyPoles.Count,
+			                $"Building's nearly poles count is not {neighbourPolesCount}");
 		}
 
 		public static void TestController(this ElectricityController controller,
@@ -50,9 +72,11 @@ namespace Tests.Helpers
 			Assert.AreEqual(netsCount,
 			                controller.Datas.Nets.Keys.Count,
 			                $"Nets count is not {netsCount}");
+			
 			Assert.AreEqual(generatorsCount,
 			                controller.Datas.Generators.Count,
 			                $"Generators count is not {generatorsCount}");
+			
 			Assert.AreEqual(buildingsCount,
 			                controller.Datas.Buildings.Count,
 			                $"Buildings count is not {buildingsCount}");

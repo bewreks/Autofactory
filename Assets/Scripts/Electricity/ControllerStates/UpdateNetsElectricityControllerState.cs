@@ -12,16 +12,6 @@ namespace Electricity.ControllerStates
 	{
 		public override ElectricityControllerState Do(IDFactory idFactory)
 		{
-			// 1. Добавить столбы
-			// 2.0 Удалить столбы
-			// 2.1 Сохранить столбы-соседи для раделения
-			// 3. Разделить сети
-			// 4. Объединить столбы/сети
-			// 5. Добавить генераторы
-			// 6. Удалить генераторы
-			// 7. Добавить дома
-			// 8. Удалить дома
-			
 			foreach (var pole in _datas.PolesToAdd)
 			{
 				var newNet = CreateNewNet(idFactory);
@@ -106,6 +96,7 @@ namespace Electricity.ControllerStates
 			{
 				pole.Net.AddGenerators(generators);
 				pole.AddGenerators(generators);
+				generators.ForEach(generator => generator.AddPole(pole));
 			});
 			_datas.Generators.RemoveAll(generator => !generator.Nets.IsEmpty());
 			
@@ -113,6 +104,7 @@ namespace Electricity.ControllerStates
 			{
 				pole.Net.AddBuildings(buildings);
 				pole.AddBuildings(buildings);
+				buildings.ForEach(building => building.AddPole(pole));
 			});
 			_datas.Buildings.RemoveAll(generator => !generator.Nets.IsEmpty());
 			

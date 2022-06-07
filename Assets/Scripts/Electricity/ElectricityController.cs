@@ -4,6 +4,7 @@ using Electricity.ControllerStates;
 using Electricity.Interfaces;
 using Factories;
 using Helpers;
+using ModestTree;
 using UniRx;
 using Zenject;
 
@@ -27,12 +28,13 @@ namespace Electricity
 			_datas.Generators = new List<IGeneratorController>();
 			_datas.Nets       = new Dictionary<int, ElectricityNet>();
 
-			_datas.ToMerge            = new List<PolesPair>();
-			_datas.PolesToAdd         = new List<IElectricalPoleController>();
-			_datas.PolesToRemove      = new List<IElectricalPoleController>();
-			_datas.BuildingsToAdd     = new List<IElectricalBuildingController>();
-			_datas.BuildingsToRemove  = new List<IElectricalBuildingController>();
-			_datas.BuildingsPairToAdd = new Dictionary<IElectricalPoleController, List<IElectricalBuildingController>>();
+			_datas.ToMerge           = new List<PolesPair>();
+			_datas.PolesToAdd        = new List<IElectricalPoleController>();
+			_datas.PolesToRemove     = new List<IElectricalPoleController>();
+			_datas.BuildingsToAdd    = new List<IElectricalBuildingController>();
+			_datas.BuildingsToRemove = new List<IElectricalBuildingController>();
+			_datas.BuildingsPairToAdd =
+				new Dictionary<IElectricalPoleController, List<IElectricalBuildingController>>();
 			_datas.BuildingsPairToRemove =
 				new Dictionary<IElectricalBuildingController, List<IElectricalPoleController>>();
 			_datas.GeneratorsToAdd        = new List<IGeneratorController>();
@@ -54,7 +56,7 @@ namespace Electricity
 
 		public void RemoveGenerator(IGeneratorController generator)
 		{
-			_datas.GeneratorsToRemove.Add(generator);
+			_datas.GeneratorsToRemove.AddUnique(generator);
 			SwitchState();
 		}
 
@@ -76,6 +78,7 @@ namespace Electricity
 			{
 				_datas.PolesToAdd.AddUnique(pole);
 			}
+
 			_datas.BuildingsPairToAdd.AddUnique(pole, building);
 			SwitchState();
 		}
@@ -92,6 +95,7 @@ namespace Electricity
 			{
 				_datas.PolesToAdd.AddUnique(mainPole);
 			}
+
 			var pair = new PolesPair(mainPole, newPole);
 			_datas.ToMerge.Add(pair);
 			SwitchState();
@@ -116,6 +120,7 @@ namespace Electricity
 			{
 				_datas.PolesToAdd.AddUnique(pole);
 			}
+
 			_datas.GeneratorsPairToAdd.AddUnique(pole, generator);
 			SwitchState();
 		}
@@ -164,23 +169,23 @@ namespace Electricity
 	{
 		#region Temp data
 
-		public List<IElectricalPoleController>                                           PolesToAdd;
-		public List<IElectricalPoleController>                                           PolesToRemove;
-		public List<IGeneratorController>                                                GeneratorsToAdd;
-		public List<IGeneratorController>                                                GeneratorsToRemove;
+		public List<IElectricalPoleController>                                            PolesToAdd;
+		public List<IElectricalPoleController>                                            PolesToRemove;
+		public List<IGeneratorController>                                                 GeneratorsToAdd;
+		public List<IGeneratorController>                                                 GeneratorsToRemove;
 		public Dictionary<IElectricalPoleController, List<IGeneratorController>>          GeneratorsPairToAdd;
 		public Dictionary<IGeneratorController, List<IElectricalPoleController>>          GeneratorsPairToRemove;
-		public List<IElectricalBuildingController>                                       BuildingsToAdd;
-		public List<IElectricalBuildingController>                                       BuildingsToRemove;
+		public List<IElectricalBuildingController>                                        BuildingsToAdd;
+		public List<IElectricalBuildingController>                                        BuildingsToRemove;
 		public Dictionary<IElectricalPoleController, List<IElectricalBuildingController>> BuildingsPairToAdd;
 		public Dictionary<IElectricalBuildingController, List<IElectricalPoleController>> BuildingsPairToRemove;
-		public List<PolesPair>                                                          ToMerge;
+		public List<PolesPair>                                                            ToMerge;
 
 		#endregion
 
 		#region Main data
 
-		public Dictionary<int, ElectricityNet>    Nets;
+		public Dictionary<int, ElectricityNet>     Nets;
 		public List<IGeneratorController>          Generators;
 		public List<IElectricalBuildingController> Buildings;
 

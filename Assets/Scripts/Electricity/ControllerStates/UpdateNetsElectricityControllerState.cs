@@ -108,27 +108,55 @@ namespace Electricity.ControllerStates
 			});
 			_datas.Buildings.RemoveAll(generator => !generator.Nets.IsEmpty());
 			
+			_datas.GeneratorsToRemove.ForEach(generator =>
+			{
+				_datas.GeneratorsPairToRemove.AddUniqueRange(generator, generator.NearlyPoles);
+			});
 			_datas.GeneratorsPairToRemove.ForEveryKey((generator, poles) =>
 			{
 				generator.RemovePoles(poles);
+				poles.ForEach(pole => pole.RemoveGenerator(generator));
+				var netWasRemoved = false;
 				foreach (var pole in poles.Where(pole => !generator.NearlyPoles.Select(_ => _.Net).Distinct().Contains(pole.Net)))
 				{
-					generator.Nets.Remove(pole.Net);
+					if (generator.Nets.Contains(pole.Net))
+					{
+						generator.Nets.Remove(pole.Net);
+						netWasRemoved = true;
+					}
 				}
-				if (generator.Nets.IsEmpty())
+				if (netWasRemoved && generator.Nets.IsEmpty())
 				{
 					_datas.Generators.AddUnique(generator);
 				}
 			});
 			
+			_datas.BuildingsToRemove.ForEach(building =>
+			{
+				_datas.BuildingsPairToRemove.AddUniqueRange(building, building.NearlyPoles);
+			});
 			_datas.BuildingsPairToRemove.ForEveryKey((building, poles) =>
 			{
 				building.RemovePoles(poles);
-				if (building.Nets.IsEmpty())
+				poles.ForEach(pole => pole.RemoveBuilding(building));
+				var netWasRemoved = false;
+				foreach (var pole in poles.Where(pole => !building.NearlyPoles.Select(_ => _.Net).Distinct().Contains(pole.Net)))
+				{
+					if (building.Nets.Contains(pole.Net))
+					{
+						building.Nets.Remove(pole.Net);
+						netWasRemoved = true;
+					}
+				}
+				if (netWasRemoved && building.Nets.IsEmpty())
 				{
 					_datas.Buildings.AddUnique(building);
 				}
 			});
+
+			// Добавить метку, что удалено
+			_datas.Buildings.RemoveAll(_datas.BuildingsToRemove.Contains);
+			_datas.Generators.RemoveAll(_datas.GeneratorsToRemove.Contains);
 
 			_datas.ClearTemp();
 

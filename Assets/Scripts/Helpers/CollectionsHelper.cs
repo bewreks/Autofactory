@@ -17,10 +17,20 @@ namespace Helpers
 				dictionary.Add(key, buildings);
 			}
 
-			if (!buildings.Contains(data))
+			buildings.AddUnique(data);
+		}
+
+		public static void AddUniqueRange<K, T>(this Dictionary<K, List<T>> dictionary,
+		                                        K                           key,
+		                                        List<T>                     data)
+		{
+			if (!dictionary.TryGetValue(key, out var buildings))
 			{
-				buildings.AddUnique(data);
+				buildings = new List<T>();
+				dictionary.Add(key, buildings);
 			}
+
+			buildings.AddUniqueRange(data);
 		}
 
 		public static void AddUnique<T>(this List<T> list, T data)
@@ -35,7 +45,7 @@ namespace Helpers
 		{
 			list.AddUniqueRange(dataEnum, out var notUsed);
 		}
-		
+
 		public static void AddUniqueRange<T>(this List<T> list, IEnumerable<T> dataEnum, out IEnumerable<T> added)
 		{
 			added = dataEnum.Except(list);

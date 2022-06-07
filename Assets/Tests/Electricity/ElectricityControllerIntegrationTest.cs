@@ -1,10 +1,8 @@
 using System.Collections;
 using Buildings.Interfaces;
-using Buildings.Models;
 using Electricity;
 using Electricity.Controllers;
 using Factories;
-using Helpers;
 using NUnit.Framework;
 using Tests.Helpers;
 using UnityEngine;
@@ -403,71 +401,8 @@ namespace Tests.Electricity
 			net.TestNet(_generatorModel.Power, 1, 2, 1);
 		}
 
-		/*[UnityTest]
-		public IEnumerator AddSinglePoleTest()
-		{
-			_electricityController.AddPole(new ElectricalPoleController(Vector3.zero, _poleModel));
-			yield return null;
-			_electricityController.Datas.Nets[0].TestNet(0, 0, 1, 0);
-		}
-
 		[UnityTest]
-		public IEnumerator AddSingleGeneratorTest()
-		{
-			_electricityController.AddGenerator(new GeneratorController(Vector3.zero, _generatorModel));
-			yield return null;
-			_electricityController.TestController(0, 1, 0);
-		}
-
-		[UnityTest]
-		public IEnumerator AddSingleBuildingTest()
-		{
-			_electricityController.AddBuilding(new ElectricalBuildingController(Vector3.zero,
-			                                                                    _electricalBuildingModel));
-			yield return null;
-			_electricityController.TestController(0, 0, 1);
-		}
-
-		[UnityTest]
-		public IEnumerator AddTwoSeparatePolesTest()
-		{
-			_electricityController.AddPole(new ElectricalPoleController(Vector3.zero, _poleModel));
-			_electricityController.AddPole(new ElectricalPoleController(Vector3.zero, _poleModel));
-			yield return null;
-			_electricityController.TestController(2, 0, 0);
-		}
-
-		[UnityTest]
-		public IEnumerator AddTwoSeparatePolesAndUniteTest()
-		{
-			var first  = new ElectricalPoleController(Vector3.zero, _poleModel);
-			var second = new ElectricalPoleController(Vector3.zero, _poleModel);
-			_electricityController.AddPole(first);
-			_electricityController.AddPole(second);
-			_electricityController.MergePoles(first, second);
-			yield return null;
-			_electricityController.TestController(1, 0, 0);
-			_electricityController.Datas.Nets[0].TestNet(0, 0, 2, 0);
-			Assert.NotZero(Factory.GetCountOf<ElectricityNet>());
-		}
-
-		[UnityTest]
-		public IEnumerator AddTwoSeparatePolesAndUniteAfterFrameTest()
-		{
-			var first  = new ElectricalPoleController(Vector3.zero, _poleModel);
-			var second = new ElectricalPoleController(Vector3.zero, _poleModel);
-			_electricityController.AddPole(first);
-			_electricityController.AddPole(second);
-			yield return null;
-			_electricityController.MergePoles(first, second);
-			yield return null;
-			_electricityController.TestController(1, 0, 0);
-			_electricityController.Datas.Nets[0].TestNet(0, 0, 2, 0);
-			Assert.NotZero(Factory.GetCountOf<ElectricityNet>());
-		}
-
-		[UnityTest]
-		public IEnumerator AddPoleGeneratorAndUniteTest()
+		public IEnumerator RemoveGeneratorFromNetV1Test()
 		{
 			var pole      = new ElectricalPoleController(Vector3.zero, _poleModel);
 			var generator = new GeneratorController(Vector3.zero, _generatorModel);
@@ -475,8 +410,259 @@ namespace Tests.Electricity
 			_electricityController.AddGenerator(generator);
 			_electricityController.AddGeneratorToNet(generator, pole);
 			yield return null;
+			_electricityController.RemoveGeneratorFromNet(generator, pole);
+			yield return null;
+			_electricityController.TestController(1, 1, 0);
+			pole.TestPole(0, 0, 0);
+			generator.TestGenerator(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveGeneratorFromNetV2Test()
+		{
+			var pole      = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var generator = new GeneratorController(Vector3.zero, _generatorModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddGenerator(generator);
+			_electricityController.AddGeneratorToNet(generator, pole);
+			_electricityController.RemoveGeneratorFromNet(generator, pole);
+			yield return null;
+			_electricityController.TestController(1, 1, 0);
+			pole.TestPole(0, 0, 0);
+			generator.TestGenerator(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveBuildingFromNetV1Test()
+		{
+			var pole     = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var building = new ElectricalBuildingController(Vector3.zero, _electricalBuildingModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddBuilding(building);
+			_electricityController.AddBuildingToNet(building, pole);
+			yield return null;
+			_electricityController.RemoveBuildingFromNet(building, pole);
+			yield return null;
+			_electricityController.TestController(1, 0, 1);
+			pole.TestPole(0, 0, 0);
+			building.TestBuilding(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveBuildingFromNetV2Test()
+		{
+			var pole     = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var building = new ElectricalBuildingController(Vector3.zero, _electricalBuildingModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddBuilding(building);
+			_electricityController.AddBuildingToNet(building, pole);
+			_electricityController.RemoveBuildingFromNet(building, pole);
+			yield return null;
+			_electricityController.TestController(1, 0, 1);
+			pole.TestPole(0, 0, 0);
+			building.TestBuilding(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveBuildingFromTwoNetsTest()
+		{
+			var pole       = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var secondPole = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var building   = new ElectricalBuildingController(Vector3.zero, _electricalBuildingModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddPole(secondPole);
+			_electricityController.AddBuilding(building);
+			_electricityController.AddBuildingToNet(building, pole);
+			_electricityController.AddBuildingToNet(building, secondPole);
+			yield return null;
+			_electricityController.RemoveBuildingFromNet(building, pole);
+			_electricityController.RemoveBuildingFromNet(building, secondPole);
+			yield return null;
+			_electricityController.TestController(2, 0, 1);
+			pole.TestPole(0, 0, 0);
+			secondPole.TestPole(0, 0, 0);
+			building.TestBuilding(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveGeneratorFromTwoNetsTest()
+		{
+			var pole       = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var secondPole = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var generator  = new GeneratorController(Vector3.zero, _generatorModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddPole(secondPole);
+			_electricityController.AddGenerator(generator);
+			_electricityController.AddGeneratorToNet(generator, pole);
+			_electricityController.AddGeneratorToNet(generator, secondPole);
+			yield return null;
+			_electricityController.RemoveGeneratorFromNet(generator, pole);
+			_electricityController.RemoveGeneratorFromNet(generator, secondPole);
+			yield return null;
+			_electricityController.TestController(2, 1, 0);
+			pole.TestPole(0, 0, 0);
+			secondPole.TestPole(0, 0, 0);
+			generator.TestGenerator(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveBuildingFromControllerTest()
+		{
+			var building = new ElectricalBuildingController(Vector3.zero, _electricalBuildingModel);
+			_electricityController.AddBuilding(building);
+			yield return null;
+			_electricityController.RemoveBuilding(building);
+			yield return null;
+			_electricityController.TestController(0, 0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveGeneratorFromControllerTest()
+		{
+			var generator = new GeneratorController(Vector3.zero, _generatorModel);
+			_electricityController.AddGenerator(generator);
+			yield return null;
+			_electricityController.RemoveGenerator(generator);
+			yield return null;
+			_electricityController.TestController(0, 0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveGeneratorFullV1Test()
+		{
+			var pole      = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var generator = new GeneratorController(Vector3.zero, _generatorModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddGenerator(generator);
+			_electricityController.AddGeneratorToNet(generator, pole);
+			yield return null;
+			_electricityController.RemoveGeneratorFromNet(generator, pole);
+			_electricityController.RemoveGenerator(generator);
+			yield return null;
 			_electricityController.TestController(1, 0, 0);
-			_electricityController.Datas.Nets[0].TestNet(_generatorModel.Power, 1, 1, 0);
-		}*/
+			pole.TestPole(0, 0, 0);
+			generator.TestGenerator(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveGeneratorFullV2Test()
+		{
+			var pole      = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var generator = new GeneratorController(Vector3.zero, _generatorModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddGenerator(generator);
+			_electricityController.AddGeneratorToNet(generator, pole);
+			_electricityController.RemoveGeneratorFromNet(generator, pole);
+			yield return null;
+			_electricityController.RemoveGenerator(generator);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			pole.TestPole(0, 0, 0);
+			generator.TestGenerator(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveGeneratorFullV3Test()
+		{
+			var pole      = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var generator = new GeneratorController(Vector3.zero, _generatorModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddGenerator(generator);
+			_electricityController.AddGeneratorToNet(generator, pole);
+			yield return null;
+			_electricityController.RemoveGenerator(generator);
+			yield return null;
+			_electricityController.RemoveGeneratorFromNet(generator, pole);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			pole.TestPole(0, 0, 0);
+			generator.TestGenerator(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveGeneratorFullV4Test()
+		{
+			var pole      = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var generator = new GeneratorController(Vector3.zero, _generatorModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddGenerator(generator);
+			_electricityController.AddGeneratorToNet(generator, pole);
+			_electricityController.RemoveGenerator(generator);
+			yield return null;
+			_electricityController.RemoveGeneratorFromNet(generator, pole);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			pole.TestPole(0, 0, 0);
+			generator.TestGenerator(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveBuildingFullV1Test()
+		{
+			var pole     = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var building = new ElectricalBuildingController(Vector3.zero, _electricalBuildingModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddBuilding(building);
+			_electricityController.AddBuildingToNet(building, pole);
+			yield return null;
+			_electricityController.RemoveBuildingFromNet(building, pole);
+			_electricityController.RemoveBuilding(building);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			pole.TestPole(0, 0, 0);
+			building.TestBuilding(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveBuildingFullV2Test()
+		{
+			var pole     = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var building = new ElectricalBuildingController(Vector3.zero, _electricalBuildingModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddBuilding(building);
+			_electricityController.AddBuildingToNet(building, pole);
+			_electricityController.RemoveBuildingFromNet(building, pole);
+			yield return null;
+			_electricityController.RemoveBuilding(building);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			pole.TestPole(0, 0, 0);
+			building.TestBuilding(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveBuildingFullV3Test()
+		{
+			var pole     = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var building = new ElectricalBuildingController(Vector3.zero, _electricalBuildingModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddBuilding(building);
+			_electricityController.AddBuildingToNet(building, pole);
+			yield return null;
+			_electricityController.RemoveBuilding(building);
+			yield return null;
+			_electricityController.RemoveBuildingFromNet(building, pole);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			pole.TestPole(0, 0, 0);
+			building.TestBuilding(0, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveBuildingFullV4Test()
+		{
+			var pole     = new ElectricalPoleController(Vector3.zero, _poleModel);
+			var building = new ElectricalBuildingController(Vector3.zero, _electricalBuildingModel);
+			_electricityController.AddPole(pole);
+			_electricityController.AddBuilding(building);
+			_electricityController.AddBuildingToNet(building, pole);
+			_electricityController.RemoveBuilding(building);
+			yield return null;
+			_electricityController.RemoveBuildingFromNet(building, pole);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			pole.TestPole(0, 0, 0);
+			building.TestBuilding(0, 0);
+		}
 	}
 }

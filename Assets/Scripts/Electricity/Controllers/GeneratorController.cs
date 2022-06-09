@@ -14,28 +14,30 @@ namespace Electricity.Controllers
 		private ReactiveProperty<(IGeneratorController, float)> _actualPower =
 			new ReactiveProperty<(IGeneratorController, float)>();
 
+		private List<IElectricityNet> _nets;
+
 		public IReadOnlyReactiveProperty<(IGeneratorController, float)> ActualPower => _actualPower;
 		public IGeneratorModel                                          Model       { get; }
-		public List<IElectricityNet>                                    Nets        { get; }
+		public IReadOnlyList<IElectricityNet>                           Nets        => _nets;
 		public List<IElectricalPoleController>                          NearlyPoles { get; }
 
 		public GeneratorController(Vector3 position, IGeneratorModel model) : base(position, model)
 		{
 			NearlyPoles        = new List<IElectricalPoleController>();
 			Model              = model;
-			Nets               = new List<IElectricityNet>();
+			_nets              = new List<IElectricityNet>();
 			_actualPower.Value = (this, model.Power);
 		}
 
 		public void AddNet(IElectricityNet net)
 		{
-			Nets.AddUnique(net);
+			_nets.AddUnique(net);
 			UpdatePowerPart();
 		}
 
 		public void RemoveNet(IElectricityNet net)
 		{
-			Nets.Remove(net);
+			_nets.Remove(net);
 			UpdatePowerPart();
 		}
 

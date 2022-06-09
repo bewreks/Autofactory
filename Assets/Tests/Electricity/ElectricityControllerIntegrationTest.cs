@@ -816,7 +816,7 @@ namespace Tests.Electricity
 			building.TestBuilding(0, 0);
 			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out var net));
 			Assert.AreEqual(0, net.ID);
-			net.TestNet(0, 0, 1, 1);
+			net.TestNet(0, 0, 1, 0);
 		}
 
 		[UnityTest]

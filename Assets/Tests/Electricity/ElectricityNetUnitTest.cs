@@ -108,5 +108,68 @@ namespace Tests.Electricity
 			Assert.IsTrue(generator.Nets.Contains(_net));
 			Assert.IsTrue(building.Nets.Contains(_net));
 		}
+
+		[Test]
+		public void RemoveGeneratorTest()
+		{
+			var generator = new GeneratorController(Vector3.zero,
+			                                        ElectricityTestHelper.GetGeneratorModelMock().Object);
+
+			_net.Initialize(0);
+			_net.AddGenerator(generator);
+			_net.RemoveGenerator(generator);
+			generator.TestGenerator(0, 0);
+			_net.TestNet(0, 0, 0, 0);
+		}
+
+		[Test]
+		public void RemoveGeneratorsTest()
+		{
+			var generator = new GeneratorController(Vector3.zero,
+			                                        ElectricityTestHelper.GetGeneratorModelMock().Object);
+			var secondGenerator = new GeneratorController(Vector3.zero,
+			                                              ElectricityTestHelper.GetGeneratorModelMock().Object);
+
+			_net.Initialize(0);
+			var controllers = new List<IGeneratorController>(new[] { generator, secondGenerator });
+			_net.AddGenerators(controllers);
+			_net.RemoveGenerators(controllers);
+			generator.TestGenerator(0, 0);
+			secondGenerator.TestGenerator(0, 0);
+			_net.TestNet(0, 0, 0, 0);
+		}
+
+		[Test]
+		public void RemoveBuildingTest()
+		{
+			var building = new ElectricalBuildingController(Vector3.zero,
+			                                                ElectricityTestHelper.GetElectricalBuildingModelMock()
+				                                                .Object);
+
+			_net.Initialize(0);
+			_net.AddBuilding(building);
+			_net.RemoveBuilding(building);
+			building.TestBuilding(0, 0);
+			_net.TestNet(0, 0, 0, 0);
+		}
+
+		[Test]
+		public void RemoveBuildingsTest()
+		{
+			var building = new ElectricalBuildingController(Vector3.zero,
+			                                                ElectricityTestHelper.GetElectricalBuildingModelMock()
+				                                                .Object);
+			var secondBuilding = new ElectricalBuildingController(Vector3.zero,
+			                                                      ElectricityTestHelper.GetElectricalBuildingModelMock()
+				                                                      .Object);
+
+			_net.Initialize(0);
+			var controllers = new List<IElectricalBuildingController>(new[] { building, secondBuilding });
+			_net.AddBuildings(controllers);
+			_net.RemoveBuildings(controllers);
+			building.TestBuilding(0, 0);
+			secondBuilding.TestBuilding(0, 0);
+			_net.TestNet(0, 0, 0, 0);
+		}
 	}
 }

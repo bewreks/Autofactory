@@ -195,6 +195,7 @@ namespace Electricity
 
 				generator.RemoveNet(this);
 			});
+			SetActualPower();
 		}
 
 		public void AddBuilding(IElectricalBuildingController building)

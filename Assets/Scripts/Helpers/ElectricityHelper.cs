@@ -6,8 +6,8 @@ namespace Helpers
 {
 	public static class ElectricityHelper
 	{
-		public static void UnitePoles(this List<IElectricalPoleController> poles,
-		                              List<IElectricalPoleController>      newNet)
+		public static void UnitePoles(this IEnumerable<IElectricalPoleController> poles,
+		                              List<IElectricalPoleController>             newNet)
 		{
 			foreach (var pole in poles.Where(pole => !newNet.Contains(pole)))
 			{

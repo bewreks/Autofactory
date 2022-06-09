@@ -18,15 +18,23 @@ namespace Electricity.ControllerStates
 				newNet.AddPole(pole);
 			}
 
-			var toRemove = new List<List<IElectricalPoleController>>();
+			var toRemove = new List<IEnumerable<IElectricalPoleController>>();
 			foreach (var pole in _datas.PolesToRemove)
 			{
-				toRemove.Add(pole.NearlyPoles);
-				pole.NearlyGenerators.ForEach(generator =>
+				toRemove.Add(pole.NearlyPoles.ToList());
+				foreach (var nearlyPole in pole.NearlyPoles)
 				{
-					_datas.GeneratorsPairToRemove.AddUnique(generator, pole);
-				});
-				pole.NearlyBuildings.ForEach(building => { _datas.BuildingsPairToRemove.AddUnique(building, pole); });
+					nearlyPole.RemovePole(pole);
+				}
+				pole.RemovePoles(pole.NearlyPoles);
+				foreach (var generator in pole.NearlyGenerators)
+				{
+					_datas.GeneratorsPairToRemove.AddUnique(generator, pole);	
+				}
+				foreach (var building in pole.NearlyBuildings)
+				{
+					_datas.BuildingsPairToRemove.AddUnique(building, pole);
+				}
 			}
 
 			foreach (var neighbours in toRemove)
@@ -46,6 +54,12 @@ namespace Electricity.ControllerStates
 					continue;
 				}
 
+
+				var net   = list[0][0].Net;
+				var netID = net.ID;
+				net.Dispose();
+				net.Initialize(netID, list[0]);
+
 				for (i = 1; i < list.Count; i++)
 				{
 					CreateNewNet(idFactory, list[i]);
@@ -54,6 +68,9 @@ namespace Electricity.ControllerStates
 
 			foreach (var pair in _datas.ToMerge)
 			{
+				pair.Main.AddPole(pair.New);
+				pair.New.AddPole(pair.Main);
+				
 				if (pair.Main.Net == pair.New.Net && pair.Main.Net != null) continue;
 
 				switch (pair.Main.Net)

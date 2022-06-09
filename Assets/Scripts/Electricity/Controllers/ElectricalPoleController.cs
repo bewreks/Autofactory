@@ -9,63 +9,66 @@ namespace Electricity.Controllers
 {
 	public class ElectricalPoleController : BuildingController, IElectricalPoleController
 	{
-		public float                               Wires            { get; }
-		public Rect                                Electricity      { get; }
-		public IElectricalPoleModel                Model            { get; }
-		public List<IElectricalPoleController>     NearlyPoles      { get; }
-		public List<IGeneratorController>          NearlyGenerators { get; }
-		public List<IElectricalBuildingController> NearlyBuildings  { get; }
-		public IElectricityNet                      Net              { get; private set; }
+		public float                                        Wires            { get; }
+		public Rect                                         Electricity      { get; }
+		public IElectricalPoleModel                         Model            { get; }
+		public IReadOnlyList<IElectricalPoleController>     NearlyPoles      => _poles;
+		public IReadOnlyList<IGeneratorController>          NearlyGenerators => _generators;
+		public IReadOnlyList<IElectricalBuildingController> NearlyBuildings  => _buildings;
+		public IElectricityNet                              Net              { get; private set; }
 
+		private List<IElectricalPoleController>     _poles;
+		private List<IGeneratorController>          _generators;
+		private List<IElectricalBuildingController> _buildings;
 
 		public ElectricalPoleController(Vector3 position, IElectricalPoleModel model) : base(position, model)
 		{
-			NearlyPoles      = new List<IElectricalPoleController>();
-			NearlyGenerators = new List<IGeneratorController>();
-			NearlyBuildings  = new List<IElectricalBuildingController>();
-			Model            = model;
-			Wires            = model.WireRadius;
-			Electricity      = BuildingHelper.GetPoleRect(position, model.ElectricitySize);
+			_poles      = new List<IElectricalPoleController>();
+			_generators = new List<IGeneratorController>();
+			_buildings  = new List<IElectricalBuildingController>();
+			Model       = model;
+			Wires       = model.WireRadius;
+			Electricity = BuildingHelper.GetPoleRect(position, model.ElectricitySize);
 		}
 
 		public void AddGenerator(IGeneratorController generator)
 		{
-			NearlyGenerators.AddUnique(generator);
+			_generators.AddUnique(generator);
 		}
 
 		public void RemoveGenerator(IGeneratorController generator)
 		{
-			NearlyGenerators.Remove(generator);
+			_generators.Remove(generator);
 		}
 
 		public void AddGenerators(List<IGeneratorController> generators)
 		{
-			NearlyGenerators.AddUniqueRange(generators);
+			_generators.AddUniqueRange(generators);
 		}
 
 		public void RemoveGenerators(List<IGeneratorController> generators)
 		{
-			NearlyGenerators.RemoveAll(generators.Contains);
+			_generators.RemoveAll(generators.Contains);
 		}
 
 		public void AddPole(IElectricalPoleController pole)
 		{
-			NearlyPoles.AddUnique(pole);
+			_poles.AddUnique(pole);
 		}
 
 		public void RemovePole(IElectricalPoleController pole)
 		{
-			NearlyPoles.Remove(pole);
+			_poles.Remove(pole);
 		}
 
 		public void AddPoles(IElectricalPoleController[] nearlyPoles)
 		{
-			NearlyPoles.AddUniqueRange(nearlyPoles);
+			_poles.AddUniqueRange(nearlyPoles);
 		}
 
-		public void RemovePoles(IElectricalPoleController[] nearlyPoles)
+		public void RemovePoles(IEnumerable<IElectricalPoleController> nearlyPoles)
 		{
-			NearlyPoles.RemoveAll(nearlyPoles.Contains);
+			_poles.RemoveAll(nearlyPoles.Contains);
 		}
 
 		public void SetNet(IElectricityNet net)
@@ -75,22 +78,22 @@ namespace Electricity.Controllers
 
 		public void AddBuilding(IElectricalBuildingController building)
 		{
-			NearlyBuildings.AddUnique(building);
+			_buildings.AddUnique(building);
 		}
 
 		public void RemoveBuilding(IElectricalBuildingController building)
 		{
-			NearlyBuildings.Remove(building);
+			_buildings.Remove(building);
 		}
 
 		public void AddBuildings(List<IElectricalBuildingController> buildings)
 		{
-			NearlyBuildings.AddUniqueRange(buildings);
+			_buildings.AddUniqueRange(buildings);
 		}
 
 		public void RemoveBuildings(List<IElectricalBuildingController> buildings)
 		{
-			NearlyBuildings.RemoveAll(buildings.Contains);
+			_buildings.RemoveAll(buildings.Contains);
 		}
 	}
 }

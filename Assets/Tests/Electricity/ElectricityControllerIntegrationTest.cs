@@ -305,8 +305,8 @@ namespace Tests.Electricity
 			_electricityController.MergePoles(pole, secondPole);
 			yield return null;
 			_electricityController.TestController(1, 0, 0);
-			pole.TestPole(0, 1, 1);
-			secondPole.TestPole(0, 1, 1);
+			pole.TestPole(1, 1, 1);
+			secondPole.TestPole(1, 1, 1);
 			building.TestBuilding(1, 2);
 			generator.TestGenerator(1, 2);
 			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out var net));
@@ -334,8 +334,8 @@ namespace Tests.Electricity
 			_electricityController.MergePoles(pole, secondPole);
 			yield return null;
 			_electricityController.TestController(1, 0, 0);
-			pole.TestPole(0, 1, 1);
-			secondPole.TestPole(0, 1, 1);
+			pole.TestPole(1, 1, 1);
+			secondPole.TestPole(1, 1, 1);
 			building.TestBuilding(1, 2);
 			generator.TestGenerator(1, 2);
 			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out var net));
@@ -363,8 +363,8 @@ namespace Tests.Electricity
 			_electricityController.AddGenerator(generator);
 			yield return null;
 			_electricityController.TestController(1, 0, 0);
-			pole.TestPole(0, 1, 1);
-			secondPole.TestPole(0, 1, 1);
+			pole.TestPole(1, 1, 1);
+			secondPole.TestPole(1, 1, 1);
 			building.TestBuilding(1, 2);
 			generator.TestGenerator(1, 2);
 			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out var net));
@@ -392,8 +392,8 @@ namespace Tests.Electricity
 			_electricityController.AddGenerator(generator);
 			yield return null;
 			_electricityController.TestController(1, 0, 0);
-			pole.TestPole(0, 1, 1);
-			secondPole.TestPole(0, 1, 1);
+			pole.TestPole(1, 1, 1);
+			secondPole.TestPole(1, 1, 1);
 			building.TestBuilding(1, 2);
 			generator.TestGenerator(1, 2);
 			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out var net));
@@ -839,6 +839,39 @@ namespace Tests.Electricity
 			generator.TestGenerator(0, 0);
 			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out var net));
 			Assert.AreEqual(0, net.ID);
+			net.TestNet(0, 0, 1, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveOnePoleOfThreeTest()
+		{
+			var firstPole  = new ElectricalPoleController(Vector3.one, _poleModel);
+			var secondPole = new ElectricalPoleController(Vector3.one * 2, _poleModel);
+			var thirdPole  = new ElectricalPoleController(Vector3.one * 3, _poleModel);
+			_electricityController.MergePoles(firstPole, secondPole);
+			_electricityController.MergePoles(thirdPole, secondPole);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			firstPole.TestPole(1, 0, 0);
+			secondPole.TestPole(2, 0, 0);
+			thirdPole.TestPole(1, 0, 0);
+			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out var net));
+			Assert.AreEqual(0, net.ID);
+			net.TestNet(0, 0, 3, 0);
+			_electricityController.RemovePole(secondPole);
+			yield return null;
+			_electricityController.TestController(2, 0, 0);
+			Assert.IsNotNull(firstPole.Net);
+			firstPole.TestPole(0, 0, 0);
+			Assert.IsNull(secondPole.Net);
+			secondPole.TestPole(0, 0, 0);
+			Assert.IsNotNull(thirdPole.Net);
+			thirdPole.TestPole(0, 0, 0);
+			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out net));
+			Assert.AreEqual(0, net.ID);
+			net.TestNet(0, 0, 1, 0);
+			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(1, out net));
+			Assert.AreEqual(1, net.ID);
 			net.TestNet(0, 0, 1, 0);
 		}
 	}

@@ -20,7 +20,7 @@ namespace Electricity
 		private List<IGeneratorController>          _generators = new List<IGeneratorController>();
 		private List<IElectricalBuildingController> _buildings  = new List<IElectricalBuildingController>();
 
-		private CompositeDisposable _disposables = new CompositeDisposable();
+		private CompositeDisposable _disposables;
 
 		private Dictionary<IGeneratorController, IDisposable> _generatorDisposables =
 			new Dictionary<IGeneratorController, IDisposable>();
@@ -35,6 +35,7 @@ namespace Electricity
 		{
 			ID = netId;
 			StartPowerUpdates();
+			_disposables = new CompositeDisposable();
 		}
 
 		public void Initialize(int netId, List<IElectricalPoleController> poles)

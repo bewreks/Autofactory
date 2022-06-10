@@ -22,22 +22,42 @@ namespace Game.States
 		{
 			if (!(Camera.main is null))
 			{
-				if (PlayerInputHelper.GetWorldMousePosition(_gameSettings.GroundMask, Camera.main, out var mousePosition))
+				if (PlayerInputHelper.GetWorldMousePosition(_gameSettings.GroundMask, Camera.main,
+				                                            out var mousePosition))
 				{
 					model.MousePosition = mousePosition;
 				}
+
 				var deltaTime    = Time.deltaTime;
 				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime);
 				model.MoveDelta += currentInput;
 			}
-			
+
 			if (Input.GetKeyUp(KeyCode.Alpha1))
 			{
-				var inventory = model.PlayerModel.Inventory;
-				model.SelectedPack     = inventory.GetPacks(InventoryObjectsTypesEnum.TEST_OBJECT);
-				model.InstantiablePack = _instantiateManager.InstantiatePreview();
-				Factory.ReturnItem(this);
-				return Factory.GetFactoryItem<SelectedItemGameState>(_diContainer);
+				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.BASE_ELECTRIC_POLE,
+				                                          model,
+				                                          this,
+				                                          _instantiateManager,
+				                                          _diContainer);
+			}
+
+			if (Input.GetKeyUp(KeyCode.Alpha2))
+			{
+				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.GENERATOR,
+				                                          model,
+				                                          this,
+				                                          _instantiateManager,
+				                                          _diContainer);
+			}
+
+			if (Input.GetKeyUp(KeyCode.Alpha3))
+			{
+				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.TEST_OBJECT,
+				                                          model,
+				                                          this,
+				                                          _instantiateManager,
+				                                          _diContainer);
 			}
 
 			if (Input.GetKeyUp(KeyCode.Tab))

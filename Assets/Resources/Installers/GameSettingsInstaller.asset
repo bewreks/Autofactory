@@ -16,6 +16,24 @@ MonoBehaviour:
     _groundMask:
       serializedVersion: 2
       m_Bits: 64
+    _electricPoleMask:
+      serializedVersion: 2
+      m_Bits: 256
+    _previewLayer:
+      serializedVersion: 2
+      m_Bits: 8192
+    _poleLayer:
+      serializedVersion: 2
+      m_Bits: 256
+    _generatorLayer:
+      serializedVersion: 2
+      m_Bits: 512
+    _consumptionLayer:
+      serializedVersion: 2
+      m_Bits: 1024
+    _defaultLayer:
+      serializedVersion: 2
+      m_Bits: 1
     _playerPrefab: {fileID: 2697359441457239117, guid: 3f727b160e226c74da4abb17a2428c63, type: 3}
     _rotationSpeed: 0.05
-    _moveSpeed: 3
+    _moveSpeed: 5

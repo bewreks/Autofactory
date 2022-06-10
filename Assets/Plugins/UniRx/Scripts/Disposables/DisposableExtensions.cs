@@ -16,5 +16,16 @@ namespace UniRx
 
             return disposable;
         }
+
+        public static T AddTo<T, K>(this T disposable, Dictionary<K, T> map, K key)
+            where T : IDisposable
+        {
+            if (!map.ContainsKey(key))
+            {
+                map.Add(key, disposable);
+            }
+
+            return disposable;
+        }
     }
 }

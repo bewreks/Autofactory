@@ -15,4 +15,5 @@ MonoBehaviour:
   type: 3
   maxPackSize: 100
   icon: {fileID: 21300000, guid: 6a24e49fed193b545ad53ba32dbdf6ec, type: 3}
-  instance: {fileID: 3621568170023806016, guid: dfade23669b470e449e21b4e0e23c8dc, type: 3}
+  instance: {fileID: 1139856078144057602, guid: d766509567a857243bc0b86762efc3ca, type: 3}
+  buildingModel: {fileID: 11400000, guid: 3668e4def5b168e40bef71c8dce39ef5, type: 2}

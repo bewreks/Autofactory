@@ -1,6 +1,8 @@
 ﻿using Crafting;
+using Electricity;
 using Game;
 using Instantiate;
+using Inventories;
 using UniRx;
 using Zenject;
 
@@ -14,6 +16,7 @@ namespace Installers
 
 			Container.Bind<GameController>().FromNew().AsSingle();
 			Container.Bind<CraftingController>().FromNew().AsSingle();
+			Container.BindInterfacesTo<ElectricityController>().FromNew().AsSingle();
 			Container.Bind<WindowsManager>().FromNew().AsSingle();
 			Container.Bind<InstantiateManager>().FromNew().AsSingle();
 		}
@@ -22,12 +25,19 @@ namespace Installers
 
 		public override void Start()
 		{
-			var gameController     = Container.Resolve<GameController>();
-			var instantiateManager = Container.Resolve<InstantiateManager>();
-			var craftingController = Container.Resolve<CraftingController>();
+			var gameController        = Container.Resolve<GameController>();
+			var instantiateManager    = Container.Resolve<InstantiateManager>();
+			var craftingController    = Container.Resolve<CraftingController>();
+			var electricityController = Container.Resolve<IElectricityController>();
 			_disposables.Add(gameController);
 			_disposables.Add(instantiateManager);
 			_disposables.Add(craftingController);
+			_disposables.Add(electricityController);
+
+			var gameModel = Container.Resolve<IGameModel>();
+			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.BASE_ELECTRIC_POLE, 10, out var edge);
+			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.GENERATOR, 10, out edge);
+			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.TEST_OBJECT, 1, out edge);
 		}
 	}
 }

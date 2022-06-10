@@ -108,8 +108,14 @@ namespace Electricity
 		public void Dispose()
 		{
 			ID = -1;
+			foreach (var controller in _poles.Where(controller => controller.Net == this))
+			{
+				controller.SetNet(null);
+			}
 			_poles.Clear();
+			_buildings.ForEach(controller => controller.RemoveNet(this));
 			_buildings.Clear();
+			_generators.ForEach(controller => controller.RemoveNet(this));
 			_generators.Clear();
 			_disposables?.Dispose();
 			foreach (var disposable in _generatorDisposables.Values)

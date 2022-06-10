@@ -845,7 +845,7 @@ namespace Tests.Electricity
 		[UnityTest]
 		public IEnumerator RemoveOnePoleOfThreeTest()
 		{
-			var firstPole  = new ElectricalPoleController(Vector3.one, _poleModel);
+			var firstPole  = new ElectricalPoleController(Vector3.one,     _poleModel);
 			var secondPole = new ElectricalPoleController(Vector3.one * 2, _poleModel);
 			var thirdPole  = new ElectricalPoleController(Vector3.one * 3, _poleModel);
 			_electricityController.MergePoles(firstPole, secondPole);
@@ -873,6 +873,88 @@ namespace Tests.Electricity
 			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(1, out net));
 			Assert.AreEqual(1, net.ID);
 			net.TestNet(0, 0, 1, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveOnePoleOfThreeWithGeneratorsTest()
+		{
+			var firstPole       = new ElectricalPoleController(Vector3.one,     _poleModel);
+			var secondPole      = new ElectricalPoleController(Vector3.one * 2, _poleModel);
+			var thirdPole       = new ElectricalPoleController(Vector3.one * 3, _poleModel);
+			var firstGenerator  = new GeneratorController(Vector3.one,     _generatorModel);
+			var secondGenerator = new GeneratorController(Vector3.one * 3, _generatorModel);
+			_electricityController.MergePoles(firstPole, secondPole);
+			_electricityController.MergePoles(thirdPole, secondPole);
+			_electricityController.AddGeneratorToNet(firstGenerator,  firstPole);
+			_electricityController.AddGeneratorToNet(secondGenerator, thirdPole);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			firstPole.TestPole(1, 1, 0);
+			secondPole.TestPole(2, 0, 0);
+			thirdPole.TestPole(1, 1, 0);
+			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out var net));
+			Assert.AreEqual(0, net.ID);
+			firstGenerator.TestGenerator(10, 1, 1);
+			secondGenerator.TestGenerator(10, 1, 1);
+			net.TestNet(20, 2, 3, 0);
+			_electricityController.RemovePole(secondPole);
+			yield return null;
+			_electricityController.TestController(2, 0, 0);
+			firstGenerator.TestGenerator(10, 1, 1);
+			secondGenerator.TestGenerator(10, 1, 1);
+			Assert.IsNotNull(firstPole.Net);
+			firstPole.TestPole(0, 1, 0);
+			Assert.IsNull(secondPole.Net);
+			secondPole.TestPole(0, 0, 0);
+			Assert.IsNotNull(thirdPole.Net);
+			thirdPole.TestPole(0, 1, 0);
+			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out net));
+			Assert.AreEqual(0, net.ID);
+			net.TestNet(10, 1, 1, 0);
+			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(1, out net));
+			Assert.AreEqual(1, net.ID);
+			net.TestNet(10, 1, 1, 0);
+		}
+
+		[UnityTest]
+		public IEnumerator RemoveOnePoleOfThreeWithBuildingsTest()
+		{
+			var firstPole      = new ElectricalPoleController(Vector3.one,     _poleModel);
+			var secondPole     = new ElectricalPoleController(Vector3.one * 2, _poleModel);
+			var thirdPole      = new ElectricalPoleController(Vector3.one * 3, _poleModel);
+			var firstBuilding  = new ElectricalBuildingController(Vector3.one,     _electricalBuildingModel);
+			var secondBuilding = new ElectricalBuildingController(Vector3.one * 3, _electricalBuildingModel);
+			_electricityController.MergePoles(firstPole, secondPole);
+			_electricityController.MergePoles(thirdPole, secondPole);
+			_electricityController.AddBuildingToNet(firstBuilding,  firstPole);
+			_electricityController.AddBuildingToNet(secondBuilding, thirdPole);
+			yield return null;
+			_electricityController.TestController(1, 0, 0);
+			firstPole.TestPole(1, 0, 1);
+			secondPole.TestPole(2, 0, 0);
+			thirdPole.TestPole(1, 0, 1);
+			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out var net));
+			Assert.AreEqual(0, net.ID);
+			firstBuilding.TestBuilding(1, 1);
+			secondBuilding.TestBuilding(1, 1);
+			net.TestNet(0, 0, 3, 2);
+			_electricityController.RemovePole(secondPole);
+			yield return null;
+			_electricityController.TestController(2, 0, 0);
+			firstBuilding.TestBuilding(1, 1);
+			secondBuilding.TestBuilding(1, 1);
+			Assert.IsNotNull(firstPole.Net);
+			firstPole.TestPole(0, 0, 1);
+			Assert.IsNull(secondPole.Net);
+			secondPole.TestPole(0, 0, 0);
+			Assert.IsNotNull(thirdPole.Net);
+			thirdPole.TestPole(0, 0, 1);
+			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(0, out net));
+			Assert.AreEqual(0, net.ID);
+			net.TestNet(0, 0, 1, 1);
+			Assert.IsTrue(_electricityController.Datas.Nets.TryGetValue(1, out net));
+			Assert.AreEqual(1, net.ID);
+			net.TestNet(0, 0, 1, 1);
 		}
 	}
 }

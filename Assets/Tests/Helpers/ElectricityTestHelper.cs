@@ -51,6 +51,21 @@ namespace Tests.Helpers
 			                $"Generator's nearly poles count is not {neighbourPolesCount}");
 		}
 
+		public static void TestGenerator(this GeneratorController generator, float power, int netsCount, int neighbourPolesCount)
+		{
+			Assert.AreEqual(netsCount, 
+			                generator.Nets.Count, 
+			                $"Generator's nets count is not {netsCount}");
+			
+			Assert.AreEqual(neighbourPolesCount, 
+			                generator.NearlyPoles.Count,
+			                $"Generator's nearly poles count is not {neighbourPolesCount}");
+			
+			Assert.AreEqual(power, 
+			                generator.ActualPower.Value.Item2, 
+			                $"Generator's power is not {netsCount}");
+		}
+
 		public static void TestBuilding(this ElectricalBuildingController building,
 		                                int                               netsCount,
 		                                int                               neighbourPolesCount)

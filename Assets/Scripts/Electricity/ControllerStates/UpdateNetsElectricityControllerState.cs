@@ -102,6 +102,7 @@ namespace Electricity.ControllerStates
 							to.Unite(from);
 							_datas.Nets.Remove(from.ID);
 							idFactory.Push(from.ID);
+							from.Dispose();
 							Factory.ReturnItem(from);
 						}
 
@@ -183,7 +184,7 @@ namespace Electricity.ControllerStates
 
 			foreach (var pole in _datas.PolesToRemove)
 			{
-				pole.Net.RemovePole(pole);
+				pole.Net?.RemovePole(pole);
 			}
 
 			// Добавить метку, что удалено

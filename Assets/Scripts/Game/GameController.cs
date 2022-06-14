@@ -18,15 +18,20 @@ namespace Game
 		private GameModel           _model;
 		private IGameState          _state;
 		private CompositeDisposable _disposables = new CompositeDisposable();
+		private PlayerInputActions  _playerInputActions;
 
 		[Inject]
 		public void Construct(GameSettings gameSettings)
 		{
-			_model             = new GameModel();
-			_model.PlayerModel = _diContainer.InstantiatePrefabForComponent<PlayerModel>(gameSettings.PlayerPrefab);
+			_model              = new GameModel();
+			_playerInputActions = new PlayerInputActions();
+			_model.PlayerModel  = _diContainer.InstantiatePrefabForComponent<PlayerModel>(gameSettings.PlayerPrefab);
 			_disposables.Add(_model);
 			_diContainer.Inject(_model.PlayerModel.Inventory);
 			_diContainer.BindInterfacesTo<GameModel>().FromInstance(_model).AsSingle();
+			_diContainer.BindInstance(_playerInputActions);
+			_playerInputActions.Player.Enable();
+			_playerInputActions.Window.Disable();
 
 			_state = Factory.GetFactoryItem<NormalGameState>(_diContainer);
 

@@ -17,19 +17,20 @@ namespace Game.States
 		[Inject] private GameSettings       _gameSettings;
 		[Inject] private GameController     _gameController;
 		[Inject] private WindowsManager     _windowsManager;
+		[Inject] private PlayerInputActions _playerInputActions;
 
 		public IGameState OnUpdate(GameModel model, DiContainer container)
 		{
 			if (!(Camera.main is null))
 			{
 				if (PlayerInputHelper.GetWorldMousePosition(_gameSettings.GroundMask, Camera.main,
-				                                            out var mousePosition))
+				                                            _playerInputActions, out var mousePosition))
 				{
 					model.MousePosition = mousePosition;
 				}
 
 				var deltaTime    = Time.deltaTime;
-				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime);
+				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime, _playerInputActions);
 				model.MoveDelta += currentInput;
 			}
 

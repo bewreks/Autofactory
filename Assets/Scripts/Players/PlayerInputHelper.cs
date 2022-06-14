@@ -11,11 +11,15 @@ namespace Players
 {
 	public static class PlayerInputHelper
 	{
-		public static bool GetWorldMousePosition(LayerMask groundMask, Camera castCamera, out Vector3 mousePosition)
+		public static bool GetWorldMousePosition(LayerMask          groundMask,
+		                                         Camera             castCamera,
+		                                         PlayerInputActions playerInputActions,
+		                                         out Vector3        mousePosition)
 		{
 			mousePosition = Vector3.zero;
 
-			var ray = castCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
+			var pos = playerInputActions.Player.Look.ReadValue<Vector2>();
+			var ray = castCamera.ScreenPointToRay(pos);
 
 			if (Physics.Raycast(ray, out var hit, float.MaxValue, groundMask))
 			{
@@ -29,9 +33,8 @@ namespace Players
 			return false;
 		}
 
-		public static Vector3 GetPlayerInput(Camera camera, float delta)
+		public static Vector3 GetPlayerInput(Camera camera, float delta, PlayerInputActions playerInputActions)
 		{
-			return Vector3.zero;/*
 			var transform = camera.transform;
 			var forward   = transform.forward;
 			var right     = transform.right;
@@ -41,14 +44,16 @@ namespace Players
 			forward.Normalize();
 			right.Normalize();
 
-			right   *= Input.GetAxis("Horizontal");
-			forward *= Input.GetAxis("Vertical");
+			var movement = playerInputActions.Player.Movement.ReadValue<Vector2>();
+
+			right   *= movement.x;
+			forward *= movement.y;
 
 			forward += right;
 
 			forward.Normalize();
 
-			return forward * delta;*/
+			return forward * delta;
 		}
 
 		public static IGameState TryToInstantiate(InventoryObjectsTypesEnum type,

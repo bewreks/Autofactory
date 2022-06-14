@@ -13,13 +13,14 @@ namespace Game.States
 		[Inject] private GameSettings       _gameSettings;
 		[Inject] private DiContainer        _diContainer;
 		[Inject] private GameController     _gameController;
-		
+		[Inject] private PlayerInputActions _playerInputActions;
+
 		public IGameState OnUpdate(GameModel model, DiContainer container)
 		{
 			if (Input.GetKeyUp(KeyCode.Escape))
 			{
 				Object.Destroy(model.InstantiablePack.gameObject);
-				
+
 				model.SelectedPack     = null;
 				model.InstantiablePack = null;
 				Factory.ReturnItem(this);
@@ -29,7 +30,7 @@ namespace Game.States
 			if (Input.GetMouseButtonUp(0) && !model.InstantiablePack.Triggered)
 			{
 				_instantiateManager.InstantiateFinal();
-				
+
 				model.SelectedPack     = null;
 				model.InstantiablePack = null;
 				Factory.ReturnItem(this);
@@ -38,12 +39,14 @@ namespace Game.States
 
 			if (!(Camera.main is null))
 			{
-				if (PlayerInputHelper.GetWorldMousePosition(_gameSettings.GroundMask, Camera.main, out var mousePosition))
+				if (PlayerInputHelper.GetWorldMousePosition(_gameSettings.GroundMask, Camera.main,
+				                                            _playerInputActions, out var mousePosition))
 				{
 					model.MousePosition = mousePosition;
 				}
+
 				var deltaTime    = Time.deltaTime;
-				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime);
+				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime, _playerInputActions);
 				model.MoveDelta += currentInput;
 			}
 

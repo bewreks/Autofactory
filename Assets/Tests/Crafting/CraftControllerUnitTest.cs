@@ -61,7 +61,7 @@ namespace Tests.Crafting
             Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     1);
             Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 0);
             _craftingController.StartCraft(_inventory, _inventory, InventoryObjectsTypesEnum.TEST_OBJECT);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1.1f);
             Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.NOTHING),     0);
             Assert.AreEqual(_inventory.ItemsCount(InventoryObjectsTypesEnum.TEST_OBJECT), 1);
         }

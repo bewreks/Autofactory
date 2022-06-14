@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿using Factories;
+using Game;
+using Game.States;
+using Instantiate;
+using Inventories;
+using UnityEngine;
+using Zenject;
 
 namespace Players
 {
@@ -37,10 +43,30 @@ namespace Players
 			forward *= Input.GetAxis("Vertical");
 
 			forward += right;
-			
+
 			forward.Normalize();
 
 			return forward * delta;
+		}
+
+		public static IGameState TryToInstantiate(InventoryObjectsTypesEnum type,
+		                                          GameModel                 model,
+		                                          IGameState                gameState,
+		                                          InstantiateManager        instantiateManager,
+		                                          DiContainer               diContainer)
+		{
+			var inventory = model.PlayerModel.Inventory;
+			if (inventory.ItemsCount(type) > 0)
+			{
+				model.SelectedPack     = inventory.GetPacks(type);
+				model.InstantiablePack = instantiateManager.InstantiatePreview();
+				Factory.ReturnItem(gameState);
+				return Factory.GetFactoryItem<SelectedItemGameState>(diContainer);
+			}
+			else
+			{
+				return gameState;
+			}
 		}
 	}
 }

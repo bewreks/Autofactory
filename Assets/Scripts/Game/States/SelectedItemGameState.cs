@@ -18,7 +18,7 @@ namespace Game.States
 		{
 			if (Input.GetKeyUp(KeyCode.Escape))
 			{
-				Object.Destroy(model.InstantiablePack);
+				Object.Destroy(model.InstantiablePack.gameObject);
 				
 				model.SelectedPack     = null;
 				model.InstantiablePack = null;
@@ -29,7 +29,6 @@ namespace Game.States
 			if (Input.GetMouseButtonUp(0) && !model.InstantiablePack.Triggered)
 			{
 				_instantiateManager.InstantiateFinal();
-				Object.Destroy(model.InstantiablePack.gameObject);
 				
 				model.SelectedPack     = null;
 				model.InstantiablePack = null;

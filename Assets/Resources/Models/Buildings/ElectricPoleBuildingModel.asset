@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c25455791d2438e95416e9f6f12ec40, type: 3}
+  m_Name: ElectricPoleBuildingModel
+  m_EditorClassIdentifier: 
+  type: 4
+  instance: {fileID: 3005922543460145641, guid: cdcf1432ed684084db4eac3881849d2e, type: 3}
+  wireRadius: 7
+  electricitySize: 7

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4844609381507975319}
   - component: {fileID: 3621568170023806016}
   - component: {fileID: 2775936801741747536}
-  - component: {fileID: 6246917791670200555}
+  - component: {fileID: -2746024760520162885}
   m_Layer: 0
   m_Name: TestObjectModel
   m_TagString: Building
@@ -43,11 +43,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4844609381507975318}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec25961db89b4d09b39d2fb40469a188, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fa1dd4fcaaf4f38a7db4eb6a1b50f4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 2775936801741747536}
-  renderer: {fileID: 4844609382661303606}
+  _collider: {fileID: 2775936801741747536}
+  _renderer: {fileID: 4844609382661303606}
 --- !u!65 &2775936801741747536
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -59,9 +59,9 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.5, z: 1}
-  m_Center: {x: 0.5, y: 0.25, z: 0.5}
---- !u!54 &6246917791670200555
+  m_Size: {x: 1.9, y: 1, z: 1.9}
+  m_Center: {x: 1, y: 0.5, z: 1}
+--- !u!54 &-2746024760520162885
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,8 +103,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4844609382661303611}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0.25, z: 0.5}
-  m_LocalScale: {x: 1, y: 0.5, z: 1}
+  m_LocalPosition: {x: 1, y: 0.5, z: 1}
+  m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children: []
   m_Father: {fileID: 4844609381507975319}
   m_RootOrder: 0

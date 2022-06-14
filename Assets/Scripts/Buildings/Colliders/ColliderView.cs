@@ -2,10 +2,12 @@ using UnityEngine;
 
 namespace Buildings.Colliders
 {
-	public class ColliderView : MonoBehaviour
+	public abstract class ColliderView : MonoBehaviour
 	{
-		[SerializeField] private Collider _triggerCollider;
+		[SerializeField] protected Collider _triggerCollider;
 
 		public Collider TriggerCollider => _triggerCollider;
+
+		public abstract void SetSize(float size);
 	}
 }

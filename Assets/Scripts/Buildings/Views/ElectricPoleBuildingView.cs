@@ -33,6 +33,7 @@ namespace Buildings.Views
 
 			var colliderView =
 				_container.InstantiatePrefabForComponent<ColliderView>(_buildingSettings.SquareCollider, _bottom);
+			colliderView.SetSize(PoleModel.ElectricitySize);
 
 			colliderView.TriggerCollider.OnTriggerEnterAsObservable().Subscribe(other =>
 			{
@@ -66,6 +67,7 @@ namespace Buildings.Views
 
 			colliderView =
 				_container.InstantiatePrefabForComponent<ColliderView>(_buildingSettings.WiresCollider, _bottom);
+			colliderView.SetSize(PoleModel.WireRadius);
 
 			colliderView.TriggerCollider.OnTriggerEnterAsObservable().Subscribe(other =>
 			{
@@ -79,47 +81,6 @@ namespace Buildings.Views
 			colliderView.TriggerCollider.OnTriggerExitAsObservable().Subscribe(other =>
 			{
 			}).AddTo(_disposables);
-
-			/*squareCollider.Pole = this;
-
-			var transformCache = transform;
-			var electricModel  = (ElectricPoleBuildingModel)_model;
-
-			var hits = Physics.SphereCastAll(transformCache.position,
-			                                 electricModel.WireRadius,
-			                                 transformCache.forward,
-			                                 electricModel.WireRadius,
-			                                 gameSettings.ElectricPoleMask);
-
-			var nets = new List<int>();
-
-			foreach (var hit in hits.Select(hit => hit.collider.gameObject.GetComponent<ElectricPoleBuildingView>())
-			                        .Where(view => view != null))
-			{
-				if (hit == this)
-				{
-					continue;
-				}
-
-				if (!nets.Contains(hit.NetID))
-				{
-					nets.Add(hit.NetID);
-				}
-			}
-
-			if (nets.Count > 1)
-			{
-				_electricityController.Unite(nets);
-			}
-
-			if (nets.Count >= 1)
-			{
-				_electricityController.AddPole(transformCache.position, electricModel, nets.First());
-			}
-			else
-			{
-				_electricityController.AddPole(transformCache.position, electricModel);
-			}*/
 		}
 
 		protected override void OnRemoveInstance()

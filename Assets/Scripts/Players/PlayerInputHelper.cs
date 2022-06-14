@@ -4,6 +4,7 @@ using Game.States;
 using Instantiate;
 using Inventories;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 namespace Players
@@ -14,7 +15,7 @@ namespace Players
 		{
 			mousePosition = Vector3.zero;
 
-			var ray = castCamera.ScreenPointToRay(Input.mousePosition);
+			var ray = castCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
 
 			if (Physics.Raycast(ray, out var hit, float.MaxValue, groundMask))
 			{
@@ -30,6 +31,7 @@ namespace Players
 
 		public static Vector3 GetPlayerInput(Camera camera, float delta)
 		{
+			return Vector3.zero;/*
 			var transform = camera.transform;
 			var forward   = transform.forward;
 			var right     = transform.right;
@@ -46,7 +48,7 @@ namespace Players
 
 			forward.Normalize();
 
-			return forward * delta;
+			return forward * delta;*/
 		}
 
 		public static IGameState TryToInstantiate(InventoryObjectsTypesEnum type,

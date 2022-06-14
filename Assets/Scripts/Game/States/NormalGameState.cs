@@ -33,7 +33,7 @@ namespace Game.States
 				model.MoveDelta += currentInput;
 			}
 
-			if (Input.GetKeyUp(KeyCode.Alpha1))
+/*			if (Input.GetKeyUp(KeyCode.Alpha1))
 			{
 				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.BASE_ELECTRIC_POLE,
 				                                          model,
@@ -68,7 +68,7 @@ namespace Game.States
 			if (Input.GetKeyUp(KeyCode.E))
 			{
 				_windowsManager.OpenWindow<CraftingWindow>();
-			}
+			}*/
 
 			return this;
 		}

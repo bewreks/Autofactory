@@ -18,27 +18,22 @@ namespace Game
 		private GameModel           _model;
 		private IGameState          _state;
 		private CompositeDisposable _disposables = new CompositeDisposable();
-		private PlayerInputActions  _playerInputActions;
 
 		[Inject]
 		public void Construct(GameSettings gameSettings)
 		{
-			_model              = new GameModel();
-			_playerInputActions = new PlayerInputActions();
-			_model.PlayerModel  = _diContainer.InstantiatePrefabForComponent<PlayerModel>(gameSettings.PlayerPrefab);
+			_model = new GameModel();
+			_diContainer.BindInterfacesTo<GameModel>().FromInstance(_model).AsSingle();
+			_model.PlayerModel = _diContainer.InstantiatePrefabForComponent<PlayerModel>(gameSettings.PlayerPrefab);
 			_disposables.Add(_model);
 			_diContainer.Inject(_model.PlayerModel.Inventory);
-			_diContainer.BindInterfacesTo<GameModel>().FromInstance(_model).AsSingle();
-			_diContainer.BindInstance(_playerInputActions);
-			_playerInputActions.Player.Enable();
-			_playerInputActions.Window.Disable();
 
 			_state = Factory.GetFactoryItem<NormalGameState>(_diContainer);
 
 			Observable.EveryUpdate()
 			          .Subscribe(l => { _state = _state.OnUpdate(_model, _diContainer); })
 			          .AddTo(_disposables);
-			
+
 			Observable.EveryFixedUpdate()
 			          .Subscribe(l => { _state.OnFixedUpdate(_model); })
 			          .AddTo(_disposables);
@@ -57,7 +52,7 @@ namespace Game
 
 		public void MovePlayer(Vector3 modelMoveDelta)
 		{
-			_model.PlayerModel.transform.position += modelMoveDelta * _gameSettings.MoveSpeed;
+			_model.PlayerModel.Rigidbody.velocity =  modelMoveDelta * (_gameSettings.MoveSpeed * 50);
 		}
 	}
 }

@@ -9,11 +9,11 @@ namespace Game.States
 {
 	public class SelectedItemGameState : IGameState
 	{
-		[Inject] private InstantiateManager _instantiateManager;
-		[Inject] private GameSettings       _gameSettings;
-		[Inject] private DiContainer        _diContainer;
-		[Inject] private GameController     _gameController;
-		[Inject] private PlayerInputActions _playerInputActions;
+		[Inject] private InstantiateManager    _instantiateManager;
+		[Inject] private GameSettings          _gameSettings;
+		[Inject] private DiContainer           _diContainer;
+		[Inject] private GameController        _gameController;
+		[Inject] private PlayerInputController _playerInputController;
 
 		public IGameState OnUpdate(GameModel model, DiContainer container)
 		{
@@ -40,13 +40,13 @@ namespace Game.States
 			if (!(Camera.main is null))
 			{
 				if (PlayerInputHelper.GetWorldMousePosition(_gameSettings.GroundMask, Camera.main,
-				                                            _playerInputActions, out var mousePosition))
+				                                            _playerInputController, out var mousePosition))
 				{
 					model.MousePosition = mousePosition;
 				}
 
 				var deltaTime    = Time.deltaTime;
-				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime, _playerInputActions);
+				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime, _playerInputController);
 				model.MoveDelta += currentInput;
 			}
 

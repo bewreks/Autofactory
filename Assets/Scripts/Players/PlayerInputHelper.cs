@@ -11,14 +11,14 @@ namespace Players
 {
 	public static class PlayerInputHelper
 	{
-		public static bool GetWorldMousePosition(LayerMask          groundMask,
-		                                         Camera             castCamera,
-		                                         PlayerInputActions playerInputActions,
-		                                         out Vector3        mousePosition)
+		public static bool GetWorldMousePosition(LayerMask             groundMask,
+		                                         Camera                castCamera,
+		                                         PlayerInputController playerInputController,
+		                                         out Vector3           mousePosition)
 		{
 			mousePosition = Vector3.zero;
 
-			var pos = playerInputActions.Player.Look.ReadValue<Vector2>();
+			var pos = playerInputController.MousePosition;
 			var ray = castCamera.ScreenPointToRay(pos);
 
 			if (Physics.Raycast(ray, out var hit, float.MaxValue, groundMask))
@@ -33,7 +33,7 @@ namespace Players
 			return false;
 		}
 
-		public static Vector3 GetPlayerInput(Camera camera, float delta, PlayerInputActions playerInputActions)
+		public static Vector3 GetPlayerInput(Camera camera, float delta, PlayerInputController playerInputController)
 		{
 			var transform = camera.transform;
 			var forward   = transform.forward;
@@ -44,7 +44,7 @@ namespace Players
 			forward.Normalize();
 			right.Normalize();
 
-			var movement = playerInputActions.Player.Movement.ReadValue<Vector2>();
+			var movement = playerInputController.MovementDirection;
 
 			right   *= movement.x;
 			forward *= movement.y;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Game;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Zenject;
 
@@ -19,6 +20,7 @@ namespace Windows.InventoryWindow
 
 		protected override void Opening()
 		{
+			_playerInputController.Player.InventoryWindows.performed += ClickInventoryWindowButton;
 			var inventoryPacks = _gameModel.PlayerModel.Inventory.GetPacks();
 			inventoryPackPrefab.gameObject.SetActive(true);
 
@@ -36,6 +38,12 @@ namespace Windows.InventoryWindow
 
 			closeButton.onClick.AddListener(Close);
 			Opened();
+		}
+
+		private void ClickInventoryWindowButton(InputAction.CallbackContext obj)
+		{
+			_playerInputController.Player.InventoryWindows.performed -= ClickInventoryWindowButton;
+			Close();
 		}
 
 		protected override void Closing()

@@ -5,6 +5,7 @@ using Game;
 using Installers;
 using Inventories;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using Zenject;
 
@@ -26,6 +27,7 @@ namespace Windows.CraftingWindow
 
 		protected override void Opening()
 		{
+			_playerInputController.Player.CraftWindows.performed += ClickCraftWindowButton;
 			craftItemPrefab.gameObject.SetActive(true);
 
 			foreach (var craftingModel in _craftSettings.GetModels)
@@ -45,6 +47,12 @@ namespace Windows.CraftingWindow
 
 			closeButton.onClick.AddListener(Close);
 			Opened();
+		}
+
+		private void ClickCraftWindowButton(InputAction.CallbackContext obj)
+		{
+			_playerInputController.Player.CraftWindows.performed -= ClickCraftWindowButton;
+			Close();
 		}
 
 		private void PackViewOnOnMouseClick(InventoryPackModel model)

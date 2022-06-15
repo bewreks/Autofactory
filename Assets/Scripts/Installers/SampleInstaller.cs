@@ -4,6 +4,7 @@ using Game;
 using Instantiate;
 using Inventories;
 using Players;
+using Players.Interfaces;
 using UniRx;
 using Zenject;
 
@@ -15,7 +16,7 @@ namespace Installers
 		{
 			Observable.OnceApplicationQuit().Subscribe(unit => { _disposables.Dispose(); }).AddTo(_disposables);
 
-			Container.Bind<PlayerInputController>().FromNew().AsSingle();
+			Container.BindInterfacesTo<PlayerInputController>().FromNew().AsSingle();
 			Container.Bind<GameController>().FromNew().AsSingle();
 			Container.Bind<CraftingController>().FromNew().AsSingle();
 			Container.BindInterfacesTo<ElectricityController>().FromNew().AsSingle();
@@ -27,16 +28,18 @@ namespace Installers
 
 		public override void Start()
 		{
-			var inputController       = Container.Resolve<PlayerInputController>();
+			var inputController       = Container.Resolve<IPlayerInputController>();
 			var gameController        = Container.Resolve<GameController>();
 			var instantiateManager    = Container.Resolve<InstantiateManager>();
 			var craftingController    = Container.Resolve<CraftingController>();
 			var electricityController = Container.Resolve<IElectricityController>();
+			var windowsManager        = Container.Resolve<WindowsManager>();
 			_disposables.Add(inputController);
 			_disposables.Add(gameController);
 			_disposables.Add(instantiateManager);
 			_disposables.Add(craftingController);
 			_disposables.Add(electricityController);
+			_disposables.Add(windowsManager);
 
 			var gameModel = Container.Resolve<IGameModel>();
 			gameModel.PlayerModel.Inventory.AddItems(InventoryObjectsTypesEnum.BASE_ELECTRIC_POLE, 10, out var edge);

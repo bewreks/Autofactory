@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows;
+using ModestTree;
 using UnityEngine;
 using Zenject;
 
@@ -19,25 +20,53 @@ namespace Installers
 		}
 	}
 
-	public class WindowsManager
+	public class WindowsManager : IDisposable
 	{
 		[Inject] private WindowsSettings _windowsSettings;
 		[Inject] private DiContainer     _container;
 
+		private Dictionary<Type, Window> _openedWindows = new Dictionary<Type, Window>();
+
 		public T OpenWindow<T>()
 			where T : Window
 		{
+			if (IsOpened<T>()) return null;
+			
 			var windowPrefab = _windowsSettings.GetWindow<T>();
 			if (windowPrefab != null)
 			{
 				var window = _container.InstantiatePrefab(windowPrefab).GetComponent<T>();
+				window.OnClose += _ =>
+				{
+					_openedWindows.Remove(_.GetType());
+				};
 				window.Open();
+				_openedWindows.Add(window.GetType(), window);
 				return window;
 			}
 			else
 			{
 				return null;
 			}
+		}
+
+		public bool IsOpened<T>()
+		{
+			return _openedWindows.ContainsKey(typeof(T));
+		}
+
+		public bool IsOpened()
+		{
+			return !_openedWindows.IsEmpty();
+		}
+
+		public void Dispose()
+		{
+			foreach (var window in _openedWindows.Values.ToArray())
+			{
+				window.Close();
+			}
+			_openedWindows.Clear();
 		}
 	}
 

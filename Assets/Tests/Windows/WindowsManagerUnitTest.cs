@@ -1,8 +1,10 @@
 using System.Collections;
-using Windows;
 using Windows.TestWindows;
 using Installers;
+using Moq;
 using NUnit.Framework;
+using Players;
+using Players.Interfaces;
 using UnityEngine;
 using UnityEngine.TestTools;
 using Zenject;
@@ -20,6 +22,7 @@ namespace Tests.Windows
             var findAndSelectPrefab = Resources.Load<TestWindow>("Windows/TestWindow");
             windowsSettings.Windows.Add(findAndSelectPrefab);
             windowsSettings.Prepare();
+            Container.BindInterfacesTo<PlayerInputController>().FromNew().AsSingle();
             Container.Bind<WindowsSettings>().FromInstance(windowsSettings).AsSingle();
             Container.Bind<WindowsManager>().AsSingle();
         }
@@ -28,6 +31,7 @@ namespace Tests.Windows
         {
             base.Teardown();
             Container.Unbind<WindowsSettings>();
+            Container.Unbind<IPlayerInputController>();
         }
         
         [UnityTest]

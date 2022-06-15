@@ -1,21 +1,36 @@
 ﻿using System;
 using Installers;
+using Players;
+using Players.Interfaces;
 using UniRx;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using Zenject;
 
 namespace Windows
 {
 	public abstract class Window : MonoBehaviour
 	{
-		public event Action OnClose;
+		[Inject] protected IPlayerInputController _playerInputController;
+		
+		public event Action<Window> OnClose;
 
 		private readonly ReactiveProperty<WindowStateEnum>
 			_state = new ReactiveProperty<WindowStateEnum>(WindowStateEnum.CLOSED);
 
 		public void Open()
 		{
+			if (_playerInputController != null)
+				_playerInputController.Player.CloseWindows.performed += CloseWindow;
 			_state.SetValueAndForceNotify(WindowStateEnum.OPENING);
 			Opening();
+		}
+
+		private void CloseWindow(InputAction.CallbackContext obj)
+		{
+			if (_playerInputController != null)
+				_playerInputController.Player.CloseWindows.performed -= CloseWindow;
+			Close();
 		}
 
 		public void Close()
@@ -32,7 +47,7 @@ namespace Windows
 		protected void Closed()
 		{
 			_state.SetValueAndForceNotify(WindowStateEnum.CLOSED);
-			OnClose?.Invoke();
+			OnClose?.Invoke(this);
 			Destroy(gameObject);
 		}
 

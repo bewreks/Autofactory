@@ -16,6 +16,6 @@ MonoBehaviour:
   - model: {fileID: 11400000, guid: 04eff9906d9f9634583e8c7cd220227a, type: 2}
     count: 0
   craftingResult:
-    model: {fileID: 11400000, guid: f537fd74175edb541937d0e84bd44ca4, type: 2}
+    model: {fileID: 11400000, guid: 3c9eae84e242d9d48b7139f44e80c8ae, type: 2}
     count: 2
   craftingTime: 0

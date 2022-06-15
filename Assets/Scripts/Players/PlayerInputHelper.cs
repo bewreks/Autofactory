@@ -3,18 +3,18 @@ using Game;
 using Game.States;
 using Instantiate;
 using Inventories;
+using Players.Interfaces;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Zenject;
 
 namespace Players
 {
 	public static class PlayerInputHelper
 	{
-		public static bool GetWorldMousePosition(LayerMask             groundMask,
-		                                         Camera                castCamera,
-		                                         PlayerInputController playerInputController,
-		                                         out Vector3           mousePosition)
+		public static bool GetWorldMousePosition(LayerMask              groundMask,
+		                                         Camera                 castCamera,
+		                                         IPlayerInputController playerInputController,
+		                                         out Vector3            mousePosition)
 		{
 			mousePosition = Vector3.zero;
 
@@ -33,7 +33,7 @@ namespace Players
 			return false;
 		}
 
-		public static Vector3 GetPlayerInput(Camera camera, float delta, PlayerInputController playerInputController)
+		public static Vector3 GetPlayerInput(Camera camera, float delta, IPlayerInputController playerInputController)
 		{
 			var transform = camera.transform;
 			var forward   = transform.forward;
@@ -60,7 +60,8 @@ namespace Players
 		                                          GameModel                 model,
 		                                          IGameState                gameState,
 		                                          InstantiateManager        instantiateManager,
-		                                          DiContainer               diContainer)
+		                                          DiContainer               diContainer,
+		                                          IPlayerInputController    playerInputController)
 		{
 			var inventory = model.PlayerModel.Inventory;
 			if (inventory.ItemsCount(type) > 0)

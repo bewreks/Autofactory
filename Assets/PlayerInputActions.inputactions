@@ -15,6 +15,33 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "CloseWindows",
+                    "type": "Button",
+                    "id": "81654118-921a-4334-aa58-020d2beaff2f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UsingSubmit",
+                    "type": "Button",
+                    "id": "9639c585-61c6-4712-8097-61208b02359d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UsingCancel",
+                    "type": "Button",
+                    "id": "f7386fb8-2230-445f-bf74-600b37274b29",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Look",
                     "type": "Value",
                     "id": "9b0ee411-d3d6-4eac-b43f-ba381a4ebeb6",
@@ -330,119 +357,43 @@
                     "action": "InventoryWindows",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "PlayerUse",
-            "id": "572c3e28-73d6-41a3-93e3-c56f365b9ae6",
-            "actions": [
-                {
-                    "name": "Movement",
-                    "type": "Value",
-                    "id": "36636405-254e-40ee-84f1-aec6488ebc2a",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Look",
-                    "type": "Value",
-                    "id": "060669eb-7848-4024-949c-728466b28504",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "2D Vector",
-                    "id": "6d5417f9-aec2-447b-8406-5f16848f83b3",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "up",
-                    "id": "8d6a0792-3d7d-4f95-a822-2443c830d25f",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "b2daaba6-cee0-4b35-b02e-8d92de49b3e7",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "left",
-                    "id": "a99f4811-06bc-4d05-b203-66e577466e69",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "d6753a62-0d15-4c27-9987-61f68ecb8a98",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
-                    "id": "e31c5a9c-aded-401e-aff1-ef0551a57549",
-                    "path": "<Mouse>/position",
+                    "id": "e7b0d395-a9e5-430b-b2c0-5b2945f2a84d",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Look",
+                    "action": "UsingCancel",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Window",
-            "id": "d9445b8c-27fb-4b14-96be-3061fe25edbd",
-            "actions": [
-                {
-                    "name": "CloseWindows",
-                    "type": "Button",
-                    "id": "61944149-2407-47e6-aadd-a2d0854e2814",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "09b64950-549d-4ed6-ab88-db4d0a02399a",
+                    "id": "fecaa9a3-427c-465c-b7d7-3c51c82c78be",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UsingSubmit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "75733892-1f4b-4e1e-9f05-57f87a8040af",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UsingSubmit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5ad5e2dc-236f-4d92-8eb3-878eb0127286",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",

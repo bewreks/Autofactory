@@ -39,6 +39,33 @@ namespace Players
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""CloseWindows"",
+                    ""type"": ""Button"",
+                    ""id"": ""81654118-921a-4334-aa58-020d2beaff2f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UsingSubmit"",
+                    ""type"": ""Button"",
+                    ""id"": ""9639c585-61c6-4712-8097-61208b02359d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UsingCancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""f7386fb8-2230-445f-bf74-600b37274b29"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
                     ""id"": ""9b0ee411-d3d6-4eac-b43f-ba381a4ebeb6"",
@@ -354,119 +381,43 @@ namespace Players
                     ""action"": ""InventoryWindows"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""PlayerUse"",
-            ""id"": ""572c3e28-73d6-41a3-93e3-c56f365b9ae6"",
-            ""actions"": [
-                {
-                    ""name"": ""Movement"",
-                    ""type"": ""Value"",
-                    ""id"": ""36636405-254e-40ee-84f1-aec6488ebc2a"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Look"",
-                    ""type"": ""Value"",
-                    ""id"": ""060669eb-7848-4024-949c-728466b28504"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": ""2D Vector"",
-                    ""id"": ""6d5417f9-aec2-447b-8406-5f16848f83b3"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""8d6a0792-3d7d-4f95-a822-2443c830d25f"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""b2daaba6-cee0-4b35-b02e-8d92de49b3e7"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""a99f4811-06bc-4d05-b203-66e577466e69"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""d6753a62-0d15-4c27-9987-61f68ecb8a98"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
-                    ""id"": ""e31c5a9c-aded-401e-aff1-ef0551a57549"",
-                    ""path"": ""<Mouse>/position"",
+                    ""id"": ""e7b0d395-a9e5-430b-b2c0-5b2945f2a84d"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Look"",
+                    ""action"": ""UsingCancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Window"",
-            ""id"": ""d9445b8c-27fb-4b14-96be-3061fe25edbd"",
-            ""actions"": [
-                {
-                    ""name"": ""CloseWindows"",
-                    ""type"": ""Button"",
-                    ""id"": ""61944149-2407-47e6-aadd-a2d0854e2814"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""09b64950-549d-4ed6-ab88-db4d0a02399a"",
+                    ""id"": ""fecaa9a3-427c-465c-b7d7-3c51c82c78be"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UsingSubmit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75733892-1f4b-4e1e-9f05-57f87a8040af"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UsingSubmit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5ad5e2dc-236f-4d92-8eb3-878eb0127286"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -483,6 +434,9 @@ namespace Players
             // PlayerMain
             m_PlayerMain = asset.FindActionMap("PlayerMain", throwIfNotFound: true);
             m_PlayerMain_Movement = m_PlayerMain.FindAction("Movement", throwIfNotFound: true);
+            m_PlayerMain_CloseWindows = m_PlayerMain.FindAction("CloseWindows", throwIfNotFound: true);
+            m_PlayerMain_UsingSubmit = m_PlayerMain.FindAction("UsingSubmit", throwIfNotFound: true);
+            m_PlayerMain_UsingCancel = m_PlayerMain.FindAction("UsingCancel", throwIfNotFound: true);
             m_PlayerMain_Look = m_PlayerMain.FindAction("Look", throwIfNotFound: true);
             m_PlayerMain_FastUsing0 = m_PlayerMain.FindAction("FastUsing0", throwIfNotFound: true);
             m_PlayerMain_FastUsing1 = m_PlayerMain.FindAction("FastUsing1", throwIfNotFound: true);
@@ -496,13 +450,6 @@ namespace Players
             m_PlayerMain_FastUsing9 = m_PlayerMain.FindAction("FastUsing9", throwIfNotFound: true);
             m_PlayerMain_CraftWindows = m_PlayerMain.FindAction("CraftWindows", throwIfNotFound: true);
             m_PlayerMain_InventoryWindows = m_PlayerMain.FindAction("InventoryWindows", throwIfNotFound: true);
-            // PlayerUse
-            m_PlayerUse = asset.FindActionMap("PlayerUse", throwIfNotFound: true);
-            m_PlayerUse_Movement = m_PlayerUse.FindAction("Movement", throwIfNotFound: true);
-            m_PlayerUse_Look = m_PlayerUse.FindAction("Look", throwIfNotFound: true);
-            // Window
-            m_Window = asset.FindActionMap("Window", throwIfNotFound: true);
-            m_Window_CloseWindows = m_Window.FindAction("CloseWindows", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -563,6 +510,9 @@ namespace Players
         private readonly InputActionMap m_PlayerMain;
         private IPlayerMainActions m_PlayerMainActionsCallbackInterface;
         private readonly InputAction m_PlayerMain_Movement;
+        private readonly InputAction m_PlayerMain_CloseWindows;
+        private readonly InputAction m_PlayerMain_UsingSubmit;
+        private readonly InputAction m_PlayerMain_UsingCancel;
         private readonly InputAction m_PlayerMain_Look;
         private readonly InputAction m_PlayerMain_FastUsing0;
         private readonly InputAction m_PlayerMain_FastUsing1;
@@ -581,6 +531,9 @@ namespace Players
             private @PlayerInputActions m_Wrapper;
             public PlayerMainActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @Movement => m_Wrapper.m_PlayerMain_Movement;
+            public InputAction @CloseWindows => m_Wrapper.m_PlayerMain_CloseWindows;
+            public InputAction @UsingSubmit => m_Wrapper.m_PlayerMain_UsingSubmit;
+            public InputAction @UsingCancel => m_Wrapper.m_PlayerMain_UsingCancel;
             public InputAction @Look => m_Wrapper.m_PlayerMain_Look;
             public InputAction @FastUsing0 => m_Wrapper.m_PlayerMain_FastUsing0;
             public InputAction @FastUsing1 => m_Wrapper.m_PlayerMain_FastUsing1;
@@ -606,6 +559,15 @@ namespace Players
                     @Movement.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnMovement;
                     @Movement.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnMovement;
                     @Movement.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnMovement;
+                    @CloseWindows.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnCloseWindows;
+                    @CloseWindows.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnCloseWindows;
+                    @CloseWindows.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnCloseWindows;
+                    @UsingSubmit.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingSubmit;
+                    @UsingSubmit.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingSubmit;
+                    @UsingSubmit.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingSubmit;
+                    @UsingCancel.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingCancel;
+                    @UsingCancel.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingCancel;
+                    @UsingCancel.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingCancel;
                     @Look.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnLook;
                     @Look.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnLook;
                     @Look.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnLook;
@@ -652,6 +614,15 @@ namespace Players
                     @Movement.started += instance.OnMovement;
                     @Movement.performed += instance.OnMovement;
                     @Movement.canceled += instance.OnMovement;
+                    @CloseWindows.started += instance.OnCloseWindows;
+                    @CloseWindows.performed += instance.OnCloseWindows;
+                    @CloseWindows.canceled += instance.OnCloseWindows;
+                    @UsingSubmit.started += instance.OnUsingSubmit;
+                    @UsingSubmit.performed += instance.OnUsingSubmit;
+                    @UsingSubmit.canceled += instance.OnUsingSubmit;
+                    @UsingCancel.started += instance.OnUsingCancel;
+                    @UsingCancel.performed += instance.OnUsingCancel;
+                    @UsingCancel.canceled += instance.OnUsingCancel;
                     @Look.started += instance.OnLook;
                     @Look.performed += instance.OnLook;
                     @Look.canceled += instance.OnLook;
@@ -695,83 +666,12 @@ namespace Players
             }
         }
         public PlayerMainActions @PlayerMain => new PlayerMainActions(this);
-
-        // PlayerUse
-        private readonly InputActionMap m_PlayerUse;
-        private IPlayerUseActions m_PlayerUseActionsCallbackInterface;
-        private readonly InputAction m_PlayerUse_Movement;
-        private readonly InputAction m_PlayerUse_Look;
-        public struct PlayerUseActions
-        {
-            private @PlayerInputActions m_Wrapper;
-            public PlayerUseActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Movement => m_Wrapper.m_PlayerUse_Movement;
-            public InputAction @Look => m_Wrapper.m_PlayerUse_Look;
-            public InputActionMap Get() { return m_Wrapper.m_PlayerUse; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
-            public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(PlayerUseActions set) { return set.Get(); }
-            public void SetCallbacks(IPlayerUseActions instance)
-            {
-                if (m_Wrapper.m_PlayerUseActionsCallbackInterface != null)
-                {
-                    @Movement.started -= m_Wrapper.m_PlayerUseActionsCallbackInterface.OnMovement;
-                    @Movement.performed -= m_Wrapper.m_PlayerUseActionsCallbackInterface.OnMovement;
-                    @Movement.canceled -= m_Wrapper.m_PlayerUseActionsCallbackInterface.OnMovement;
-                    @Look.started -= m_Wrapper.m_PlayerUseActionsCallbackInterface.OnLook;
-                    @Look.performed -= m_Wrapper.m_PlayerUseActionsCallbackInterface.OnLook;
-                    @Look.canceled -= m_Wrapper.m_PlayerUseActionsCallbackInterface.OnLook;
-                }
-                m_Wrapper.m_PlayerUseActionsCallbackInterface = instance;
-                if (instance != null)
-                {
-                    @Movement.started += instance.OnMovement;
-                    @Movement.performed += instance.OnMovement;
-                    @Movement.canceled += instance.OnMovement;
-                    @Look.started += instance.OnLook;
-                    @Look.performed += instance.OnLook;
-                    @Look.canceled += instance.OnLook;
-                }
-            }
-        }
-        public PlayerUseActions @PlayerUse => new PlayerUseActions(this);
-
-        // Window
-        private readonly InputActionMap m_Window;
-        private IWindowActions m_WindowActionsCallbackInterface;
-        private readonly InputAction m_Window_CloseWindows;
-        public struct WindowActions
-        {
-            private @PlayerInputActions m_Wrapper;
-            public WindowActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-            public InputAction @CloseWindows => m_Wrapper.m_Window_CloseWindows;
-            public InputActionMap Get() { return m_Wrapper.m_Window; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
-            public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(WindowActions set) { return set.Get(); }
-            public void SetCallbacks(IWindowActions instance)
-            {
-                if (m_Wrapper.m_WindowActionsCallbackInterface != null)
-                {
-                    @CloseWindows.started -= m_Wrapper.m_WindowActionsCallbackInterface.OnCloseWindows;
-                    @CloseWindows.performed -= m_Wrapper.m_WindowActionsCallbackInterface.OnCloseWindows;
-                    @CloseWindows.canceled -= m_Wrapper.m_WindowActionsCallbackInterface.OnCloseWindows;
-                }
-                m_Wrapper.m_WindowActionsCallbackInterface = instance;
-                if (instance != null)
-                {
-                    @CloseWindows.started += instance.OnCloseWindows;
-                    @CloseWindows.performed += instance.OnCloseWindows;
-                    @CloseWindows.canceled += instance.OnCloseWindows;
-                }
-            }
-        }
-        public WindowActions @Window => new WindowActions(this);
         public interface IPlayerMainActions
         {
             void OnMovement(InputAction.CallbackContext context);
+            void OnCloseWindows(InputAction.CallbackContext context);
+            void OnUsingSubmit(InputAction.CallbackContext context);
+            void OnUsingCancel(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
             void OnFastUsing0(InputAction.CallbackContext context);
             void OnFastUsing1(InputAction.CallbackContext context);
@@ -785,15 +685,6 @@ namespace Players
             void OnFastUsing9(InputAction.CallbackContext context);
             void OnCraftWindows(InputAction.CallbackContext context);
             void OnInventoryWindows(InputAction.CallbackContext context);
-        }
-        public interface IPlayerUseActions
-        {
-            void OnMovement(InputAction.CallbackContext context);
-            void OnLook(InputAction.CallbackContext context);
-        }
-        public interface IWindowActions
-        {
-            void OnCloseWindows(InputAction.CallbackContext context);
         }
     }
 }

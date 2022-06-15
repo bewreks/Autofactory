@@ -5,6 +5,7 @@ using Installers;
 using Instantiate;
 using Inventories;
 using Players;
+using Players.Interfaces;
 using UnityEngine;
 using Zenject;
 
@@ -14,71 +15,60 @@ namespace Game.States
 	{
 		[Inject] private InstantiateManager    _instantiateManager;
 		[Inject] private DiContainer           _diContainer;
-		[Inject] private GameSettings          _gameSettings;
-		[Inject] private GameController        _gameController;
 		[Inject] private WindowsManager        _windowsManager;
-		[Inject] private PlayerInputController _playerInputController;
+		[Inject] private IPlayerInputController _playerInputController;
 
 		public IGameState OnUpdate(GameModel model, DiContainer container)
 		{
-			if (!(Camera.main is null))
-			{
-				if (PlayerInputHelper.GetWorldMousePosition(_gameSettings.GroundMask, Camera.main,
-				                                            _playerInputController, out var mousePosition))
-				{
-					model.MousePosition = mousePosition;
-				}
-
-				var deltaTime    = Time.deltaTime;
-				var currentInput = PlayerInputHelper.GetPlayerInput(Camera.main, deltaTime, _playerInputController);
-				model.MoveDelta += currentInput;
-			}
-
-/*			if (Input.GetKeyUp(KeyCode.Alpha1))
+			if (_playerInputController.Player.FastUsing1.WasPressedThisFrame())
 			{
 				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.BASE_ELECTRIC_POLE,
 				                                          model,
 				                                          this,
 				                                          _instantiateManager,
-				                                          _diContainer);
+				                                          _diContainer,
+				                                          _playerInputController);
 			}
 
-			if (Input.GetKeyUp(KeyCode.Alpha2))
+			if (_playerInputController.Player.FastUsing2.WasPressedThisFrame())
 			{
 				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.GENERATOR,
 				                                          model,
 				                                          this,
 				                                          _instantiateManager,
-				                                          _diContainer);
+				                                          _diContainer,
+				                                          _playerInputController);
 			}
 
-			if (Input.GetKeyUp(KeyCode.Alpha3))
+			if (_playerInputController.Player.FastUsing3.WasPressedThisFrame())
 			{
 				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.TEST_OBJECT,
 				                                          model,
 				                                          this,
 				                                          _instantiateManager,
-				                                          _diContainer);
+				                                          _diContainer,
+				                                          _playerInputController);
 			}
 
-			if (Input.GetKeyUp(KeyCode.Tab))
+			if (_playerInputController.Player.InventoryWindows.WasPressedThisFrame())
 			{
 				_windowsManager.OpenWindow<InventoryWindow>();
+				Factory.ReturnItem(this);
+				return Factory.GetFactoryItem<WindowGameState>(_diContainer);
 			}
 
-			if (Input.GetKeyUp(KeyCode.E))
+			if (_playerInputController.Player.CraftWindows.WasPressedThisFrame())
 			{
 				_windowsManager.OpenWindow<CraftingWindow>();
-			}*/
+				Factory.ReturnItem(this);
+				return Factory.GetFactoryItem<WindowGameState>(_diContainer);
+			}
 
 			return this;
 		}
 
 		public void OnFixedUpdate(GameModel model)
 		{
-			_gameController.RotatePlayerTo(model.MousePosition);
-			_gameController.MovePlayer(model.MoveDelta);
-			model.MoveDelta = Vector3.zero;
 		}
 	}
 }

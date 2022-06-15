@@ -1,9 +1,12 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Crafting;
 using Installers;
-using NUnit.Framework;
+using ModestTree;
 using UnityEngine.TestTools;
 using Zenject;
+using Assert = NUnit.Framework.Assert;
 
 namespace Tests.Integration.Crafting
 {
@@ -40,8 +43,8 @@ namespace Tests.Integration.Crafting
 			PostInstall();
 
 			var craftSettings = Container.Resolve<CraftSettings>();
-			var uniqueWindows = craftSettings.Models.Select(model => model.CraftingResult.model.Type).Distinct();
-			var uniqueCount   = uniqueWindows.Count();
+			var uniqueModels  = craftSettings.Models.Select(model => model.CraftingResult.model.Type).Distinct();
+			var uniqueCount   = uniqueModels.Count();
 			if (uniqueCount != craftSettings.Models.Count)
 			{
 				var distinctItems = craftSettings.Models
@@ -50,6 +53,46 @@ namespace Tests.Integration.Crafting
 				                                 .SelectMany(r => r);
 
 				Assert.Fail(string.Join("\r\n", distinctItems));
+			}
+
+			yield break;
+		}
+
+		[UnityTest]
+		public IEnumerator SettingsConfiguredNeedsTest()
+		{
+			PreInstall();
+			PostInstall();
+
+			var craftSettings = Container.Resolve<CraftSettings>();
+			var errorsInNeeds = craftSettings.Models
+			                                 .Where(model => model.CraftingNeeds.Any(need => need == null ||
+			                                                                                 need.model == null))
+			                                 .Select(model => model.name)
+			                                 .ToArray();
+			if (!errorsInNeeds.IsEmpty())
+			{
+				Assert.Fail(string.Join("\r\n", errorsInNeeds));
+			}
+
+			yield break;
+		}
+
+		[UnityTest]
+		public IEnumerator SettingsConfiguredResultsTest()
+		{
+			PreInstall();
+			PostInstall();
+
+			var craftSettings = Container.Resolve<CraftSettings>();
+			var errorsInNeeds = craftSettings.Models
+			                                 .Where(model => model.CraftingResult == null ||
+			                                                 model.CraftingResult.model == null)
+			                                 .Select(model => model.name)
+			                                 .ToArray();
+			if (!errorsInNeeds.IsEmpty())
+			{
+				Assert.Fail(string.Join("\r\n", errorsInNeeds));
 			}
 
 			yield break;

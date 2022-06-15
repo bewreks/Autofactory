@@ -26,7 +26,7 @@ namespace Players
     ""name"": ""PlayerInputActions"",
     ""maps"": [
         {
-            ""name"": ""PlayerMain"",
+            ""name"": ""PlayerMove"",
             ""id"": ""d2239dd4-b303-40d6-9433-310177f0543a"",
             ""actions"": [
                 {
@@ -39,33 +39,6 @@ namespace Players
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""CloseWindows"",
-                    ""type"": ""Button"",
-                    ""id"": ""81654118-921a-4334-aa58-020d2beaff2f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""UsingSubmit"",
-                    ""type"": ""Button"",
-                    ""id"": ""9639c585-61c6-4712-8097-61208b02359d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""UsingCancel"",
-                    ""type"": ""Button"",
-                    ""id"": ""f7386fb8-2230-445f-bf74-600b37274b29"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
                     ""id"": ""9b0ee411-d3d6-4eac-b43f-ba381a4ebeb6"",
@@ -73,114 +46,6 @@ namespace Players
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""FastUsing0"",
-                    ""type"": ""Button"",
-                    ""id"": ""7ec35eb9-158c-47a5-8ea0-4813c9c36a83"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FastUsing1"",
-                    ""type"": ""Button"",
-                    ""id"": ""d4f73ef6-c53b-4574-9199-97396feffe99"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FastUsing2"",
-                    ""type"": ""Button"",
-                    ""id"": ""6aec4d86-10c8-43c5-9017-d87b15808f68"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FastUsing3"",
-                    ""type"": ""Button"",
-                    ""id"": ""e6298ae5-8186-4c84-a4f8-4a979882de66"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FastUsing4"",
-                    ""type"": ""Button"",
-                    ""id"": ""a2e94c35-e01f-4f7e-9f2d-cfd2090ec5e9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FastUsing5"",
-                    ""type"": ""Button"",
-                    ""id"": ""e9152b7e-d11b-425e-bb31-e2c237b97568"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FastUsing6"",
-                    ""type"": ""Button"",
-                    ""id"": ""4f403136-4b3c-4389-bbc5-e7bb60db4b2e"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FastUsing7"",
-                    ""type"": ""Button"",
-                    ""id"": ""1e675745-c576-4eb9-9c42-84591c7d0ee0"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FastUsing8"",
-                    ""type"": ""Button"",
-                    ""id"": ""c480d386-1227-4d4f-aa4c-08c3364dc62a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""FastUsing9"",
-                    ""type"": ""Button"",
-                    ""id"": ""94bb3485-b04c-4669-b97c-7f8c6bafcd0f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""CraftWindows"",
-                    ""type"": ""Button"",
-                    ""id"": ""b7112380-aadd-4076-bce2-caf7d4fea83a"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""InventoryWindows"",
-                    ""type"": ""Button"",
-                    ""id"": ""5c65c049-2dfd-4a86-ad3f-7e0135bfcbea"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -249,21 +114,76 @@ namespace Players
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Windows"",
+            ""id"": ""24943bc7-01f4-4045-a4ae-f9f678ea2aaa"",
+            ""actions"": [
+                {
+                    ""name"": ""New action"",
+                    ""type"": ""Button"",
+                    ""id"": ""eb50607a-c5aa-40db-8098-6504aae33c03"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""CloseWindows"",
+                    ""type"": ""Button"",
+                    ""id"": ""b9592ede-49fc-473a-b383-f1423995ca4c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CraftWindows"",
+                    ""type"": ""Button"",
+                    ""id"": ""77b7fa1f-4617-425a-87cb-6561effc471e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryWindows"",
+                    ""type"": ""Button"",
+                    ""id"": ""8a736115-024a-4df9-919a-0c1370f7878f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
                     ""name"": """",
-                    ""id"": ""6bb0a02f-d3b3-4ac9-8f85-ca40439d454d"",
-                    ""path"": ""<Keyboard>/0"",
+                    ""id"": ""c31dbb1a-4e90-4a31-83a6-b530019b30f4"",
+                    ""path"": """",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""FastUsing0"",
+                    ""action"": ""New action"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8ec3074e-ac60-4480-83b7-bcf4e28fc6b2"",
+                    ""id"": ""b001da54-2561-4e85-983b-91e2d6151ff5"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CloseWindows"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f5b6d96d-0e56-4233-ae86-258a5e0b0b8e"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -274,7 +194,127 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""fa100f6d-21db-466b-ba53-c52c75e3e89e"",
+                    ""id"": ""acb90a27-a1b3-462a-981e-5753b73f753a"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryWindows"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""UsingBefore"",
+            ""id"": ""4e0913e4-3d50-4a10-93be-b38986aa2445"",
+            ""actions"": [
+                {
+                    ""name"": ""FastUsing0"",
+                    ""type"": ""Button"",
+                    ""id"": ""4ce39e19-78bc-4697-9f31-d02b1cc84127"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastUsing1"",
+                    ""type"": ""Button"",
+                    ""id"": ""c97790da-ef3f-4d7b-bb8e-5137b9acc87f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastUsing2"",
+                    ""type"": ""Button"",
+                    ""id"": ""2c7941e4-9fe2-4b41-a595-7ac51300a5ab"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastUsing3"",
+                    ""type"": ""Button"",
+                    ""id"": ""856d84eb-cc82-459b-a460-9bd49383fce0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastUsing4"",
+                    ""type"": ""Button"",
+                    ""id"": ""db3e61f3-5cd1-4d20-a1a4-3a143f0b17ee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastUsing5"",
+                    ""type"": ""Button"",
+                    ""id"": ""75655ae2-8759-457e-8455-2f15568333ce"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastUsing6"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8f1d7ff-8b6d-4b6b-be0e-3d90d3ea5a76"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastUsing7"",
+                    ""type"": ""Button"",
+                    ""id"": ""d60eed6a-ed8f-4c8e-b4da-5ea65e642547"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastUsing8"",
+                    ""type"": ""Button"",
+                    ""id"": ""397c6580-8061-4f27-ae26-14c2c2c16780"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FastUsing9"",
+                    ""type"": ""Button"",
+                    ""id"": ""38216683-cd9d-4eff-8fcb-2c18722ad1cb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a91fda36-4d80-49ed-98e9-27e20fcc32f4"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastUsing0"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""95e20aaa-754c-4476-a88e-b43117925477"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -285,7 +325,7 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""8fa60ca9-a01c-4551-805e-007cb1e0fba1"",
+                    ""id"": ""5124e09f-457f-44aa-9ed8-dfeec0e286ce"",
                     ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -296,7 +336,7 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""2dbc12ef-15b1-4335-b2d2-fbe2da8ebb5b"",
+                    ""id"": ""35501626-f08c-4a95-9e34-11980f36f760"",
                     ""path"": ""<Keyboard>/3"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -307,7 +347,7 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""a07b65a8-b1e4-4d04-b76f-f7c8a0a509c3"",
+                    ""id"": ""0488e0fa-8608-42c2-83ff-856c936247e9"",
                     ""path"": ""<Keyboard>/4"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -318,7 +358,7 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""4e11e8b4-79f5-45fa-8968-2835474edcc6"",
+                    ""id"": ""5d185cf2-d5ad-4796-aab0-56f563da2415"",
                     ""path"": ""<Keyboard>/5"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -329,7 +369,7 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""2662f796-e434-4c7b-b078-7d11403e6acd"",
+                    ""id"": ""347d28e2-63c4-4cb8-bfb0-9c8788a57f19"",
                     ""path"": ""<Keyboard>/6"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -340,7 +380,7 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""201b1855-8d52-498d-a655-993b2e0a9ad8"",
+                    ""id"": ""c945cbeb-679d-4faf-b5a0-dec841cf9c04"",
                     ""path"": ""<Keyboard>/7"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -351,7 +391,7 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""1c1f15a1-4bcf-4365-96f4-6d2cadca46a4"",
+                    ""id"": ""0692aef2-bcc1-4688-b581-ee5c307f2653"",
                     ""path"": ""<Keyboard>/8"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -362,7 +402,7 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""78604e87-573f-432c-bf72-6b0a78472c09"",
+                    ""id"": ""f4f5c726-c1c9-4ce1-b895-bed79c548d3f"",
                     ""path"": ""<Keyboard>/9"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -370,32 +410,36 @@ namespace Players
                     ""action"": ""FastUsing9"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
+                }
+            ]
+        },
+        {
+            ""name"": ""UsingAfter"",
+            ""id"": ""662a335a-ef3d-44e4-ae74-14015d1ade9a"",
+            ""actions"": [
                 {
-                    ""name"": """",
-                    ""id"": ""68fa88d8-ba75-47a6-86e5-7bdecc50492b"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
+                    ""name"": ""UsingSubmit"",
+                    ""type"": ""Button"",
+                    ""id"": ""f642b445-8954-4f5b-a821-899acf6d6067"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""InventoryWindows"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e7b0d395-a9e5-430b-b2c0-5b2945f2a84d"",
-                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""UsingCancel"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""UsingCancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""45e055fb-b629-4a8e-a789-ffa26846774f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
                     ""name"": """",
-                    ""id"": ""fecaa9a3-427c-465c-b7d7-3c51c82c78be"",
+                    ""id"": ""be951f12-c0ba-499b-9195-65373082d5bc"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -406,7 +450,7 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""75733892-1f4b-4e1e-9f05-57f87a8040af"",
+                    ""id"": ""d86eace1-c925-459a-88e9-113ed92d1b28"",
                     ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -417,12 +461,12 @@ namespace Players
                 },
                 {
                     ""name"": """",
-                    ""id"": ""5ad5e2dc-236f-4d92-8eb3-878eb0127286"",
+                    ""id"": ""46927bb5-28d0-4cb0-9a7c-c2a568b07361"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""CloseWindows"",
+                    ""action"": ""UsingCancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -431,25 +475,32 @@ namespace Players
     ],
     ""controlSchemes"": []
 }");
-            // PlayerMain
-            m_PlayerMain = asset.FindActionMap("PlayerMain", throwIfNotFound: true);
-            m_PlayerMain_Movement = m_PlayerMain.FindAction("Movement", throwIfNotFound: true);
-            m_PlayerMain_CloseWindows = m_PlayerMain.FindAction("CloseWindows", throwIfNotFound: true);
-            m_PlayerMain_UsingSubmit = m_PlayerMain.FindAction("UsingSubmit", throwIfNotFound: true);
-            m_PlayerMain_UsingCancel = m_PlayerMain.FindAction("UsingCancel", throwIfNotFound: true);
-            m_PlayerMain_Look = m_PlayerMain.FindAction("Look", throwIfNotFound: true);
-            m_PlayerMain_FastUsing0 = m_PlayerMain.FindAction("FastUsing0", throwIfNotFound: true);
-            m_PlayerMain_FastUsing1 = m_PlayerMain.FindAction("FastUsing1", throwIfNotFound: true);
-            m_PlayerMain_FastUsing2 = m_PlayerMain.FindAction("FastUsing2", throwIfNotFound: true);
-            m_PlayerMain_FastUsing3 = m_PlayerMain.FindAction("FastUsing3", throwIfNotFound: true);
-            m_PlayerMain_FastUsing4 = m_PlayerMain.FindAction("FastUsing4", throwIfNotFound: true);
-            m_PlayerMain_FastUsing5 = m_PlayerMain.FindAction("FastUsing5", throwIfNotFound: true);
-            m_PlayerMain_FastUsing6 = m_PlayerMain.FindAction("FastUsing6", throwIfNotFound: true);
-            m_PlayerMain_FastUsing7 = m_PlayerMain.FindAction("FastUsing7", throwIfNotFound: true);
-            m_PlayerMain_FastUsing8 = m_PlayerMain.FindAction("FastUsing8", throwIfNotFound: true);
-            m_PlayerMain_FastUsing9 = m_PlayerMain.FindAction("FastUsing9", throwIfNotFound: true);
-            m_PlayerMain_CraftWindows = m_PlayerMain.FindAction("CraftWindows", throwIfNotFound: true);
-            m_PlayerMain_InventoryWindows = m_PlayerMain.FindAction("InventoryWindows", throwIfNotFound: true);
+            // PlayerMove
+            m_PlayerMove = asset.FindActionMap("PlayerMove", throwIfNotFound: true);
+            m_PlayerMove_Movement = m_PlayerMove.FindAction("Movement", throwIfNotFound: true);
+            m_PlayerMove_Look = m_PlayerMove.FindAction("Look", throwIfNotFound: true);
+            // Windows
+            m_Windows = asset.FindActionMap("Windows", throwIfNotFound: true);
+            m_Windows_Newaction = m_Windows.FindAction("New action", throwIfNotFound: true);
+            m_Windows_CloseWindows = m_Windows.FindAction("CloseWindows", throwIfNotFound: true);
+            m_Windows_CraftWindows = m_Windows.FindAction("CraftWindows", throwIfNotFound: true);
+            m_Windows_InventoryWindows = m_Windows.FindAction("InventoryWindows", throwIfNotFound: true);
+            // UsingBefore
+            m_UsingBefore = asset.FindActionMap("UsingBefore", throwIfNotFound: true);
+            m_UsingBefore_FastUsing0 = m_UsingBefore.FindAction("FastUsing0", throwIfNotFound: true);
+            m_UsingBefore_FastUsing1 = m_UsingBefore.FindAction("FastUsing1", throwIfNotFound: true);
+            m_UsingBefore_FastUsing2 = m_UsingBefore.FindAction("FastUsing2", throwIfNotFound: true);
+            m_UsingBefore_FastUsing3 = m_UsingBefore.FindAction("FastUsing3", throwIfNotFound: true);
+            m_UsingBefore_FastUsing4 = m_UsingBefore.FindAction("FastUsing4", throwIfNotFound: true);
+            m_UsingBefore_FastUsing5 = m_UsingBefore.FindAction("FastUsing5", throwIfNotFound: true);
+            m_UsingBefore_FastUsing6 = m_UsingBefore.FindAction("FastUsing6", throwIfNotFound: true);
+            m_UsingBefore_FastUsing7 = m_UsingBefore.FindAction("FastUsing7", throwIfNotFound: true);
+            m_UsingBefore_FastUsing8 = m_UsingBefore.FindAction("FastUsing8", throwIfNotFound: true);
+            m_UsingBefore_FastUsing9 = m_UsingBefore.FindAction("FastUsing9", throwIfNotFound: true);
+            // UsingAfter
+            m_UsingAfter = asset.FindActionMap("UsingAfter", throwIfNotFound: true);
+            m_UsingAfter_UsingSubmit = m_UsingAfter.FindAction("UsingSubmit", throwIfNotFound: true);
+            m_UsingAfter_UsingCancel = m_UsingAfter.FindAction("UsingCancel", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -506,126 +557,174 @@ namespace Players
             return asset.FindBinding(bindingMask, out action);
         }
 
-        // PlayerMain
-        private readonly InputActionMap m_PlayerMain;
-        private IPlayerMainActions m_PlayerMainActionsCallbackInterface;
-        private readonly InputAction m_PlayerMain_Movement;
-        private readonly InputAction m_PlayerMain_CloseWindows;
-        private readonly InputAction m_PlayerMain_UsingSubmit;
-        private readonly InputAction m_PlayerMain_UsingCancel;
-        private readonly InputAction m_PlayerMain_Look;
-        private readonly InputAction m_PlayerMain_FastUsing0;
-        private readonly InputAction m_PlayerMain_FastUsing1;
-        private readonly InputAction m_PlayerMain_FastUsing2;
-        private readonly InputAction m_PlayerMain_FastUsing3;
-        private readonly InputAction m_PlayerMain_FastUsing4;
-        private readonly InputAction m_PlayerMain_FastUsing5;
-        private readonly InputAction m_PlayerMain_FastUsing6;
-        private readonly InputAction m_PlayerMain_FastUsing7;
-        private readonly InputAction m_PlayerMain_FastUsing8;
-        private readonly InputAction m_PlayerMain_FastUsing9;
-        private readonly InputAction m_PlayerMain_CraftWindows;
-        private readonly InputAction m_PlayerMain_InventoryWindows;
-        public struct PlayerMainActions
+        // PlayerMove
+        private readonly InputActionMap m_PlayerMove;
+        private IPlayerMoveActions m_PlayerMoveActionsCallbackInterface;
+        private readonly InputAction m_PlayerMove_Movement;
+        private readonly InputAction m_PlayerMove_Look;
+        public struct PlayerMoveActions
         {
             private @PlayerInputActions m_Wrapper;
-            public PlayerMainActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Movement => m_Wrapper.m_PlayerMain_Movement;
-            public InputAction @CloseWindows => m_Wrapper.m_PlayerMain_CloseWindows;
-            public InputAction @UsingSubmit => m_Wrapper.m_PlayerMain_UsingSubmit;
-            public InputAction @UsingCancel => m_Wrapper.m_PlayerMain_UsingCancel;
-            public InputAction @Look => m_Wrapper.m_PlayerMain_Look;
-            public InputAction @FastUsing0 => m_Wrapper.m_PlayerMain_FastUsing0;
-            public InputAction @FastUsing1 => m_Wrapper.m_PlayerMain_FastUsing1;
-            public InputAction @FastUsing2 => m_Wrapper.m_PlayerMain_FastUsing2;
-            public InputAction @FastUsing3 => m_Wrapper.m_PlayerMain_FastUsing3;
-            public InputAction @FastUsing4 => m_Wrapper.m_PlayerMain_FastUsing4;
-            public InputAction @FastUsing5 => m_Wrapper.m_PlayerMain_FastUsing5;
-            public InputAction @FastUsing6 => m_Wrapper.m_PlayerMain_FastUsing6;
-            public InputAction @FastUsing7 => m_Wrapper.m_PlayerMain_FastUsing7;
-            public InputAction @FastUsing8 => m_Wrapper.m_PlayerMain_FastUsing8;
-            public InputAction @FastUsing9 => m_Wrapper.m_PlayerMain_FastUsing9;
-            public InputAction @CraftWindows => m_Wrapper.m_PlayerMain_CraftWindows;
-            public InputAction @InventoryWindows => m_Wrapper.m_PlayerMain_InventoryWindows;
-            public InputActionMap Get() { return m_Wrapper.m_PlayerMain; }
+            public PlayerMoveActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Movement => m_Wrapper.m_PlayerMove_Movement;
+            public InputAction @Look => m_Wrapper.m_PlayerMove_Look;
+            public InputActionMap Get() { return m_Wrapper.m_PlayerMove; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
             public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(PlayerMainActions set) { return set.Get(); }
-            public void SetCallbacks(IPlayerMainActions instance)
+            public static implicit operator InputActionMap(PlayerMoveActions set) { return set.Get(); }
+            public void SetCallbacks(IPlayerMoveActions instance)
             {
-                if (m_Wrapper.m_PlayerMainActionsCallbackInterface != null)
+                if (m_Wrapper.m_PlayerMoveActionsCallbackInterface != null)
                 {
-                    @Movement.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnMovement;
-                    @Movement.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnMovement;
-                    @Movement.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnMovement;
-                    @CloseWindows.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnCloseWindows;
-                    @CloseWindows.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnCloseWindows;
-                    @CloseWindows.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnCloseWindows;
-                    @UsingSubmit.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingSubmit;
-                    @UsingSubmit.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingSubmit;
-                    @UsingSubmit.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingSubmit;
-                    @UsingCancel.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingCancel;
-                    @UsingCancel.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingCancel;
-                    @UsingCancel.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnUsingCancel;
-                    @Look.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnLook;
-                    @Look.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnLook;
-                    @Look.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnLook;
-                    @FastUsing0.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing0;
-                    @FastUsing0.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing0;
-                    @FastUsing0.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing0;
-                    @FastUsing1.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing1;
-                    @FastUsing1.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing1;
-                    @FastUsing1.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing1;
-                    @FastUsing2.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing2;
-                    @FastUsing2.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing2;
-                    @FastUsing2.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing2;
-                    @FastUsing3.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing3;
-                    @FastUsing3.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing3;
-                    @FastUsing3.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing3;
-                    @FastUsing4.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing4;
-                    @FastUsing4.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing4;
-                    @FastUsing4.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing4;
-                    @FastUsing5.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing5;
-                    @FastUsing5.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing5;
-                    @FastUsing5.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing5;
-                    @FastUsing6.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing6;
-                    @FastUsing6.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing6;
-                    @FastUsing6.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing6;
-                    @FastUsing7.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing7;
-                    @FastUsing7.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing7;
-                    @FastUsing7.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing7;
-                    @FastUsing8.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing8;
-                    @FastUsing8.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing8;
-                    @FastUsing8.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing8;
-                    @FastUsing9.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing9;
-                    @FastUsing9.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing9;
-                    @FastUsing9.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnFastUsing9;
-                    @CraftWindows.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnCraftWindows;
-                    @CraftWindows.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnCraftWindows;
-                    @CraftWindows.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnCraftWindows;
-                    @InventoryWindows.started -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnInventoryWindows;
-                    @InventoryWindows.performed -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnInventoryWindows;
-                    @InventoryWindows.canceled -= m_Wrapper.m_PlayerMainActionsCallbackInterface.OnInventoryWindows;
+                    @Movement.started -= m_Wrapper.m_PlayerMoveActionsCallbackInterface.OnMovement;
+                    @Movement.performed -= m_Wrapper.m_PlayerMoveActionsCallbackInterface.OnMovement;
+                    @Movement.canceled -= m_Wrapper.m_PlayerMoveActionsCallbackInterface.OnMovement;
+                    @Look.started -= m_Wrapper.m_PlayerMoveActionsCallbackInterface.OnLook;
+                    @Look.performed -= m_Wrapper.m_PlayerMoveActionsCallbackInterface.OnLook;
+                    @Look.canceled -= m_Wrapper.m_PlayerMoveActionsCallbackInterface.OnLook;
                 }
-                m_Wrapper.m_PlayerMainActionsCallbackInterface = instance;
+                m_Wrapper.m_PlayerMoveActionsCallbackInterface = instance;
                 if (instance != null)
                 {
                     @Movement.started += instance.OnMovement;
                     @Movement.performed += instance.OnMovement;
                     @Movement.canceled += instance.OnMovement;
-                    @CloseWindows.started += instance.OnCloseWindows;
-                    @CloseWindows.performed += instance.OnCloseWindows;
-                    @CloseWindows.canceled += instance.OnCloseWindows;
-                    @UsingSubmit.started += instance.OnUsingSubmit;
-                    @UsingSubmit.performed += instance.OnUsingSubmit;
-                    @UsingSubmit.canceled += instance.OnUsingSubmit;
-                    @UsingCancel.started += instance.OnUsingCancel;
-                    @UsingCancel.performed += instance.OnUsingCancel;
-                    @UsingCancel.canceled += instance.OnUsingCancel;
                     @Look.started += instance.OnLook;
                     @Look.performed += instance.OnLook;
                     @Look.canceled += instance.OnLook;
+                }
+            }
+        }
+        public PlayerMoveActions @PlayerMove => new PlayerMoveActions(this);
+
+        // Windows
+        private readonly InputActionMap m_Windows;
+        private IWindowsActions m_WindowsActionsCallbackInterface;
+        private readonly InputAction m_Windows_Newaction;
+        private readonly InputAction m_Windows_CloseWindows;
+        private readonly InputAction m_Windows_CraftWindows;
+        private readonly InputAction m_Windows_InventoryWindows;
+        public struct WindowsActions
+        {
+            private @PlayerInputActions m_Wrapper;
+            public WindowsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Newaction => m_Wrapper.m_Windows_Newaction;
+            public InputAction @CloseWindows => m_Wrapper.m_Windows_CloseWindows;
+            public InputAction @CraftWindows => m_Wrapper.m_Windows_CraftWindows;
+            public InputAction @InventoryWindows => m_Wrapper.m_Windows_InventoryWindows;
+            public InputActionMap Get() { return m_Wrapper.m_Windows; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(WindowsActions set) { return set.Get(); }
+            public void SetCallbacks(IWindowsActions instance)
+            {
+                if (m_Wrapper.m_WindowsActionsCallbackInterface != null)
+                {
+                    @Newaction.started -= m_Wrapper.m_WindowsActionsCallbackInterface.OnNewaction;
+                    @Newaction.performed -= m_Wrapper.m_WindowsActionsCallbackInterface.OnNewaction;
+                    @Newaction.canceled -= m_Wrapper.m_WindowsActionsCallbackInterface.OnNewaction;
+                    @CloseWindows.started -= m_Wrapper.m_WindowsActionsCallbackInterface.OnCloseWindows;
+                    @CloseWindows.performed -= m_Wrapper.m_WindowsActionsCallbackInterface.OnCloseWindows;
+                    @CloseWindows.canceled -= m_Wrapper.m_WindowsActionsCallbackInterface.OnCloseWindows;
+                    @CraftWindows.started -= m_Wrapper.m_WindowsActionsCallbackInterface.OnCraftWindows;
+                    @CraftWindows.performed -= m_Wrapper.m_WindowsActionsCallbackInterface.OnCraftWindows;
+                    @CraftWindows.canceled -= m_Wrapper.m_WindowsActionsCallbackInterface.OnCraftWindows;
+                    @InventoryWindows.started -= m_Wrapper.m_WindowsActionsCallbackInterface.OnInventoryWindows;
+                    @InventoryWindows.performed -= m_Wrapper.m_WindowsActionsCallbackInterface.OnInventoryWindows;
+                    @InventoryWindows.canceled -= m_Wrapper.m_WindowsActionsCallbackInterface.OnInventoryWindows;
+                }
+                m_Wrapper.m_WindowsActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Newaction.started += instance.OnNewaction;
+                    @Newaction.performed += instance.OnNewaction;
+                    @Newaction.canceled += instance.OnNewaction;
+                    @CloseWindows.started += instance.OnCloseWindows;
+                    @CloseWindows.performed += instance.OnCloseWindows;
+                    @CloseWindows.canceled += instance.OnCloseWindows;
+                    @CraftWindows.started += instance.OnCraftWindows;
+                    @CraftWindows.performed += instance.OnCraftWindows;
+                    @CraftWindows.canceled += instance.OnCraftWindows;
+                    @InventoryWindows.started += instance.OnInventoryWindows;
+                    @InventoryWindows.performed += instance.OnInventoryWindows;
+                    @InventoryWindows.canceled += instance.OnInventoryWindows;
+                }
+            }
+        }
+        public WindowsActions @Windows => new WindowsActions(this);
+
+        // UsingBefore
+        private readonly InputActionMap m_UsingBefore;
+        private IUsingBeforeActions m_UsingBeforeActionsCallbackInterface;
+        private readonly InputAction m_UsingBefore_FastUsing0;
+        private readonly InputAction m_UsingBefore_FastUsing1;
+        private readonly InputAction m_UsingBefore_FastUsing2;
+        private readonly InputAction m_UsingBefore_FastUsing3;
+        private readonly InputAction m_UsingBefore_FastUsing4;
+        private readonly InputAction m_UsingBefore_FastUsing5;
+        private readonly InputAction m_UsingBefore_FastUsing6;
+        private readonly InputAction m_UsingBefore_FastUsing7;
+        private readonly InputAction m_UsingBefore_FastUsing8;
+        private readonly InputAction m_UsingBefore_FastUsing9;
+        public struct UsingBeforeActions
+        {
+            private @PlayerInputActions m_Wrapper;
+            public UsingBeforeActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @FastUsing0 => m_Wrapper.m_UsingBefore_FastUsing0;
+            public InputAction @FastUsing1 => m_Wrapper.m_UsingBefore_FastUsing1;
+            public InputAction @FastUsing2 => m_Wrapper.m_UsingBefore_FastUsing2;
+            public InputAction @FastUsing3 => m_Wrapper.m_UsingBefore_FastUsing3;
+            public InputAction @FastUsing4 => m_Wrapper.m_UsingBefore_FastUsing4;
+            public InputAction @FastUsing5 => m_Wrapper.m_UsingBefore_FastUsing5;
+            public InputAction @FastUsing6 => m_Wrapper.m_UsingBefore_FastUsing6;
+            public InputAction @FastUsing7 => m_Wrapper.m_UsingBefore_FastUsing7;
+            public InputAction @FastUsing8 => m_Wrapper.m_UsingBefore_FastUsing8;
+            public InputAction @FastUsing9 => m_Wrapper.m_UsingBefore_FastUsing9;
+            public InputActionMap Get() { return m_Wrapper.m_UsingBefore; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UsingBeforeActions set) { return set.Get(); }
+            public void SetCallbacks(IUsingBeforeActions instance)
+            {
+                if (m_Wrapper.m_UsingBeforeActionsCallbackInterface != null)
+                {
+                    @FastUsing0.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing0;
+                    @FastUsing0.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing0;
+                    @FastUsing0.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing0;
+                    @FastUsing1.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing1;
+                    @FastUsing1.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing1;
+                    @FastUsing1.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing1;
+                    @FastUsing2.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing2;
+                    @FastUsing2.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing2;
+                    @FastUsing2.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing2;
+                    @FastUsing3.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing3;
+                    @FastUsing3.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing3;
+                    @FastUsing3.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing3;
+                    @FastUsing4.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing4;
+                    @FastUsing4.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing4;
+                    @FastUsing4.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing4;
+                    @FastUsing5.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing5;
+                    @FastUsing5.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing5;
+                    @FastUsing5.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing5;
+                    @FastUsing6.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing6;
+                    @FastUsing6.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing6;
+                    @FastUsing6.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing6;
+                    @FastUsing7.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing7;
+                    @FastUsing7.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing7;
+                    @FastUsing7.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing7;
+                    @FastUsing8.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing8;
+                    @FastUsing8.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing8;
+                    @FastUsing8.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing8;
+                    @FastUsing9.started -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing9;
+                    @FastUsing9.performed -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing9;
+                    @FastUsing9.canceled -= m_Wrapper.m_UsingBeforeActionsCallbackInterface.OnFastUsing9;
+                }
+                m_Wrapper.m_UsingBeforeActionsCallbackInterface = instance;
+                if (instance != null)
+                {
                     @FastUsing0.started += instance.OnFastUsing0;
                     @FastUsing0.performed += instance.OnFastUsing0;
                     @FastUsing0.canceled += instance.OnFastUsing0;
@@ -656,23 +755,65 @@ namespace Players
                     @FastUsing9.started += instance.OnFastUsing9;
                     @FastUsing9.performed += instance.OnFastUsing9;
                     @FastUsing9.canceled += instance.OnFastUsing9;
-                    @CraftWindows.started += instance.OnCraftWindows;
-                    @CraftWindows.performed += instance.OnCraftWindows;
-                    @CraftWindows.canceled += instance.OnCraftWindows;
-                    @InventoryWindows.started += instance.OnInventoryWindows;
-                    @InventoryWindows.performed += instance.OnInventoryWindows;
-                    @InventoryWindows.canceled += instance.OnInventoryWindows;
                 }
             }
         }
-        public PlayerMainActions @PlayerMain => new PlayerMainActions(this);
-        public interface IPlayerMainActions
+        public UsingBeforeActions @UsingBefore => new UsingBeforeActions(this);
+
+        // UsingAfter
+        private readonly InputActionMap m_UsingAfter;
+        private IUsingAfterActions m_UsingAfterActionsCallbackInterface;
+        private readonly InputAction m_UsingAfter_UsingSubmit;
+        private readonly InputAction m_UsingAfter_UsingCancel;
+        public struct UsingAfterActions
+        {
+            private @PlayerInputActions m_Wrapper;
+            public UsingAfterActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+            public InputAction @UsingSubmit => m_Wrapper.m_UsingAfter_UsingSubmit;
+            public InputAction @UsingCancel => m_Wrapper.m_UsingAfter_UsingCancel;
+            public InputActionMap Get() { return m_Wrapper.m_UsingAfter; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(UsingAfterActions set) { return set.Get(); }
+            public void SetCallbacks(IUsingAfterActions instance)
+            {
+                if (m_Wrapper.m_UsingAfterActionsCallbackInterface != null)
+                {
+                    @UsingSubmit.started -= m_Wrapper.m_UsingAfterActionsCallbackInterface.OnUsingSubmit;
+                    @UsingSubmit.performed -= m_Wrapper.m_UsingAfterActionsCallbackInterface.OnUsingSubmit;
+                    @UsingSubmit.canceled -= m_Wrapper.m_UsingAfterActionsCallbackInterface.OnUsingSubmit;
+                    @UsingCancel.started -= m_Wrapper.m_UsingAfterActionsCallbackInterface.OnUsingCancel;
+                    @UsingCancel.performed -= m_Wrapper.m_UsingAfterActionsCallbackInterface.OnUsingCancel;
+                    @UsingCancel.canceled -= m_Wrapper.m_UsingAfterActionsCallbackInterface.OnUsingCancel;
+                }
+                m_Wrapper.m_UsingAfterActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @UsingSubmit.started += instance.OnUsingSubmit;
+                    @UsingSubmit.performed += instance.OnUsingSubmit;
+                    @UsingSubmit.canceled += instance.OnUsingSubmit;
+                    @UsingCancel.started += instance.OnUsingCancel;
+                    @UsingCancel.performed += instance.OnUsingCancel;
+                    @UsingCancel.canceled += instance.OnUsingCancel;
+                }
+            }
+        }
+        public UsingAfterActions @UsingAfter => new UsingAfterActions(this);
+        public interface IPlayerMoveActions
         {
             void OnMovement(InputAction.CallbackContext context);
-            void OnCloseWindows(InputAction.CallbackContext context);
-            void OnUsingSubmit(InputAction.CallbackContext context);
-            void OnUsingCancel(InputAction.CallbackContext context);
             void OnLook(InputAction.CallbackContext context);
+        }
+        public interface IWindowsActions
+        {
+            void OnNewaction(InputAction.CallbackContext context);
+            void OnCloseWindows(InputAction.CallbackContext context);
+            void OnCraftWindows(InputAction.CallbackContext context);
+            void OnInventoryWindows(InputAction.CallbackContext context);
+        }
+        public interface IUsingBeforeActions
+        {
             void OnFastUsing0(InputAction.CallbackContext context);
             void OnFastUsing1(InputAction.CallbackContext context);
             void OnFastUsing2(InputAction.CallbackContext context);
@@ -683,8 +824,11 @@ namespace Players
             void OnFastUsing7(InputAction.CallbackContext context);
             void OnFastUsing8(InputAction.CallbackContext context);
             void OnFastUsing9(InputAction.CallbackContext context);
-            void OnCraftWindows(InputAction.CallbackContext context);
-            void OnInventoryWindows(InputAction.CallbackContext context);
+        }
+        public interface IUsingAfterActions
+        {
+            void OnUsingSubmit(InputAction.CallbackContext context);
+            void OnUsingCancel(InputAction.CallbackContext context);
         }
     }
 }

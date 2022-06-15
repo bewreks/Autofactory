@@ -69,6 +69,8 @@ namespace Players
 				model.SelectedPack     = inventory.GetPacks(type);
 				model.InstantiablePack = instantiateManager.InstantiatePreview();
 				Factory.ReturnItem(gameState);
+				playerInputController.UsingBeforeActions.Disable();
+				playerInputController.UsingAfterActions.Enable();
 				return Factory.GetFactoryItem<SelectedItemGameState>(diContainer);
 			}
 			else

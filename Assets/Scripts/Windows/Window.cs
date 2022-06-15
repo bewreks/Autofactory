@@ -21,7 +21,7 @@ namespace Windows
 		public void Open()
 		{
 			if (_playerInputController != null)
-				_playerInputController.Player.CloseWindows.performed += CloseWindow;
+				_playerInputController.WindowsActions.CloseWindows.performed += CloseWindow;
 			_state.SetValueAndForceNotify(WindowStateEnum.OPENING);
 			Opening();
 		}
@@ -29,7 +29,7 @@ namespace Windows
 		private void CloseWindow(InputAction.CallbackContext obj)
 		{
 			if (_playerInputController != null)
-				_playerInputController.Player.CloseWindows.performed -= CloseWindow;
+				_playerInputController.WindowsActions.CloseWindows.performed -= CloseWindow;
 			Close();
 		}
 

@@ -20,7 +20,7 @@ namespace Game.States
 
 		public IGameState OnUpdate(GameModel model, DiContainer container)
 		{
-			if (_playerInputController.Player.FastUsing1.WasPressedThisFrame())
+			if (_playerInputController.UsingBeforeActions.FastUsing1.WasPressedThisFrame())
 			{
 				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.BASE_ELECTRIC_POLE,
 				                                          model,
@@ -30,7 +30,7 @@ namespace Game.States
 				                                          _playerInputController);
 			}
 
-			if (_playerInputController.Player.FastUsing2.WasPressedThisFrame())
+			if (_playerInputController.UsingBeforeActions.FastUsing2.WasPressedThisFrame())
 			{
 				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.GENERATOR,
 				                                          model,
@@ -40,7 +40,7 @@ namespace Game.States
 				                                          _playerInputController);
 			}
 
-			if (_playerInputController.Player.FastUsing3.WasPressedThisFrame())
+			if (_playerInputController.UsingBeforeActions.FastUsing3.WasPressedThisFrame())
 			{
 				return PlayerInputHelper.TryToInstantiate(InventoryObjectsTypesEnum.TEST_OBJECT,
 				                                          model,
@@ -50,14 +50,14 @@ namespace Game.States
 				                                          _playerInputController);
 			}
 
-			if (_playerInputController.Player.InventoryWindows.WasPressedThisFrame())
+			if (_playerInputController.WindowsActions.InventoryWindows.WasPressedThisFrame())
 			{
 				_windowsManager.OpenWindow<InventoryWindow>();
 				Factory.ReturnItem(this);
 				return Factory.GetFactoryItem<WindowGameState>(_diContainer);
 			}
 
-			if (_playerInputController.Player.CraftWindows.WasPressedThisFrame())
+			if (_playerInputController.WindowsActions.CraftWindows.WasPressedThisFrame())
 			{
 				_windowsManager.OpenWindow<CraftingWindow>();
 				Factory.ReturnItem(this);

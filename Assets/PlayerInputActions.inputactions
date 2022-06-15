@@ -2,7 +2,7 @@
     "name": "PlayerInputActions",
     "maps": [
         {
-            "name": "PlayerMain",
+            "name": "PlayerMove",
             "id": "d2239dd4-b303-40d6-9433-310177f0543a",
             "actions": [
                 {
@@ -15,33 +15,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "CloseWindows",
-                    "type": "Button",
-                    "id": "81654118-921a-4334-aa58-020d2beaff2f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UsingSubmit",
-                    "type": "Button",
-                    "id": "9639c585-61c6-4712-8097-61208b02359d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "UsingCancel",
-                    "type": "Button",
-                    "id": "f7386fb8-2230-445f-bf74-600b37274b29",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Look",
                     "type": "Value",
                     "id": "9b0ee411-d3d6-4eac-b43f-ba381a4ebeb6",
@@ -49,114 +22,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "FastUsing0",
-                    "type": "Button",
-                    "id": "7ec35eb9-158c-47a5-8ea0-4813c9c36a83",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FastUsing1",
-                    "type": "Button",
-                    "id": "d4f73ef6-c53b-4574-9199-97396feffe99",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FastUsing2",
-                    "type": "Button",
-                    "id": "6aec4d86-10c8-43c5-9017-d87b15808f68",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FastUsing3",
-                    "type": "Button",
-                    "id": "e6298ae5-8186-4c84-a4f8-4a979882de66",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FastUsing4",
-                    "type": "Button",
-                    "id": "a2e94c35-e01f-4f7e-9f2d-cfd2090ec5e9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FastUsing5",
-                    "type": "Button",
-                    "id": "e9152b7e-d11b-425e-bb31-e2c237b97568",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FastUsing6",
-                    "type": "Button",
-                    "id": "4f403136-4b3c-4389-bbc5-e7bb60db4b2e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FastUsing7",
-                    "type": "Button",
-                    "id": "1e675745-c576-4eb9-9c42-84591c7d0ee0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FastUsing8",
-                    "type": "Button",
-                    "id": "c480d386-1227-4d4f-aa4c-08c3364dc62a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "FastUsing9",
-                    "type": "Button",
-                    "id": "94bb3485-b04c-4669-b97c-7f8c6bafcd0f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "CraftWindows",
-                    "type": "Button",
-                    "id": "b7112380-aadd-4076-bce2-caf7d4fea83a",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "InventoryWindows",
-                    "type": "Button",
-                    "id": "5c65c049-2dfd-4a86-ad3f-7e0135bfcbea",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -225,21 +90,76 @@
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Windows",
+            "id": "24943bc7-01f4-4045-a4ae-f9f678ea2aaa",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "eb50607a-c5aa-40db-8098-6504aae33c03",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
+                    "name": "CloseWindows",
+                    "type": "Button",
+                    "id": "b9592ede-49fc-473a-b383-f1423995ca4c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CraftWindows",
+                    "type": "Button",
+                    "id": "77b7fa1f-4617-425a-87cb-6561effc471e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "InventoryWindows",
+                    "type": "Button",
+                    "id": "8a736115-024a-4df9-919a-0c1370f7878f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
                     "name": "",
-                    "id": "6bb0a02f-d3b3-4ac9-8f85-ca40439d454d",
-                    "path": "<Keyboard>/0",
+                    "id": "c31dbb1a-4e90-4a31-83a6-b530019b30f4",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "FastUsing0",
+                    "action": "New action",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "8ec3074e-ac60-4480-83b7-bcf4e28fc6b2",
+                    "id": "b001da54-2561-4e85-983b-91e2d6151ff5",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CloseWindows",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f5b6d96d-0e56-4233-ae86-258a5e0b0b8e",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
@@ -250,7 +170,127 @@
                 },
                 {
                     "name": "",
-                    "id": "fa100f6d-21db-466b-ba53-c52c75e3e89e",
+                    "id": "acb90a27-a1b3-462a-981e-5753b73f753a",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InventoryWindows",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "UsingBefore",
+            "id": "4e0913e4-3d50-4a10-93be-b38986aa2445",
+            "actions": [
+                {
+                    "name": "FastUsing0",
+                    "type": "Button",
+                    "id": "4ce39e19-78bc-4697-9f31-d02b1cc84127",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastUsing1",
+                    "type": "Button",
+                    "id": "c97790da-ef3f-4d7b-bb8e-5137b9acc87f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastUsing2",
+                    "type": "Button",
+                    "id": "2c7941e4-9fe2-4b41-a595-7ac51300a5ab",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastUsing3",
+                    "type": "Button",
+                    "id": "856d84eb-cc82-459b-a460-9bd49383fce0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastUsing4",
+                    "type": "Button",
+                    "id": "db3e61f3-5cd1-4d20-a1a4-3a143f0b17ee",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastUsing5",
+                    "type": "Button",
+                    "id": "75655ae2-8759-457e-8455-2f15568333ce",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastUsing6",
+                    "type": "Button",
+                    "id": "f8f1d7ff-8b6d-4b6b-be0e-3d90d3ea5a76",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastUsing7",
+                    "type": "Button",
+                    "id": "d60eed6a-ed8f-4c8e-b4da-5ea65e642547",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastUsing8",
+                    "type": "Button",
+                    "id": "397c6580-8061-4f27-ae26-14c2c2c16780",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "FastUsing9",
+                    "type": "Button",
+                    "id": "38216683-cd9d-4eff-8fcb-2c18722ad1cb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a91fda36-4d80-49ed-98e9-27e20fcc32f4",
+                    "path": "<Keyboard>/0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FastUsing0",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "95e20aaa-754c-4476-a88e-b43117925477",
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
@@ -261,7 +301,7 @@
                 },
                 {
                     "name": "",
-                    "id": "8fa60ca9-a01c-4551-805e-007cb1e0fba1",
+                    "id": "5124e09f-457f-44aa-9ed8-dfeec0e286ce",
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
@@ -272,7 +312,7 @@
                 },
                 {
                     "name": "",
-                    "id": "2dbc12ef-15b1-4335-b2d2-fbe2da8ebb5b",
+                    "id": "35501626-f08c-4a95-9e34-11980f36f760",
                     "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
@@ -283,7 +323,7 @@
                 },
                 {
                     "name": "",
-                    "id": "a07b65a8-b1e4-4d04-b76f-f7c8a0a509c3",
+                    "id": "0488e0fa-8608-42c2-83ff-856c936247e9",
                     "path": "<Keyboard>/4",
                     "interactions": "",
                     "processors": "",
@@ -294,7 +334,7 @@
                 },
                 {
                     "name": "",
-                    "id": "4e11e8b4-79f5-45fa-8968-2835474edcc6",
+                    "id": "5d185cf2-d5ad-4796-aab0-56f563da2415",
                     "path": "<Keyboard>/5",
                     "interactions": "",
                     "processors": "",
@@ -305,7 +345,7 @@
                 },
                 {
                     "name": "",
-                    "id": "2662f796-e434-4c7b-b078-7d11403e6acd",
+                    "id": "347d28e2-63c4-4cb8-bfb0-9c8788a57f19",
                     "path": "<Keyboard>/6",
                     "interactions": "",
                     "processors": "",
@@ -316,7 +356,7 @@
                 },
                 {
                     "name": "",
-                    "id": "201b1855-8d52-498d-a655-993b2e0a9ad8",
+                    "id": "c945cbeb-679d-4faf-b5a0-dec841cf9c04",
                     "path": "<Keyboard>/7",
                     "interactions": "",
                     "processors": "",
@@ -327,7 +367,7 @@
                 },
                 {
                     "name": "",
-                    "id": "1c1f15a1-4bcf-4365-96f4-6d2cadca46a4",
+                    "id": "0692aef2-bcc1-4688-b581-ee5c307f2653",
                     "path": "<Keyboard>/8",
                     "interactions": "",
                     "processors": "",
@@ -338,7 +378,7 @@
                 },
                 {
                     "name": "",
-                    "id": "78604e87-573f-432c-bf72-6b0a78472c09",
+                    "id": "f4f5c726-c1c9-4ce1-b895-bed79c548d3f",
                     "path": "<Keyboard>/9",
                     "interactions": "",
                     "processors": "",
@@ -346,32 +386,36 @@
                     "action": "FastUsing9",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
+                }
+            ]
+        },
+        {
+            "name": "UsingAfter",
+            "id": "662a335a-ef3d-44e4-ae74-14015d1ade9a",
+            "actions": [
                 {
-                    "name": "",
-                    "id": "68fa88d8-ba75-47a6-86e5-7bdecc50492b",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
+                    "name": "UsingSubmit",
+                    "type": "Button",
+                    "id": "f642b445-8954-4f5b-a821-899acf6d6067",
+                    "expectedControlType": "Button",
                     "processors": "",
-                    "groups": "",
-                    "action": "InventoryWindows",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e7b0d395-a9e5-430b-b2c0-5b2945f2a84d",
-                    "path": "<Keyboard>/escape",
                     "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "UsingCancel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
+                    "initialStateCheck": false
                 },
                 {
+                    "name": "UsingCancel",
+                    "type": "Button",
+                    "id": "45e055fb-b629-4a8e-a789-ffa26846774f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
                     "name": "",
-                    "id": "fecaa9a3-427c-465c-b7d7-3c51c82c78be",
+                    "id": "be951f12-c0ba-499b-9195-65373082d5bc",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -382,7 +426,7 @@
                 },
                 {
                     "name": "",
-                    "id": "75733892-1f4b-4e1e-9f05-57f87a8040af",
+                    "id": "d86eace1-c925-459a-88e9-113ed92d1b28",
                     "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
@@ -393,12 +437,12 @@
                 },
                 {
                     "name": "",
-                    "id": "5ad5e2dc-236f-4d92-8eb3-878eb0127286",
+                    "id": "46927bb5-28d0-4cb0-9a7c-c2a568b07361",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "CloseWindows",
+                    "action": "UsingCancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

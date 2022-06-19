@@ -11,9 +11,8 @@ namespace Windows
 		[Inject] private WindowsSettings _windowsSettings;
 		[Inject] private DiContainer     _container;
 
-		private Dictionary<Type, IWindow> _windowsToOpen = new Dictionary<Type, IWindow>();
-		private Deque<IWindow>            _windowsQueue  = new Deque<IWindow>();
-		private IWindow                   _activeWindow;
+		private WindowQueue _windowsQueue = new WindowQueue();
+		private IWindow     _activeWindow;
 
 		public IWindow OpenWindow<T>(Window.WindowData data, IWindowManager.WindowOpenOption option)
 			where T : WindowView
@@ -29,44 +28,24 @@ namespace Windows
 			switch (option)
 			{
 				case IWindowManager.WindowOpenOption.Normal:
-					if (!_windowsToOpen.ContainsKey(typeof(T)))
-					{
-						_windowsToOpen.Add(typeof(T), windowToOpen);
-						windowToOpen.InQueue(true);
-						_windowsQueue.AddLast(windowToOpen);
-					}
+					_windowsQueue.AddLast(windowToOpen);
 					break;
 				case IWindowManager.WindowOpenOption.Unique:
 					if (_activeWindow != windowToOpen)
 					{
 						if (_activeWindow != null)
 						{
-							windowToOpen.InQueue(true);
 							_windowsQueue.AddFirst(_activeWindow);
 						}
 
-						if (!_windowsToOpen.ContainsKey(typeof(T)))
-						{
-							_windowsToOpen.Add(typeof(T), windowToOpen);
-						}
-
-						if (!windowToOpen.IsInQueue)
-						{
-							windowToOpen.InQueue(true);
-							_windowsQueue.AddFirst(windowToOpen);
-						}
+						_windowsQueue.AddFirst(windowToOpen);
 
 						_activeWindow?.Hide();
 					}
 
 					break;
 				case IWindowManager.WindowOpenOption.QueueFirst:
-					if (!_windowsToOpen.ContainsKey(typeof(T)))
-					{
-						_windowsToOpen.Add(typeof(T), windowToOpen);
-						windowToOpen.InQueue(true);
-						_windowsQueue.AddFirst(windowToOpen);
-					}
+					_windowsQueue.AddFirst(windowToOpen);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(option), option, null);
@@ -90,7 +69,7 @@ namespace Windows
 			_activeWindow.OnClose -= OnCloseWindow;
 			_activeWindow.OnHide  -= OnHideWindow;
 			_activeWindow         =  null;
-			_windowsToOpen.Remove(window.WindowType);
+			_windowsQueue.RemoveFirst();
 			OpenNextInTheQueue();
 		}
 
@@ -112,8 +91,7 @@ namespace Windows
 				return;
 			}
 
-			_activeWindow         =  _windowsQueue.RemoveFirst();
-			_activeWindow.InQueue(false);
+			_activeWindow = _windowsQueue.First;
 			_activeWindow.OnClose += OnCloseWindow;
 			_activeWindow.OnHide  += OnHideWindow;
 			_activeWindow.Open();
@@ -136,10 +114,6 @@ namespace Windows
 
 		public void Dispose()
 		{
-			foreach (var window in _windowsQueue)
-			{
-				window.InQueue(false);
-			}
 			_windowsQueue.Clear();
 
 			_activeWindow?.Close();

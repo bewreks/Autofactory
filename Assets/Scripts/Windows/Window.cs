@@ -26,7 +26,7 @@ namespace Windows
 		public event Action<IWindow> OnHide;
 
 		public WindowData Data       { get; private set; }
-		public bool       IsInQueue  { get; private set; }
+		
 		public Type       WindowType => viewPrefab.GetType();
 
 		public void Initialize(WindowData data, DiContainer container)
@@ -67,11 +67,6 @@ namespace Windows
 			_view.Hiding();
 		}
 
-		public void InQueue(bool value)
-		{
-			IsInQueue = value;
-		}
-
 		private void Opened()
 		{
 			_state.SetValueAndForceNotify(WindowStateEnum.OPENED);
@@ -98,8 +93,9 @@ namespace Windows
 			_view.OnClosed -= Closed;
 			_view.OnHided  -= Hided;
 			_view.OnOpened -= Opened;
-			Debug.Log($"{_view.name} destroyed");
+			Debug.Log($"{_view.name} destroying");
 			Destroy(_view.gameObject);
+			Debug.Log($"{_view.name} destroyed");
 		}
 
 #if UNITY_INCLUDE_TESTS

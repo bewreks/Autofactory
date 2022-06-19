@@ -75,7 +75,7 @@ namespace Helpers
 		{
 			if (_count == 0)
 			{
-				throw new InvalidOperationException();
+				return null;
 			}
 			
 			var output = _head.Data;

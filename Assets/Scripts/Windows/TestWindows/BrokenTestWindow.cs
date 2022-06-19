@@ -1,13 +1,18 @@
 ﻿namespace Windows.TestWindows
 {
-	public class BrokenTestWindow : Window
+	public class BrokenTestWindow : WindowView
 	{
-		protected override void Opening()
+		public override void Opening()
 		{
 			
 		}
 
-		protected override void Closing()
+		public override void Closing()
+		{
+			
+		}
+
+		public override void Hiding()
 		{
 			
 		}

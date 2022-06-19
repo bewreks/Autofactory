@@ -1,4 +1,5 @@
-﻿using Windows.CraftingWindow;
+﻿using Windows;
+using Windows.CraftingWindow;
 using Windows.InventoryWindow;
 using Factories;
 using Installers;
@@ -52,16 +53,26 @@ namespace Game.States
 
 			if (_playerInputController.WindowsActions.InventoryWindows.WasPressedThisFrame())
 			{
-				_windowsManager.OpenWindow<InventoryWindow>();
-				Factory.ReturnItem(this);
-				return Factory.GetFactoryItem<WindowGameState>(_diContainer);
+				// if (_windowsManager.IsOpened<InventoryWindow>())
+				// {
+				// 	_windowsManager.CloseWindow<InventoryWindow>();
+				// }
+				// else
+				{
+					_windowsManager.OpenWindow<InventoryWindow>(IWindowManager.WindowOpenOption.Unique);
+				}
 			}
 
 			if (_playerInputController.WindowsActions.CraftWindows.WasPressedThisFrame())
 			{
-				_windowsManager.OpenWindow<CraftingWindow>();
-				Factory.ReturnItem(this);
-				return Factory.GetFactoryItem<WindowGameState>(_diContainer);
+				// if (_windowsManager.IsOpened<CraftingWindowOld>())
+				// {
+				// 	_windowsManager.CloseWindow<CraftingWindowOld>();
+				// }
+				// else
+				// {
+					_windowsManager.OpenWindow<CraftingWindow>(IWindowManager.WindowOpenOption.Unique);
+				// }
 			}
 
 			return this;

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows;
-using ModestTree;
 using UnityEngine;
 using Zenject;
 
@@ -20,68 +19,18 @@ namespace Installers
 		}
 	}
 
-	public class WindowsManager : IDisposable
-	{
-		[Inject] private WindowsSettings _windowsSettings;
-		[Inject] private DiContainer     _container;
-
-		private Dictionary<Type, Window> _openedWindows = new Dictionary<Type, Window>();
-
-		public T OpenWindow<T>()
-			where T : Window
-		{
-			if (IsOpened<T>()) return null;
-			
-			var windowPrefab = _windowsSettings.GetWindow<T>();
-			if (windowPrefab != null)
-			{
-				var window = _container.InstantiatePrefab(windowPrefab).GetComponent<T>();
-				window.OnClose += _ =>
-				{
-					_openedWindows.Remove(_.GetType());
-				};
-				window.Open();
-				_openedWindows.Add(window.GetType(), window);
-				return window;
-			}
-			else
-			{
-				return null;
-			}
-		}
-
-		public bool IsOpened<T>()
-		{
-			return _openedWindows.ContainsKey(typeof(T));
-		}
-
-		public bool IsOpened()
-		{
-			return !_openedWindows.IsEmpty();
-		}
-
-		public void Dispose()
-		{
-			foreach (var window in _openedWindows.Values.ToArray())
-			{
-				window.Close();
-			}
-			_openedWindows.Clear();
-		}
-	}
-
 	[Serializable]
 	public class WindowsSettings
 	{
 		[SerializeField] private List<Window> _windows = new List<Window>();
 
-		private Dictionary<Type, Window> _windowsMap;
+		private Dictionary<Type, IWindow> _windowsMap;
 
 		public bool Prepare()
 		{
 			try
 			{
-				_windowsMap = _windows.ToDictionary(window => window.GetType(), window => window);
+				_windowsMap = _windows.ToDictionary(window => window.ViewPrefab.GetType(), window => (IWindow)window);
 			}
 			catch (Exception)
 			{
@@ -91,22 +40,22 @@ namespace Installers
 			return true;
 		}
 
-		public Window GetWindow<T>()
+		public IWindow GetWindow<T>()
 		{
 			return GetWindow(typeof(T));
 		}
 
-		private Window GetWindow(Type type)
+		private IWindow GetWindow(Type type)
 		{
 			if (_windowsMap == null) return null;
-			
+
 			_windowsMap.TryGetValue(type, out var window);
 			return window;
 		}
-		
+
 #if UNITY_INCLUDE_TESTS
-		public List<Window>             Windows    => _windows;
-		public Dictionary<Type, Window> WindowsMap => _windowsMap;
+		public List<Window>              Windows    => _windows;
+		public Dictionary<Type, IWindow> WindowsMap => _windowsMap;
 #endif
 	}
 

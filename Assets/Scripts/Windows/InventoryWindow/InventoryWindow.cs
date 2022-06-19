@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Windows.InventoryWindow
 {
-	public class InventoryWindow : Window
+	public class InventoryWindow : WindowView
 	{
 		[SerializeField] private InventoryPackView inventoryPackPrefab;
 		[SerializeField] private Button            closeButton;
@@ -18,7 +18,7 @@ namespace Windows.InventoryWindow
 
 		private List<InventoryPackView> _packViews = new List<InventoryPackView>();
 
-		protected override void Opening()
+		public override void Opening()
 		{
 			var inventoryPacks = _gameModel.PlayerModel.Inventory.GetPacks();
 			inventoryPackPrefab.gameObject.SetActive(true);
@@ -35,15 +35,22 @@ namespace Windows.InventoryWindow
 
 			inventoryPackPrefab.gameObject.SetActive(false);
 
-			closeButton.onClick.AddListener(Close);
-			Opened();
+			closeButton.onClick.AddListener(CastOnClose);
+			CastOnOpened();
 		}
 
-		protected override void Closing()
+		public override void Closing()
 		{
 			_packViews.ForEach(view => view.Dispose());
 			closeButton.onClick.RemoveAllListeners();
-			Closed();
+			CastOnClosed();
+		}
+
+		public override void Hiding()
+		{
+			_packViews.ForEach(view => view.Dispose());
+			closeButton.onClick.RemoveAllListeners();
+			CastOnHided();
 		}
 	}
 }

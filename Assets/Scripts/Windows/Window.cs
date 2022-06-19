@@ -1,6 +1,5 @@
 ﻿using System;
 using Installers;
-using Players;
 using Players.Interfaces;
 using UniRx;
 using UnityEngine;
@@ -9,21 +8,44 @@ using Zenject;
 
 namespace Windows
 {
-	public abstract class Window : MonoBehaviour
+	[CreateAssetMenu(fileName = "Window", menuName = "Models/Windows/Window", order = 0)]
+	public sealed class Window : ScriptableObject, IWindow
 	{
-		[Inject] protected IPlayerInputController _playerInputController;
-		
-		public event Action<Window> OnClose;
+		[SerializeField] private WindowView viewPrefab;
+
+		[Inject] private IPlayerInputController _playerInputController;
+		[Inject] private DiContainer            _diContainer;
 
 		private readonly ReactiveProperty<WindowStateEnum>
 			_state = new ReactiveProperty<WindowStateEnum>(WindowStateEnum.CLOSED);
+
+		private WindowView _view;
+
+		public event Action<IWindow> OnOpen;
+		public event Action<IWindow> OnClose;
+		public event Action<IWindow> OnHide;
+
+		public WindowView ViewPrefab => viewPrefab;
+		public WindowData Data       { get; private set; }
+		public bool       IsInQueue  { get; private set; }
+
+		public void Initialize(WindowData data, DiContainer container)
+		{
+			container.Inject(this);
+			Data = data;
+		}
 
 		public void Open()
 		{
 			if (_playerInputController != null)
 				_playerInputController.WindowsActions.CloseWindows.performed += CloseWindow;
 			_state.SetValueAndForceNotify(WindowStateEnum.OPENING);
-			Opening();
+			_view          =  _diContainer.InstantiatePrefabForComponent<WindowView>(viewPrefab);
+			_view.OnClose  += Close;
+			_view.OnClosed += Closed;
+			_view.OnHided  += Hided;
+			_view.OnOpened += Opened;
+			_view.Opening();
 		}
 
 		private void CloseWindow(InputAction.CallbackContext obj)
@@ -36,26 +58,55 @@ namespace Windows
 		public void Close()
 		{
 			_state.SetValueAndForceNotify(WindowStateEnum.CLOSING);
-			Closing();
+			_view.Closing();
 		}
 
-		protected void Opened()
+		public void Hide()
+		{
+			_state.SetValueAndForceNotify(WindowStateEnum.CLOSING);
+			_view.Hiding();
+		}
+
+		public void InQueue(bool value)
+		{
+			IsInQueue = value;
+		}
+
+		private void Opened()
 		{
 			_state.SetValueAndForceNotify(WindowStateEnum.OPENED);
+			OnOpen?.Invoke(this);
 		}
 
-		protected void Closed()
+		private void Closed()
 		{
 			_state.SetValueAndForceNotify(WindowStateEnum.CLOSED);
 			OnClose?.Invoke(this);
-			Destroy(gameObject);
+			Dispose();
 		}
 
-		protected abstract void Opening();
-		protected abstract void Closing();
+		private void Hided()
+		{
+			_state.SetValueAndForceNotify(WindowStateEnum.CLOSED);
+			OnHide?.Invoke(this);
+			Dispose();
+		}
+
+		public void Dispose()
+		{
+			_view.OnClose  -= Close;
+			_view.OnClosed -= Closed;
+			_view.OnHided  -= Hided;
+			_view.OnOpened -= Opened;
+			Debug.Log($"{_view.name} destroyed");
+			Destroy(_view.gameObject);
+		}
 
 #if UNITY_INCLUDE_TESTS
-		public ReactiveProperty<WindowStateEnum> State => _state;
+		public IReadOnlyReactiveProperty<WindowStateEnum> State => _state;
 #endif
+
+		[Serializable]
+		public class WindowData { }
 	}
 }

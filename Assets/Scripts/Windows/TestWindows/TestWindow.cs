@@ -4,24 +4,27 @@ using UnityEngine.UI;
 
 namespace Windows.TestWindows
 {
-	public class TestWindow : Window
+	public class TestWindow : WindowView
 	{
 		[SerializeField] private Button      closeButton;
 		[SerializeField] private CanvasGroup canvasGroup;
-		[SerializeField] private float       _duration = 0.25f;
 
-		public float Duration => _duration;
-
-		protected override void Opening()
+		public override void Opening()
 		{
 			canvasGroup.alpha = 0;
-			canvasGroup.DOFade(1, _duration).OnComplete(Opened);
-			closeButton.onClick.AddListener(Close);
+			canvasGroup.DOFade(1, _duration).OnComplete(CastOnOpened);
+			closeButton.onClick.AddListener(CastOnClose);
 		}
 
-		protected override void Closing()
+		public override void Closing()
 		{
-			canvasGroup.DOFade(0, _duration).OnComplete(Closed);
+			canvasGroup.DOFade(0, _duration).OnComplete(CastOnClosed);
+			closeButton.onClick.RemoveAllListeners();
+		}
+
+		public override void Hiding()
+		{
+			canvasGroup.DOFade(0, _duration).OnComplete(CastOnHided);
 			closeButton.onClick.RemoveAllListeners();
 		}
 	}

@@ -11,7 +11,7 @@ using Zenject;
 
 namespace Windows.CraftingWindow
 {
-	public class CraftingWindow : Window
+	public class CraftingWindow : WindowView
 	{
 		[SerializeField] private CraftItemView  craftItemPrefab;
 		[SerializeField] private Button         closeButton;
@@ -25,7 +25,7 @@ namespace Windows.CraftingWindow
 
 		private List<CraftItemView> _packViews = new List<CraftItemView>();
 
-		protected override void Opening()
+		public override void Opening()
 		{
 			craftItemPrefab.gameObject.SetActive(true);
 
@@ -44,8 +44,8 @@ namespace Windows.CraftingWindow
 
 			craftItemPrefab.gameObject.SetActive(false);
 
-			closeButton.onClick.AddListener(Close);
-			Opened();
+			closeButton.onClick.AddListener(CastOnClose);
+			CastOnOpened();
 		}
 
 		private void PackViewOnOnMouseClick(InventoryPackModel model)
@@ -71,11 +71,18 @@ namespace Windows.CraftingWindow
 			inventoryPopup.gameObject.SetActive(true);
 		}
 
-		protected override void Closing()
+		public override void Closing()
 		{
 			_packViews.ForEach(view => view.Dispose());
 			closeButton.onClick.RemoveAllListeners();
-			Closed();
+			CastOnClosed();
+		}
+
+		public override void Hiding()
+		{
+			_packViews.ForEach(view => view.Dispose());
+			closeButton.onClick.RemoveAllListeners();
+			CastOnHided();
 		}
 	}
 }

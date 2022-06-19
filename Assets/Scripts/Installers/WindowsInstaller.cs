@@ -30,7 +30,7 @@ namespace Installers
 		{
 			try
 			{
-				_windowsMap = _windows.ToDictionary(window => window.ViewPrefab.GetType(), window => (IWindow)window);
+				_windowsMap = _windows.ToDictionary(window => window.WindowType, window => (IWindow)window);
 			}
 			catch (Exception)
 			{

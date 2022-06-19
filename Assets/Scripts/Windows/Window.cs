@@ -25,9 +25,9 @@ namespace Windows
 		public event Action<IWindow> OnClose;
 		public event Action<IWindow> OnHide;
 
-		public WindowView ViewPrefab => viewPrefab;
 		public WindowData Data       { get; private set; }
 		public bool       IsInQueue  { get; private set; }
+		public Type       WindowType => viewPrefab.GetType();
 
 		public void Initialize(WindowData data, DiContainer container)
 		{

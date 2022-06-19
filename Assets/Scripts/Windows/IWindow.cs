@@ -9,9 +9,9 @@ namespace Windows
 		public event Action<IWindow> OnClose;
 		public event Action<IWindow> OnHide;
 
-		public WindowView        ViewPrefab { get; }
 		public Window.WindowData Data       { get; }
 		public bool              IsInQueue  { get; }
+		public Type              WindowType { get; }
 
 		public void Initialize(Window.WindowData data, DiContainer container);
 

@@ -90,7 +90,7 @@ namespace Windows
 			_activeWindow.OnClose -= OnCloseWindow;
 			_activeWindow.OnHide  -= OnHideWindow;
 			_activeWindow         =  null;
-			_windowsToOpen.Remove(window.ViewPrefab.GetType());
+			_windowsToOpen.Remove(window.WindowType);
 			OpenNextInTheQueue();
 		}
 

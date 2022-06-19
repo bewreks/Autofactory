@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Helpers;
 using Installers;
 using Zenject;
@@ -109,7 +108,7 @@ namespace Windows
 		public bool IsOpened<T>()
 			where T : WindowView
 		{
-			return _activeWindow.GetType() == typeof(T);
+			return _activeWindow?.WindowType == typeof(T);
 		}
 
 		public void Dispose()

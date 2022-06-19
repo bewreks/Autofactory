@@ -53,11 +53,11 @@ namespace Game.States
 
 			if (_playerInputController.WindowsActions.InventoryWindows.WasPressedThisFrame())
 			{
-				// if (_windowsManager.IsOpened<InventoryWindow>())
-				// {
-				// 	_windowsManager.CloseWindow<InventoryWindow>();
-				// }
-				// else
+				if (_windowsManager.IsOpened<InventoryWindow>())
+				{
+					_windowsManager.CloseWindow<InventoryWindow>();
+				}
+				else
 				{
 					_windowsManager.OpenWindow<InventoryWindow>(IWindowManager.WindowOpenOption.Unique);
 				}
@@ -65,14 +65,14 @@ namespace Game.States
 
 			if (_playerInputController.WindowsActions.CraftWindows.WasPressedThisFrame())
 			{
-				// if (_windowsManager.IsOpened<CraftingWindowOld>())
-				// {
-				// 	_windowsManager.CloseWindow<CraftingWindowOld>();
-				// }
-				// else
-				// {
+				if (_windowsManager.IsOpened<CraftingWindow>())
+				{
+					_windowsManager.CloseWindow<CraftingWindow>();
+				}
+				else
+				{
 					_windowsManager.OpenWindow<CraftingWindow>(IWindowManager.WindowOpenOption.Unique);
-				// }
+				}
 			}
 
 			return this;

@@ -93,9 +93,7 @@ namespace Windows
 			_view.OnClosed -= Closed;
 			_view.OnHided  -= Hided;
 			_view.OnOpened -= Opened;
-			Debug.Log($"{_view.name} destroying");
 			Destroy(_view.gameObject);
-			Debug.Log($"{_view.name} destroyed");
 		}
 
 #if UNITY_INCLUDE_TESTS

@@ -408,6 +408,29 @@ namespace Tests.Helpers
 			                            });
 		}
 
+		[Test]
+		public void ClearTest()
+		{
+			var firstWindowMock  = CreateWindowMock<TestWindowTypeOne>();
+			var secondWindowMock = CreateWindowMock<TestWindowTypeTwo>();
+			var thirdWindowMock  = CreateWindowMock<TestWindowTypeThree>();
+			var fourWindowMock   = CreateWindowMock<TestWindowTypeFour>();
+			_windowQueue.AddLast(firstWindowMock.Object);
+			_windowQueue.AddLast(secondWindowMock.Object);
+			_windowQueue.AddLast(thirdWindowMock.Object);
+			_windowQueue.AddLast(fourWindowMock.Object);
+			_windowQueue.Clear();
+			Assert.IsTrue(_windowQueue.IsEmpty);
+			Assert.IsFalse(_windowQueue.Contains(firstWindowMock.Object));
+			Assert.IsFalse(_windowQueue.Contains(secondWindowMock.Object));
+			Assert.IsFalse(_windowQueue.Contains(thirdWindowMock.Object));
+			Assert.IsFalse(_windowQueue.Contains(fourWindowMock.Object));
+			Assert.AreEqual(_windowQueue.Head, null);
+			Assert.AreEqual(_windowQueue.Tail, null);
+			Assert.AreEqual(0,                 _windowQueue.Count);
+			Assert.AreEqual(0,                 _windowQueue.ListMap.Count);
+		}
+
 		private static Mock<IWindow> CreateWindowMock<T>()
 		{
 			var firstWindowMock = new Mock<IWindow>();

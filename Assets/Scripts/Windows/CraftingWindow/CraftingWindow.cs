@@ -1,88 +1,76 @@
-﻿using System.Collections.Generic;
-using Windows.InventoryWindow;
+﻿using System;
 using Crafting;
-using Game;
 using Installers;
 using Inventories;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using Zenject;
 
 namespace Windows.CraftingWindow
 {
-	public class CraftingWindow : WindowView
+	[CreateAssetMenu(fileName = "CraftingWindow", menuName = "Models/Windows/CraftingWindow")]
+	public class CraftingWindow : Window
 	{
-		[SerializeField] private CraftItemView  craftItemPrefab;
-		[SerializeField] private Button         closeButton;
-		[SerializeField] private Transform      craftContent;
-		[SerializeField] private InventoryPopup inventoryPopup;
+		protected override IWindowController CreateWindowController()
+		{
+			return new CraftingWindowController(_view, Data);
+		}
+	}
 
-		[Inject] private DiContainer        _container;
+	internal class CraftingWindowController : WindowController
+	{
 		[Inject] private CraftSettings      _craftSettings;
-		[Inject] private IGameModel         _gameModel;
 		[Inject] private CraftingController _craftingController;
 
-		private List<CraftItemView> _packViews = new List<CraftItemView>();
+		private InventoryPackModel _lastModel;
+		private CraftingWindowView view;
+		private CraftingWindowData data;
 
-		public override void Opening()
+		public CraftingWindowController(WindowView view, Window.WindowData data) : base(view, data)
 		{
-			craftItemPrefab.gameObject.SetActive(true);
-
-			foreach (var craftingModel in _craftSettings.GetModels)
-			{
-				var packView = _container.InstantiatePrefab(craftItemPrefab,
-				                                            Vector3.zero,
-				                                            Quaternion.identity,
-				                                            craftContent).GetComponent<CraftItemView>();
-				packView.SetData(craftingModel.CraftingResult);
-				packView.OnMouseOver  += PackViewOnOnMouseOver;
-				packView.OnMouseExit  += PackViewOnOnMouseExit;
-				packView.OnMouseClick += PackViewOnOnMouseClick;
-				_packViews.Add(packView);
-			}
-
-			craftItemPrefab.gameObject.SetActive(false);
-
-			closeButton.onClick.AddListener(CastOnClose);
-			CastOnOpened();
+			this.view      = (CraftingWindowView)view;
+			this.data = (CraftingWindowData)_data;
 		}
 
-		private void PackViewOnOnMouseClick(InventoryPackModel model)
+		public override void PrepareView()
 		{
-			_craftingController.StartCraft(_gameModel.PlayerModel.Inventory,
-			                               _gameModel.PlayerModel.Inventory,
-			                               model.Type);
+			view.OnMouseOver += OnMouseOver;
+			view.OnMouseExit += OnMouseExit;
+			view.OnMouseClick += OnMouseClick;
+			view.CraftPackPrefab.gameObject.SetActive(true);
+			view.ShowModels(_craftSettings.Models, view.CraftPackPrefab);
+			view.CraftPackPrefab.gameObject.SetActive(false);
 		}
 
-		private void PackViewOnOnMouseExit()
+		private void OnMouseClick()
 		{
-			inventoryPopup.gameObject.SetActive(false);
-			inventoryPopup.Reset();
+			_craftingController.StartCraft(data.InventoryFrom,
+			                               data.InventoryTo,
+			                               _lastModel.Type);
 		}
 
-		private void PackViewOnOnMouseOver(InventoryPackModel model, CraftItemView obj)
+		private void OnMouseExit()
 		{
-			inventoryPopup.SetData(_craftSettings.GetModel(model.Type));
-			var rectTransform = obj.GetComponent<RectTransform>();
-			var popupPosition = rectTransform.position;
-			popupPosition.y                   -= rectTransform.sizeDelta.y / 4;
-			inventoryPopup.transform.position =  popupPosition;
-			inventoryPopup.gameObject.SetActive(true);
+			view.HideHint();
 		}
 
-		public override void Closing()
+		private void OnMouseOver(InventoryPackModel model, RectTransform position)
 		{
-			_packViews.ForEach(view => view.Dispose());
-			closeButton.onClick.RemoveAllListeners();
-			CastOnClosed();
+			_lastModel = model;
+			view.ShowHint(_craftSettings.GetModel(model.Type), position);
 		}
 
-		public override void Hiding()
+		public override void Dispose()
 		{
-			_packViews.ForEach(view => view.Dispose());
-			closeButton.onClick.RemoveAllListeners();
-			CastOnHided();
+			view.OnMouseOver  -= OnMouseOver;
+			view.OnMouseExit  -= OnMouseExit;
+			view.OnMouseClick -= OnMouseClick;
+			base.Dispose();
 		}
+	}
+
+	public class CraftingWindowData : Window.WindowData
+	{
+		public IInventory InventoryFrom;
+		public IInventory InventoryTo;
 	}
 }

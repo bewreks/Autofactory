@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   windowsSettings:
     _windows:
-    - {fileID: 11400000, guid: 921765c3aa22f6d4f97101ba10294f97, type: 2}
-    - {fileID: 11400000, guid: a01bb8d8fe9f0bc468eca67f4dae8f06, type: 2}
-    - {fileID: 11400000, guid: 47992604fbe85bb46a43c2022899b924, type: 2}
+    - {fileID: 11400000, guid: b7550c4403f344044a87e834b16b3515, type: 2}
+    - {fileID: 11400000, guid: 818dc7bcd3b61b9409c349dcb8e14ed2, type: 2}
+    - {fileID: 11400000, guid: f812dc7594fffe242859efe4010162a4, type: 2}

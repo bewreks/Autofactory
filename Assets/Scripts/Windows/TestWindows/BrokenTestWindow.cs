@@ -1,22 +1,22 @@
-﻿namespace Windows.TestWindows
+﻿using UnityEngine;
+
+namespace Windows.TestWindows
 {
-	public class BrokenTestWindow : WindowView
+	[CreateAssetMenu(fileName = "BrokenTestWindow", menuName = "Models/Windows/BrokenTestWindow")]
+	public class BrokenTestWindow : Window
 	{
-		public override void Opening()
+		protected override IWindowController CreateWindowController()
 		{
-			
+			return new BrokenTestWindowController(_view, Data);
 		}
+	}
 
-		public override void Closing()
+	internal class BrokenTestWindowController : WindowController
+	{
+		public BrokenTestWindowController(WindowView view, Window.WindowData data) : base(view, data) { }
+		public override void PrepareView()
 		{
-			
+			throw new System.NotImplementedException();
 		}
-
-		public override void Hiding()
-		{
-			
-		}
-
-		public float Duration => 0.25f;
 	}
 }

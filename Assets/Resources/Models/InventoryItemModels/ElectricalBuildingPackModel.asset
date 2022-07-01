@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 5
   maxPackSize: 10
-  icon: {fileID: 21300000, guid: ebcb1b56ede32a5498cc86755ce41324, type: 3}
+  icon: {fileID: 21300000, guid: eec19781926cd2248b7c9abfde8db555, type: 3}
   buildingModel: {fileID: 11400000, guid: f8353728da6c345809820c26f6fc7cb4, type: 2}

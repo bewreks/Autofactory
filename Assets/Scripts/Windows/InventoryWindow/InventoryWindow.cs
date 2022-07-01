@@ -1,56 +1,33 @@
-﻿using System.Collections.Generic;
-using Game;
+﻿using Inventories;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using Zenject;
 
 namespace Windows.InventoryWindow
 {
-	public class InventoryWindow : WindowView
+	[CreateAssetMenu(fileName = "InventoryWindow", menuName = "Models/Windows/InventoryWindow")]
+	public class InventoryWindow : Window
 	{
-		[SerializeField] private InventoryPackView inventoryPackPrefab;
-		[SerializeField] private Button            closeButton;
-		[SerializeField] private Transform         inventoryContent;
-
-		[Inject] private DiContainer        _container;
-		[Inject] private IGameModel         _gameModel;
-
-		private List<InventoryPackView> _packViews = new List<InventoryPackView>();
-
-		public override void Opening()
+		protected override IWindowController CreateWindowController()
 		{
-			var inventoryPacks = _gameModel.PlayerModel.Inventory.GetPacks();
-			inventoryPackPrefab.gameObject.SetActive(true);
-
-			foreach (var pack in inventoryPacks)
-			{
-				var packView = _container.InstantiatePrefab(inventoryPackPrefab,
-				                                            Vector3.zero,
-				                                            Quaternion.identity,
-				                                            inventoryContent).GetComponent<InventoryPackView>();
-				packView.SetData(pack);
-				_packViews.Add(packView);
-			}
-
-			inventoryPackPrefab.gameObject.SetActive(false);
-
-			closeButton.onClick.AddListener(CastOnClose);
-			CastOnOpened();
+			return new InventoryWindowController(_view, Data);
 		}
+	}
 
-		public override void Closing()
+	internal class InventoryWindowController : WindowController
+	{
+		public InventoryWindowController(WindowView view, Window.WindowData data) : base(view, data) { }
+
+		public override void PrepareView()
 		{
-			_packViews.ForEach(view => view.Dispose());
-			closeButton.onClick.RemoveAllListeners();
-			CastOnClosed();
+			var view = (InventoryWindowView)_view;
+			var data = (InventoryWindowData)_data;
+			view.InventoryPackPrefab.gameObject.SetActive(true);
+			view.ShowPacks(data.Inventory.GetPacks(), view.InventoryPackPrefab);
+			view.InventoryPackPrefab.gameObject.SetActive(false);
 		}
+	}
 
-		public override void Hiding()
-		{
-			_packViews.ForEach(view => view.Dispose());
-			closeButton.onClick.RemoveAllListeners();
-			CastOnHided();
-		}
+	public class InventoryWindowData : Window.WindowData
+	{
+		public IInventory Inventory;
 	}
 }

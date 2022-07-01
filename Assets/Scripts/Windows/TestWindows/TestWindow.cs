@@ -1,31 +1,22 @@
-﻿using DG.Tweening;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace Windows.TestWindows
 {
-	public class TestWindow : WindowView
+	[CreateAssetMenu(fileName = "TestWindow", menuName = "Models/Windows/TestWindow")]
+	public class TestWindow : Window
 	{
-		[SerializeField] private Button      closeButton;
-		[SerializeField] private CanvasGroup canvasGroup;
-
-		public override void Opening()
+		protected override IWindowController CreateWindowController()
 		{
-			canvasGroup.alpha = 0;
-			canvasGroup.DOFade(1, _duration).OnComplete(CastOnOpened);
-			closeButton.onClick.AddListener(CastOnClose);
+			return new TestWindowController(_view, Data);
 		}
+	}
 
-		public override void Closing()
+	internal class TestWindowController : WindowController
+	{
+		public TestWindowController(WindowView view, Window.WindowData data) : base(view, data) { }
+		public override void PrepareView()
 		{
-			canvasGroup.DOFade(0, _duration).OnComplete(CastOnClosed);
-			closeButton.onClick.RemoveAllListeners();
-		}
-
-		public override void Hiding()
-		{
-			canvasGroup.DOFade(0, _duration).OnComplete(CastOnHided);
-			closeButton.onClick.RemoveAllListeners();
+			
 		}
 	}
 }

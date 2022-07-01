@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0be2ef8f63f74dddb72d075ac06a24b3, type: 3}
+  m_Script: {fileID: 11500000, guid: fcd882e63dd14b769b4edb89c8b950f0, type: 3}
   m_Name: CraftingWindow
   m_EditorClassIdentifier: 
   viewPrefab: {fileID: 3808759237180801609, guid: aa2df78301b663541913bbff4fc6b4df, type: 3}
+  openDuration: 0
+  closeDuration: 0

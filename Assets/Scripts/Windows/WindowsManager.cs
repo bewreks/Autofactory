@@ -14,7 +14,7 @@ namespace Windows
 		private IWindow     _activeWindow;
 
 		public IWindow OpenWindow<T>(Window.WindowData data, IWindowManager.WindowOpenOption option)
-			where T : WindowView
+			where T : IWindow
 		{
 			var windowToOpen = _windowsSettings.GetWindow<T>();
 			if (windowToOpen == null)
@@ -73,12 +73,12 @@ namespace Windows
 		}
 
 		public IWindow OpenWindow<T>(IWindowManager.WindowOpenOption option)
-			where T : WindowView
+			where T : IWindow
 		{
 			return OpenWindow<T>(null, option);
 		}
 
-		public IWindow OpenWindow<T>(Window.WindowData data) where T : WindowView
+		public IWindow OpenWindow<T>(Window.WindowData data) where T : IWindow
 		{
 			return OpenWindow<T>(data, IWindowManager.WindowOpenOption.Normal);
 		}
@@ -90,14 +90,14 @@ namespace Windows
 				return;
 			}
 
-			_activeWindow = _windowsQueue.First;
+			_activeWindow         =  _windowsQueue.First;
 			_activeWindow.OnClose += OnCloseWindow;
 			_activeWindow.OnHide  += OnHideWindow;
 			_activeWindow.Open();
 		}
 
 		public void CloseWindow<T>()
-			where T : WindowView
+			where T : IWindow
 		{
 			if (IsOpened<T>())
 			{
@@ -106,7 +106,7 @@ namespace Windows
 		}
 
 		public bool IsOpened<T>()
-			where T : WindowView
+			where T : IWindow
 		{
 			return _activeWindow?.WindowType == typeof(T);
 		}

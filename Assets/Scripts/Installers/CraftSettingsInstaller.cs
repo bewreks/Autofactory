@@ -51,8 +51,6 @@ namespace Installers
 		}
 
 		public Dictionary<InventoryObjectsTypesEnum, CraftingModel>.ValueCollection GetModels => _craftingMap.Values;
-#if UNITY_INCLUDE_TESTS
 		public List<CraftingModel> Models => _craftingModels;
-#endif
 	}
 }

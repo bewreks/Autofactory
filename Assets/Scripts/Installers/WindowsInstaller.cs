@@ -61,9 +61,12 @@ namespace Installers
 
 	public enum WindowStateEnum
 	{
+		NOT_INITED,
 		OPENING,
 		OPENED,
 		CLOSING,
-		CLOSED
+		CLOSED,
+		HIDING,
+		HIDDEN
 	}
 }

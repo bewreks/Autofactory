@@ -14,9 +14,9 @@ namespace Game.States
 {
 	public class NormalGameState : IGameState
 	{
-		[Inject] private InstantiateManager    _instantiateManager;
-		[Inject] private DiContainer           _diContainer;
-		[Inject] private WindowsManager        _windowsManager;
+		[Inject] private InstantiateManager     _instantiateManager;
+		[Inject] private DiContainer            _diContainer;
+		[Inject] private WindowsManager         _windowsManager;
 		[Inject] private IPlayerInputController _playerInputController;
 
 		public IGameState OnUpdate(GameModel model, DiContainer container)
@@ -59,7 +59,11 @@ namespace Game.States
 				}
 				else
 				{
-					_windowsManager.OpenWindow<InventoryWindow>(IWindowManager.WindowOpenOption.Unique);
+					_windowsManager.OpenWindow<InventoryWindow>(new InventoryWindowData
+					                                                {
+						                                                Inventory = model.PlayerModel.Inventory
+					                                                },
+					                                                IWindowManager.WindowOpenOption.Unique);
 				}
 			}
 
@@ -71,15 +75,18 @@ namespace Game.States
 				}
 				else
 				{
-					_windowsManager.OpenWindow<CraftingWindow>(IWindowManager.WindowOpenOption.Unique);
+					_windowsManager.OpenWindow<CraftingWindow>(new CraftingWindowData
+					                                               {
+						                                               InventoryFrom = model.PlayerModel.Inventory,
+						                                               InventoryTo   = model.PlayerModel.Inventory
+					                                               },
+					                                               IWindowManager.WindowOpenOption.Unique);
 				}
 			}
 
 			return this;
 		}
 
-		public void OnFixedUpdate(GameModel model)
-		{
-		}
+		public void OnFixedUpdate(GameModel model) { }
 	}
 }

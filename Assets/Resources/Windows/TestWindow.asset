@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0be2ef8f63f74dddb72d075ac06a24b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 14c19936ce254a9f8172dc16137b25a8, type: 3}
   m_Name: TestWindow
   m_EditorClassIdentifier: 
   viewPrefab: {fileID: 4914426128160394933, guid: 87c947929455aee429ba9e062f7820a8, type: 3}
+  openDuration: 0.25
+  closeDuration: 0.25

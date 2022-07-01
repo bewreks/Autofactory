@@ -75,7 +75,7 @@ namespace Windows
 		public IWindow OpenWindow<T>(IWindowManager.WindowOpenOption option)
 			where T : IWindow
 		{
-			return OpenWindow<T>(null, option);
+			return OpenWindow<T>(new Window.WindowData(), option);
 		}
 
 		public IWindow OpenWindow<T>(Window.WindowData data) where T : IWindow

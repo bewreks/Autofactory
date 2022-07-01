@@ -19,13 +19,13 @@ namespace Tests.Windows
         {
             base.Setup();
             
-            // var windowsSettings     = new WindowsSettings();
-            // var findAndSelectPrefab = Resources.Load<TestWindow>("Windows/TestWindow");
-            // windowsSettings.Windows.Add(findAndSelectPrefab);
-            // windowsSettings.Prepare();
-            // Container.BindInterfacesTo<PlayerInputController>().FromNew().AsSingle();
-            // Container.Bind<WindowsSettings>().FromInstance(windowsSettings).AsSingle();
-            // Container.Bind<WindowsManager>().AsSingle();
+            var windowsSettings     = new WindowsSettings();
+            var findAndSelectPrefab = Resources.Load<TestWindow>("Windows/TestWindow");
+            windowsSettings.Windows.Add(findAndSelectPrefab);
+            windowsSettings.Prepare();
+            Container.BindInterfacesTo<PlayerInputController>().FromNew().AsSingle();
+            Container.Bind<WindowsSettings>().FromInstance(windowsSettings).AsSingle();
+            Container.Bind<WindowsManager>().AsSingle();
         }
 
         public override void Teardown()
@@ -38,23 +38,31 @@ namespace Tests.Windows
         [UnityTest]
         public IEnumerator OpenTestWindowTest()
         {
-            // var windowsManager = Container.Resolve<WindowsManager>();
-            // var testWindow     = windowsManager.OpenWindow<TestWindowOld>(IWindowManager.WindowOpenOption.Normal);
-            // Assert.AreEqual(WindowStateEnum.OPENING, testWindow.State.Value);
-            // yield return new WaitForSeconds(testWindow.Duration);
-            // Assert.AreEqual(WindowStateEnum.OPENED, testWindow.State.Value);
-            // testWindow.Close();
-            // Assert.AreEqual(WindowStateEnum.CLOSING, testWindow.State.Value);
-            // yield return new WaitForSeconds(testWindow.Duration);
-            // Assert.AreEqual(WindowStateEnum.CLOSED, testWindow.State.Value);
+            var windowsManager = Container.Resolve<WindowsManager>();
+            var windowWrapper     = windowsManager.OpenWindow<TestWindow>(IWindowManager.WindowOpenOption.Normal);
+            Assert.AreEqual(WindowStateEnum.OPENING, windowWrapper.State);
+            yield return new WaitForSeconds(windowWrapper.OpenDuration);
+            Assert.AreEqual(WindowStateEnum.OPENED, windowWrapper.State);
+            windowWrapper.Close();
+            Assert.AreEqual(WindowStateEnum.CLOSING, windowWrapper.State);
+            yield return new WaitForSeconds(windowWrapper.CloseDuration);
+            Assert.AreEqual(WindowStateEnum.NOT_INITED, windowWrapper.State);
             yield return null;
         }
         
         [Test]
         public void OpenNonConfigWindowTest()
         {
-            // var windowsManager = Container.Resolve<WindowsManager>();
-            // Assert.Null(windowsManager.OpenWindow<BrokenTestWindowOld>(IWindowManager.WindowOpenOption.Normal));
+            var windowsManager = Container.Resolve<WindowsManager>();
+            Assert.Null(windowsManager.OpenWindow<WindowTest>(IWindowManager.WindowOpenOption.Normal));
+        }
+        
+        private class WindowTest : Window
+        {
+            protected override IWindowController CreateWindowController()
+            {
+                return null;
+            }
         }
     }
 }

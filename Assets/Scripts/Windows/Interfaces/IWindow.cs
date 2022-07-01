@@ -1,4 +1,5 @@
 ﻿using System;
+using Installers;
 using Zenject;
 
 namespace Windows
@@ -9,10 +10,13 @@ namespace Windows
 		public event Action<IWindow> OnClose;
 		public event Action<IWindow> OnHide;
 
-		public Window.WindowData Data       { get; }
-		public Type              WindowType { get; }
+		public Window.WindowData Data          { get; }
+		public Type              WindowType    { get; }
+		public WindowStateEnum   State         { get; }
+		public float             OpenDuration  { get; }
+		public float             CloseDuration { get; }
 
-		public void Initialize(Window.WindowData data, DiContainer container);
+		public void              Initialize(Window.WindowData data, DiContainer container);
 
 		public void Open();
 		public void Close();

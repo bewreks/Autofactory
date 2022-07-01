@@ -23,9 +23,11 @@ namespace Windows
 		public event Action<IWindow> OnClose;
 		public event Action<IWindow> OnHide;
 
-		public WindowData                                 Data       { get; private set; }
-		public Type                                       WindowType => GetType();
-		public IReadOnlyReactiveProperty<WindowStateEnum> State      => _controller.State;
+		public WindowData      Data          { get; private set; }
+		public Type            WindowType    => GetType();
+		public WindowStateEnum State         => _controller?.State.Value??WindowStateEnum.NOT_INITED;
+		public float           OpenDuration  => openDuration;
+		public float           CloseDuration => closeDuration;
 
 		public void Initialize(WindowData data, DiContainer container)
 		{
@@ -75,6 +77,7 @@ namespace Windows
 		public void Dispose()
 		{
 			_controller.Dispose();
+			_controller = null;
 			if (_view)
 				Destroy(_view.gameObject);
 		}

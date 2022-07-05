@@ -51,15 +51,15 @@ namespace Game
 			          })
 			          .AddTo(_disposables);
 
-			Observable.EveryFixedUpdate()
-			          .Subscribe(l =>
-			          {
-				          _state.OnFixedUpdate(_model);
-				          RotatePlayerTo();
-				          MovePlayer();
-				          _model.MoveDelta = Vector3.zero;
-			          })
-			          .AddTo(_disposables);
+			ObservableHelper.EveryFixedUpdate
+			                .Subscribe(l =>
+			                {
+				                _state.OnFixedUpdate(_model);
+				                RotatePlayerTo();
+				                MovePlayer();
+				                _model.MoveDelta = Vector3.zero;
+			                })
+			                .AddTo(_disposables);
 		}
 
 		public void Dispose()

@@ -1,4 +1,5 @@
-﻿using Windows;
+﻿using System;
+using Windows;
 using Crafting;
 using Electricity;
 using Game;
